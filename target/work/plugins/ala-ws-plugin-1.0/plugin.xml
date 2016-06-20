@@ -1,0 +1,10 @@
+<plugin name='ala-ws-plugin' version='1.0' grailsVersion='2.3 &gt; *'>
+  <author>Atlas of Living Australia</author>
+  <title>ALA WS Plugin</title>
+  <description>Grails plugin containing common REST and general webservice functionality.</description>
+  <documentation>https://github.com/AtlasOfLivingAustralia/ala-ws-plugin</documentation>
+  <type>AlaWsPluginGrailsPlugin</type>
+  <resources>
+    <resource>au.org.ala.ws.service.WebService</resource>
+  </resources>
+</plugin>
