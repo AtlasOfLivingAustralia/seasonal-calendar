@@ -5,7 +5,6 @@ modules = {
         resource url: [dir:'css/', file:'common.css']
         resource url: [dir:'css/', file:'weather.css']
         resource url: [dir:'js/', file:'common.js']
-
     }
 
     seasonal_calendar {
