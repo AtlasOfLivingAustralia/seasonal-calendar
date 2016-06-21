@@ -91,10 +91,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <h4 class="footer-title"><!-- Footer Title -->
-                    <a class="site-name" href="#">Seasons Calendars</a>
+                    <a class="site-name" href="#">Seasonal Calendars</a>
                 </h4>
 
-                <!-- Social Links -->
+                <!--
                 <div class="social-icons">
                     <ul>
                         <li><a href="#"><i class="fa fa-facebook-square"></i></a></li>
@@ -105,6 +105,7 @@
                         <li><a href="#"><i class="fa fa-linkedin-square"></i></a></li>
                     </ul>
                 </div>
+                -->
 
                 <p class="copyright">Atlas of Living Australia, All rights reserved &copy; 2016</p>
             </div>

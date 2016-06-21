@@ -26,16 +26,12 @@ var SeasonalCalendarsMenuVM = function() {
             contentType: 'application/json',
             success: function (data) {
                 if (data.error) {
-                    //showAlert("Error: "+data.error, "alert-danger",divId);
                 }
                 else {
-                    //showAlert("Successfully updated, reloading the page.", "alert-success",divId);
-                    //Redirect to edit page.
                     self.populate(data);
                 }
             },
             error: function (data) {
-                //showAlert("Error: "+data, "alert-danger",divId);
             }
         });
     };
