@@ -45,4 +45,17 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="multimedia">Promotional Video :</label>
+                    <textarea  data-bind="value: multimedia" class="form-control" id="multimedia" placeholder="Example: <iframe width='560' height='315' src='https://www.youtube.com/embed/j1bR-0XBfcs' frameborder='0' allowfullscreen></iframe> (Allowed host: Youtube, Vimeo, Ted, Wistia.)"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-6"></div>
+        </div>
+    </div>
+
 </div>

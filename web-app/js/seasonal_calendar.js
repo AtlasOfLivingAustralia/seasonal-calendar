@@ -47,6 +47,7 @@ var SeasonalCalendarsMenuItems = function (item){
     self.calendarStatus = ko.observable(item.calendarStatus);
     self.imageUrl = ko.observable(item.imageUrl);
 
+
     self.redirect = function(){
         window.location.href = scConfig.calendarHome + "/" + self.calendarId();
     };
@@ -71,12 +72,22 @@ var SeasonalCalendarVM = function(){
     self.calendarStatus = ko.observable();
     self.externalLink = ko.observable();
     self.seasons = ko.observableArray();
+    self.multimedia = ko.observable();
+    self.transients = {};
+    self.transients.iframe = ko.pureComputed(function() {
+        if(self.multimedia()){
+            return buildiFrame(self.multimedia());
+        }
+
+        return;
+    });
     self.populateCalendar = function(calendar){
         self.calendarId(calendar.calendarId);
         self.calendarName(calendar.calendarName);
         self.description(calendar.description);
         self.externalLink(calendar.externalLink);
         self.imageUrl(calendar.imageUrl);
+        self.multimedia(calendar.multimedia);
         self.calendarStatus((calendar.calendarStatus ? calendar.calendarStatus : 'unpublished'));
         self.seasons($.map(calendar.seasons ? calendar.seasons : [], function (obj, i) {
             return new SeasonVM(obj);
@@ -246,6 +257,7 @@ var SeasonalCalendarVM = function(){
         jsData.description = self.description();
         jsData.calendarStatus = self.calendarStatus();
         jsData.externalLink = self.externalLink();
+        jsData.multimedia = self.multimedia();
         jsData.seasons = ko.mapping.toJS(self.seasons, {ignore:['transients']});
         return JSON.stringify(jsData, function (key, value) { return value === undefined ? "" : value; });
     };

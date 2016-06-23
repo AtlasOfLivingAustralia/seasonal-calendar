@@ -10,8 +10,6 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:300,700,400' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:600,400,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
-    <!--=== Color Scheme, three colors are available red.css, orange.css and gray.css ===-->
-    <link rel="stylesheet" id="scheme-source" href="${request.contextPath}/egret/css/schemes/red.css" />
 
     <!--=== Internet explorer fix ===-->
     <!-- [if lt IE 9]>
@@ -22,6 +20,7 @@
     <r:layoutResources/>
 </head>
 <body>
+
 <!--=== Preloader section starts ===-->
 <section id="preloader">
     <div class="loading-circle fa-spin"></div>

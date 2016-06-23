@@ -13,6 +13,7 @@ modules = {
 
     egret_theme {
         dependsOn 'jquery'
+
         resource url: [dir:'egret/css/', file:'animate.css']
         resource url: [dir:'egret/css/', file:'baraja.css']
         resource url: [dir:'egret/css/', file:'bootstrap.css']
@@ -38,9 +39,9 @@ modules = {
         resource url: [dir:'egret/js/', file:'jquery.nicescroll.min.js']
         resource url: [dir:'egret/js/', file:'jquery.vegas.min.js']
         resource url: [dir:'egret/js/', file:'modernizr.js']
-
         resource url: [dir:'egret/css/', file:'font-awesome.min.css']
         resource url: [dir:'egret/js/', file:'custom.js']
+        resource url: [dir:'/egret/css/schemes/', file:'red.css']
     }
 
     lazyload {
