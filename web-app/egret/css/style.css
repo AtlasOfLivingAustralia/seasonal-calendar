@@ -312,7 +312,7 @@ ul.nav > li > a:hover {
 color:#ccc !important;
 }
 
-.navbar-toggle .icon-bar {
+.navbar-toggle .glyphicon glyphicon-bar {
 	background: #ffffff;
 }
 

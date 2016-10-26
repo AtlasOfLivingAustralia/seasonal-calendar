@@ -37,9 +37,9 @@
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-responsive-collapse">
                             <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
+                            <span class="glyphicon glyphicon-bar"></span>
+                            <span class="glyphicon glyphicon-bar"></span>
+                            <span class="glyphicon glyphicon-bar"></span>
                         </button>
                         <!--=== Site Name ===-->
                         <a class="site-name navbar-brand" href="#">Seasonal Calendar</a>
