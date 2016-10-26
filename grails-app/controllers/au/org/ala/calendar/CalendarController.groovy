@@ -25,7 +25,8 @@ class CalendarController {
             }
         }
         catch(Exception ex){
-            log.error("Error loading calendars." + ex);
+            log.error("Error loading calendars.", ex);
+            throw ex
         }
 
         render ([status:'ok', calendars:calendars] as JSON)
