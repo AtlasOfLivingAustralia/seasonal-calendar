@@ -1,4 +1,4 @@
-package au.org.ala.ecodata
+package au.org.ala.calendar
 
 import grails.converters.JSON
 import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler

@@ -6,6 +6,8 @@ import grails.converters.JSON
 class CalendarController {
     static String STATUS_DELETED = "deleted";
 
+    CalendarService calendarService
+
     def listCalendars() {
         def calendars = [];
 
@@ -69,7 +71,10 @@ class CalendarController {
         try{
             String id = UUID.randomUUID().toString()
             props.calendarId = id
-            FileSystem.save(props, "${grailsApplication.config.models.path}/${id}.json")
+//            FileSystem.save(props, "${grailsApplication.config.models.path}/${id}.json")
+
+            calendarService.create(props);
+
             result = [status:'ok', calendarId: id]
         } catch(Exception exception) {
             result = [status: 'error', error: "Error saving the calendar, please try again later."]
