@@ -40,6 +40,7 @@ grails.project.dependency.resolution = {
 
     repositories {
         mavenLocal()
+        mavenRepo "http://nexus.ala.org.au/content/repositories/grails-plugins/"
         mavenRepo ("http://nexus.ala.org.au/content/groups/public/") {
             updatePolicy 'always'
         }
@@ -50,12 +51,16 @@ grails.project.dependency.resolution = {
 
     plugins {
         build ":release:3.1.1"
-        build ":tomcat:7.0.54"
+        build ":tomcat:7.0.55"
         compile ":markdown:1.1.1"
-        compile ":ala-auth:1.3.2-SNAPSHOT"
-        compile ':cache:1.1.3'
-        compile ":cache-headers:1.1.6"
-        compile ":ala-ws-plugin:1.0"
+        compile ':cache:1.1.8'
+        compile ":cache-headers:1.1.7"
+
+        runtime ":ala-auth:1.3.2-SNAPSHOT"
+        runtime ":ala-ws-plugin:1.1"
+        runtime ":ala-ws-security:1.4"
+        runtime ":mongodb:6.0.2"
+
         runtime ":resources:1.2.14"
         if (Environment.current == Environment.PRODUCTION) {
             runtime ":cached-resources:1.0"
