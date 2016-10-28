@@ -1,7 +1,7 @@
 environments {
     development {
         grails {
-            mongo {
+            mongodb {
                 host = "localhost"
                 port = "27017"
                 databaseName = "seasonal-calendar"
@@ -10,7 +10,7 @@ environments {
     }
     test {
         grails {
-            mongo {
+            mongodb {
                 host = "localhost"
                 port = "27017"
                 databaseName = "seasonal-calendar-test"
@@ -19,7 +19,7 @@ environments {
     }
     production {
         grails {
-            mongo {
+            mongodb {
                 host = "localhost"
                 port = "27017"
                 databaseName = "seasonal-calendar"

@@ -11,6 +11,7 @@ class Calendar {
     String calendarName
     String calendarStatus
     String externalLink
+    public static final String STATUS_DELETED = "deleted";
 
     List<Season> seasons
 

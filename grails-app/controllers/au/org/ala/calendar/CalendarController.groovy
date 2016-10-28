@@ -4,27 +4,16 @@ import au.org.ala.web.AlaSecured
 import grails.converters.JSON
 
 class CalendarController {
-    static String STATUS_DELETED = "deleted";
+
 
     CalendarService calendarService
 
     def listCalendars() {
-        def calendars = [];
+        def calendars;
 
         try{
-
-            List files = FileSystem.getFiles("${grailsApplication.config.models.path}")
-            files?.each {
-                Map props = [:]
-                Map calendar = FileSystem.load(it.path)
-                if(calendar.calendarStatus != STATUS_DELETED ) {
-                    props.calendarId = calendar?.calendarId;
-                    props.name = calendar?.calendarName;
-                    props.calendarStatus = calendar?.calendarStatus;
-                    props.imageUrl = calendar?.imageUrl;
-                    calendars << props;
-                }
-            }
+            List files = calendarService.list()
+            calendars = files
         }
         catch(Exception ex){
             log.error("Error loading calendars.", ex);
@@ -40,10 +29,10 @@ class CalendarController {
 
     def getCalendar(String id) {
         def result;
-
         try{
-            Map props = [:]
-            Map calendar = FileSystem.load("${grailsApplication.config.models.path}/${id}.json")
+
+            Calendar calendar = calendarService.get(id)
+
             if(calendar){
                 result = [status:"ok", calendar: calendar]
             } else{
@@ -51,7 +40,7 @@ class CalendarController {
             }
         }
         catch(Exception ex){
-            log.error("Error loading calendars.");
+            log.error("Error loading calendars.", ex);
             result = [status:"error", error: "Error loading calendar, please try again later."]
         }
 
@@ -71,8 +60,6 @@ class CalendarController {
         try{
             String id = UUID.randomUUID().toString()
             props.calendarId = id
-//            FileSystem.save(props, "${grailsApplication.config.models.path}/${id}.json")
-
             calendarService.create(props);
 
             result = [status:'ok', calendarId: id]
@@ -89,9 +76,11 @@ class CalendarController {
         Map result
         try{
             props.calendarId = id
-            FileSystem.save(props, "${grailsApplication.config.models.path}/${id}.json")
+            calendarService.update(props)
+
             result = [status:'ok', calendarId: id]
-        } catch(Exception exception) {
+        } catch(Exception e) {
+            logger.error("Error updating calendar", e)
             result = [status: 'error', error: "Error saving the calendar, please try again later."]
         }
 
