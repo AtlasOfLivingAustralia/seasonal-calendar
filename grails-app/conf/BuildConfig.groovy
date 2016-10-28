@@ -56,7 +56,7 @@ grails.project.dependency.resolution = {
         compile ':cache:1.1.8'
         compile ":cache-headers:1.1.7"
 
-        runtime ":ala-auth:1.3.2-SNAPSHOT"
+        runtime ":ala-auth:1.3.4"
         runtime ":ala-ws-plugin:1.1"
         runtime ":ala-ws-security:1.4"
         runtime ":mongodb:6.0.2"
