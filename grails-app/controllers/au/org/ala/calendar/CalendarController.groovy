@@ -76,11 +76,9 @@ class CalendarController {
         Map result
         try{
             props.calendarId = id
-            calendarService.update(props)
-
-            result = [status:'ok', calendarId: id]
+            result = calendarService.update(props)
         } catch(Exception e) {
-            logger.error("Error updating calendar", e)
+            log.error("Error updating calendar", e)
             result = [status: 'error', error: "Error saving the calendar, please try again later."]
         }
 
@@ -89,17 +87,6 @@ class CalendarController {
 
     @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN'], anyRole = true)
     def delete(String id) {
-        def props = request.JSON
-        Map result
-        try {
-            props.calendarId = id
-            props.calendarStatus = STATUS_DELETED;
-            FileSystem.save(props, "${grailsApplication.config.models.path}/${id}.json")
-            result = [status:'ok', calendarId: id]
-        } catch(Exception exception) {
-            result = [status: 'error', error: "Error saving the calendar, please try again later."]
-        }
-
-        render result as JSON;
+        render calendarService.delete(id) as JSON
     }
 }

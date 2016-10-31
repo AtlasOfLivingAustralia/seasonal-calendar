@@ -13,6 +13,9 @@ class Calendar {
     String externalLink
     public static final String STATUS_DELETED = "deleted";
 
+    public static final String STATUS_PUBLISHED = "published";
+
+
     List<Season> seasons
 
 
@@ -29,7 +32,7 @@ class Calendar {
     static embedded = ['seasons']
 
     static mapping = {
-        calendarId index: true
+        name calendarId: [unique:true]
     }
 
     boolean equals(Object obj) {

@@ -5,5 +5,4 @@ class ThumbImage {
     String url
     static constraints = {
     }
-
 }
