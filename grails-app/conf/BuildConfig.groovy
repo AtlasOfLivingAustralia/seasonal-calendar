@@ -59,8 +59,8 @@ grails.project.dependency.resolution = {
         runtime ":ala-auth:1.3.4"
         runtime ":ala-ws-plugin:1.1"
         runtime ":ala-ws-security:1.4"
-        runtime ":mongodb:6.0.2"
 
+        runtime ":mongodb:6.0.2"
         runtime ":resources:1.2.14"
         if (Environment.current == Environment.PRODUCTION) {
             runtime ":cached-resources:1.0"
