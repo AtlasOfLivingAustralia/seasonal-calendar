@@ -120,7 +120,8 @@ var SeasonalCalendarVM = function(){
                 }
             },
             error: function (data) {
-                showAlert("Error: "+data, "alert-danger",divId);
+                debugger;
+                showAlert("Error code: "+data.responseText, "alert-danger",divId);
             }
         });
 
@@ -227,6 +228,7 @@ var SeasonalCalendarVM = function(){
             data: self.seasonAsJson(),
             contentType: 'application/json',
             success: function (data) {
+                debugger;
                 if (data.error) {
                     showAlert("Error: "+data.error, "alert-danger",divId);
                 }
@@ -240,7 +242,7 @@ var SeasonalCalendarVM = function(){
                 }
             },
             error: function (data) {
-                showAlert("Error: "+data, "alert-danger",divId);
+                showAlert("Error: " + data.responseText, "alert-danger",divId);
             }
         });
     };

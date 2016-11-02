@@ -3,10 +3,15 @@ package au.org.ala.calendar
 import au.org.ala.web.AlaSecured
 import grails.converters.JSON
 
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+
 class CalendarController {
 
 
     CalendarService calendarService
+    PermissionService permissionService
+    UserService userService
 
     def listCalendars() {
         def calendars;
@@ -28,23 +33,21 @@ class CalendarController {
     }
 
     def getCalendar(String id) {
-        def result;
         try{
 
             Calendar calendar = calendarService.get(id)
 
             if(calendar){
-                result = [status:"ok", calendar: calendar]
+                Map result = [calendar: calendar]
+                render result as JSON
             } else{
-                result = [status:"error", error: "Invalid id"]
+                render status:HttpServletResponse.SC_NOT_FOUND, text: "Invalid id"
             }
         }
         catch(Exception ex){
             log.error("Error loading calendars.", ex);
-            result = [status:"error", error: "Error loading calendar, please try again later."]
+            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "Error loading calendar, please try again later."
         }
-
-        render result as JSON
     }
 
 
@@ -56,37 +59,73 @@ class CalendarController {
     @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN'], anyRole = true)
     def addCalendar() {
         def props = request.JSON
-        Map result
         try{
+            def userId = userService.getUser()?.userId
+            if (!userId) { // Only authenticated users can create calendars
+                render status: 401, text: 'You do not have permission to create a calendar'
+                return
+            }
+
             String id = UUID.randomUUID().toString()
             props.calendarId = id
             calendarService.create(props);
 
-            result = [status:'ok', calendarId: id]
+            Map result = [calendarId: id]
+            render result as JSON
         } catch(Exception exception) {
-            result = [status: 'error', error: "Error saving the calendar, please try again later."]
+            log.error("Error saving calendar", exception )
+            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "Error saving the calendar, please try again later."
         }
-
-        render result as JSON;
     }
 
     @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN'], anyRole = true)
     def editCalendar(String id) {
         def props = request.JSON
-        Map result
+
         try{
             props.calendarId = id
-            result = calendarService.update(props)
+
+            if(!canCurrentUserEditCalendar(id)) {
+                render status: 401, text: 'You do not have permission to edit this calendar'
+                return
+            }
+
+            calendarService.update(props)
+            Map result = [calendarId: props.calendarId]
+            render result as JSON;
         } catch(Exception e) {
             log.error("Error updating calendar", e)
-            result = [status: 'error', error: "Error saving the calendar, please try again later."]
+            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "Error saving the calendar, please try again later."
         }
 
-        render result as JSON;
+
     }
 
     @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN'], anyRole = true)
     def delete(String id) {
-        render calendarService.delete(id) as JSON
+        try {
+            if (!canCurrentUserEditCalendar(id)) {
+                render status: 401, text: 'You do not have permission to delete this calendar'
+                return
+            }
+
+            calendarService.delete(id)
+            Map result = [calendarId: id]
+            render result as JSON;
+
+        } catch (Exception e) {
+            log.error("Error updating calendar", e)
+            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "Error saving the calendar, please try again later."
+        }
+
+    }
+
+    private Boolean canCurrentUserEditCalendar(String calendarId) {
+
+        if(userService.userIsAlaAdmin()) {
+            return true
+        } else {
+            return permissionService.isUserAdminForCalendar(userService.getUser()?.userId, calendarId)
+        }
     }
 }

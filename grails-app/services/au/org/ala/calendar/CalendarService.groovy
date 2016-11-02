@@ -9,28 +9,31 @@ class CalendarService {
     static transactional = false
 
     CommonService commonService
+    PermissionService permissionService
+    UserService userService
 
-    def create(Map props) {
+
+    Calendar create(Map props) {
         try {
             if (props.calendarId && Calendar.findByCalendarId(props.calendarId)) {
                 // clear session to avoid exception when GORM tries to autoflush the changes
                 Calendar.withSession { session -> session.clear() }
-                return [status: 'error', error: 'Duplicate calendar id for create ' + props.calendarId]
+                throw new IllegalArgumentException("Duplicate calendar id ${props.calendarId}")
             }
             // name is a mandatory property and hence needs to be set before dynamic properties are used (as they trigger validations)
             Calendar calendar = new Calendar(props)
             // Not flushing on create was causing that further updates to fields were overriden by old values
             calendar.save(flush: true, failOnError: true)
 
-            return [status: 'ok', calendarId: calendar.calendarId]
+            permissionService.addUserAsAdminToCalendar(userService.getUser().userId, calendar.calendarId)
+
+            return calendar
         } catch (Exception e) {
             def error = "Error creating calendar - ${e.message}"
-            log.error("Error creating calendar. ", e)
-
+            log.error("Error creating calendar ${props.calendarId}", e)
             // clear session to avoid exception when GORM tries to autoflush the changes
             Calendar.withSession { session -> session.clear() }
-
-            return [status: 'error', error: error]
+            throw new Exception(error,e)
         }
     }
 
@@ -48,23 +51,16 @@ class CalendarService {
                     storedCalendar.seasons = seasons
                 }
                 commonService.updateProperties(storedCalendar, props)
-
-                // Not flushing on create was causing that further updates to fields were overriden by old values
-//                calendar.save(flush: true, failOnError: true)
-                return [status: 'ok', calendarId: storedCalendar.calendarId]
             } else {
-                def error = "Error updating calendar - no such id ${props.calendarId}"
-                log.error error
-                return [status: 'error', error: error]
+                throw new IllegalArgumentException("No such id ${props.calendarId}")
             }
         } catch (Exception e) {
-            def error = "Error updating calendar ${props.calendarId} - ${e}"
-            log.error("Error creating calendar. ", e)
-
+            def error = "Error updating calendar - ${e.message}"
+            log.error("Error updating calendar ${props.calendarId}", e)
             // clear session to avoid exception when GORM tries to autoflush the changes
             Calendar.withSession { session -> session.clear() }
 
-            return [status: 'error', error: error]
+            throw new Exception(error,e)
         }
     }
 
@@ -85,20 +81,17 @@ class CalendarService {
 
                 // Not flushing on create was causing that further updates to fields were overriden by old values
                 storedCalendar.save(flush: true, failOnError: true)
-                return [status: 'ok', calendarId: calendarId]
+                return
             } else {
-                def error = "Error deleting calendar - no such id ${calendarId}"
-                log.error error
-                return [status: 'error', error: error]
+                throw new IllegalArgumentException( "No such id ${calendarId}")
             }
         } catch (Exception e) {
-            def error = "Error updating calendar ${calendarId} - ${e}"
-            log.error("Error creating calendar. ", e)
+            def error = "Error deleting calendar - ${e.message}"
+            log.error("Error deleting calendar ${calendarId}", e)
 
             // clear session to avoid exception when GORM tries to autoflush the changes
             Calendar.withSession { session -> session.clear() }
-
-            return [status: 'error', error: error]
+            throw new Exception(error,e)
         }
     }
 }
