@@ -3,7 +3,6 @@ package au.org.ala.calendar
 import grails.converters.JSON
 import grails.transaction.Transactional
 
-@Transactional
 class CalendarService {
 
     static transactional = false

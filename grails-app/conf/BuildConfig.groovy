@@ -47,6 +47,8 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
+        test 'org.grails:grails-datastore-test-support:1.0.2-grails-2.4'
+        test 'com.github.fakemongo:fongo:1.5.4'
     }
 
     plugins {
@@ -60,7 +62,7 @@ grails.project.dependency.resolution = {
         runtime ":ala-ws-plugin:1.1"
         runtime ":ala-ws-security:1.4"
 
-        runtime ":mongodb:6.0.2"
+        runtime ":mongodb:3.0.3"
         runtime ":resources:1.2.14"
         if (Environment.current == Environment.PRODUCTION) {
             runtime ":cached-resources:1.0"
