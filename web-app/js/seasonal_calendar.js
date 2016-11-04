@@ -61,6 +61,7 @@ var SeasonalCalendarsMenuItems = function (item){
         var calendarId = scConfig.id;
         return (calendarId == self.calendarId());
     });
+
 };
 
 var SeasonalCalendarVM = function(){
@@ -73,6 +74,8 @@ var SeasonalCalendarVM = function(){
     self.externalLink = ko.observable();
     self.seasons = ko.observableArray();
     self.multimedia = ko.observable();
+    self.license = ko.observable();
+
     self.transients = {};
     self.transients.iframe = ko.pureComputed(function() {
         if(self.multimedia()){
@@ -92,7 +95,16 @@ var SeasonalCalendarVM = function(){
         self.seasons($.map(calendar.seasons ? calendar.seasons : [], function (obj, i) {
             return new SeasonVM(obj);
         }));
+        self.license = ko.observable(calendar.license);
     };
+
+    self.transients.licenses =  [
+        {id: 'creative-commons', name: 'Creative Commons Attribution-NonCommercial-NoDerivatives (CC-BY-NC-ND)'},
+        {id: 'copyright-all', name: 'Copyright-All rights reserved'},
+        {id: 'cc-by', name: 'Creative Commons Attribution (CC-BY)'},
+        {id: 'cc-by-nc', name: 'Creative Commons Attribution-NonCommercial (CC-BY-NC)'},
+        {id: 'cc-by-sa', name: 'Creative Commons Attribution-ShareAlike (CC-BY-SA)'}
+    ];
 
     self.previewCalendar = function(calendar){
         window.open(scConfig.previewCalendar+"/"+ self.calendarId());
@@ -265,7 +277,6 @@ var SeasonalCalendarVM = function(){
     };
 
     self.loadCalendar();
-
 };
 
 var SeasonVM = function (seasons){

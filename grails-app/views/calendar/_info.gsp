@@ -1,17 +1,18 @@
-<div class="well">
-    <div class="row">
-        <div class="col-lg-12">
-            <h5 class="text-center">
-                <strong>Calendar info : <span data-bind="text:calendarName"></span></strong>
-            </h5>
-            <p class="text-center">
-                <span data-bind="if: calendarStatus() == 'unpublished'"><small class="label label-danger">Unpublished</small></span>
-                <span data-bind="if: calendarStatus() == 'published'"><small class="label label-success">Published</small></span>
+<div class="row">
+    <div class="col-lg-12">
+        <h4 class="text-center text-danger">
+            <strong>Calendar Name : <span data-bind="text:calendarName"></span></strong>
+        </h4>
+        <p class="text-center">
+            <span data-bind="if: calendarStatus() == 'unpublished'"><small class="label label-danger">Unpublished</small></span>
+            <span data-bind="if: calendarStatus() == 'published'"><small class="label label-success">Published</small></span>
 
-            </p>
-        </div>
+        </p>
     </div>
+</div>
 
+
+<div class="well">
     <div class="row">
         <div class="col-lg-12">
             <div class="col-lg-6">
@@ -23,7 +24,7 @@
             <div class="col-lg-6">
                 <div class="form-group">
                     <label for="description">Description:</label>
-                    <input data-bind="value: description" type="text" class="form-control" id="description" placeholder="Description">
+                    <textarea data-bind="value: description" type="text" class="form-control" id="description" placeholder="Description"></textarea>
                 </div>
             </div>
         </div>
