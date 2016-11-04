@@ -4,11 +4,11 @@
         <li class="single-feature" title="unlimited Google fonts">
             <!-- ko if: thumbImages().length > 0 -->
             <img data-bind="attr:{'src': thumbImages()[0].url}" alt="" class="feature-image" /><!-- Feature Icon -->
-        <!-- /ko -->
+            <!-- /ko -->
 
-        <!-- ko if: thumbImages().length == 0 -->
+            <!-- ko if: thumbImages().length == 0 -->
             <img src="${request.contextPath}/images/no-image.png" alt="" class="feature-image" /><!-- Feature Icon -->
-        <!-- /ko -->
+            <!-- /ko -->
 
             <h4 class="feature-title color-scheme" data-bind="text: categoryName"></h4>
             <p class="feature-text" data-bind="text: transients.shortDescription"></p>
