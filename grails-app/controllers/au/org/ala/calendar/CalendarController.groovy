@@ -51,12 +51,12 @@ class CalendarController {
     }
 
 
-    @AlaSecured(value = ['ROLE_SC','ROLE_ADMIN'], anyRole = true)
+    @AlaSecured(value = ['ROLE_SC','ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
     def settings() {
         return [id: params.id]
     }
 
-    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN'], anyRole = true)
+    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
     def addCalendar() {
         def props = request.JSON
         try{
@@ -78,7 +78,7 @@ class CalendarController {
         }
     }
 
-    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN'], anyRole = true)
+    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
     def editCalendar(String id) {
         def props = request.JSON
 
@@ -101,11 +101,11 @@ class CalendarController {
 
     }
 
-    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN'], anyRole = true)
+    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
     def delete(String id) {
         try {
             if (!canCurrentUserEditCalendar(id)) {
-                render status: 401, text: 'You do not have permission to delete this calendar'
+                render status: HttpServletResponse.SC_UNAUTHORIZED, text: 'You do not have permission to delete this calendar'
                 return
             }
 

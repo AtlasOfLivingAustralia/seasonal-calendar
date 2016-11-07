@@ -124,7 +124,21 @@ class UserService {
     }
 
     Boolean  userIsAlaAdmin() {
-        authService.userInRole(grailsApplication.config.security.cas.alaAdminRole)
+        String adminRoles = grailsApplication.config.security.cas.alaAdminRole
+
+        def roles = adminRoles ? adminRoles.split(",") : null
+        if(!roles)
+        {
+            log.warn("No admin roles configured, did you forget to set security.cas.alaAdminRole property?")
+            return false
+        }
+
+        for (def role:roles) {
+            if (authService.userInRole(role)) {
+                return true
+            }
+        }
+        return false
     }
 
     public UserDetails getUser() {
