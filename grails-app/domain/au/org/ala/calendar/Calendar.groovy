@@ -11,29 +11,21 @@ class Calendar {
     String calendarName
     String calendarStatus
     String externalLink
-    public static final String STATUS_DELETED = "deleted";
 
-    public static final String STATUS_PUBLISHED = "published";
-
+    public static final String STATUS_DELETED = "deleted"
+    public static final String STATUS_PUBLISHED = "published"
+    public static final String STATUS_UNPUBLISHED = "unpublished"
 
     List<Season> seasons
 
 
     static constraints = {
-        multimedia nullable: true
-        imageUrl nullable: true
-        description nullable: true
-        calendarName nullable: true
-        calendarStatus nullable: true
-        externalLink nullable: true
-        seasons nullable: true
+        calendarId nullable: false, unique: true
+        calendarName nullable: false
+        calendarStatus nullable: false
     }
 
     static embedded = ['seasons']
-
-    static mapping = {
-        name calendarId: [unique:true]
-    }
 
     boolean equals(Object obj) {
         return super.equals(obj)

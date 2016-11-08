@@ -10,7 +10,10 @@ class Category {
 
     List<ThumbImage> thumbImages
 
+    // Looks like constraints in embedded objects are just ignored
     static constraints = {
+        categoryName nullable: false
+        description nullable: false
     }
 
     static embedded = ['thumbImages']
