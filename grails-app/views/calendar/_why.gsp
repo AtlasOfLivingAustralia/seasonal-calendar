@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-lg-12">
         <p class="text-center text-danger">
-            c. Please describe, for what purpose and for whom the calendar was created?
+            c. <strong>WHY</strong> - for what purpose and for whom the calendar was created
         </p>
     </div>
 </div>
@@ -12,15 +12,15 @@
         <div class="col-lg-12">
             <div class="col-lg-6">
                 <div class="form-group">
-                    <label for="project-why-developed">Why calendar was developed</label>
-                    <textarea rows="4" type="text" class="form-control" id="project-why-developed" placeholder=""></textarea>
+                    <label for="why-developed">Why the calendar was developed</label>
+                    <textarea data-bind="value: why" rows="4" type="text" class="form-control" id="why-developed" placeholder=""></textarea>
                 </div>
             </div>
 
             <div class="col-lg-6">
                 <div class="form-group">
                     <label for="project-limitations">Limitations: </label>
-                    <input data-validation-engine="validate[required]" type="text" class="form-control" id="project-limitations" placeholder="">
+                    <textarea data-bind="value: limitations" rows="4" type="text" class="form-control" id="project-limitations" placeholder=""></textarea>
                 </div>
             </div>
 
