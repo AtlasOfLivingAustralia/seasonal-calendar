@@ -9,7 +9,11 @@ class Season {
     List<Category> categories
 
 
+    // Looks like constraints in embedded objects are just ignored
     static constraints = {
+        seasonName nullable: false
+        months nullable: false
+        description nullable: false
     }
 
     static embedded = ['categories']

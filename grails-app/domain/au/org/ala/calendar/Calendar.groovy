@@ -3,9 +3,6 @@ package au.org.ala.calendar
 import org.bson.types.ObjectId
 
 class Calendar {
-    public static final String STATUS_DELETED = "deleted";
-    public static final String STATUS_PUBLISHED = "published";
-
     ObjectId id
     String calendarId
     String multimedia
@@ -20,19 +17,19 @@ class Calendar {
     String limitations
     String reference
     String referenceLink
-
+    public static final String STATUS_DELETED = "deleted"
+    public static final String STATUS_PUBLISHED = "published"
+    public static final String STATUS_UNPUBLISHED = "unpublished"
 
     List<Season> seasons
     Organisation organisation
     Map sites
 
     static constraints = {
-        multimedia nullable: true
-        imageUrl nullable: true
-        description nullable: true
-        calendarName nullable: true
-        calendarStatus nullable: true
-        externalLink nullable: true
+        calendarId nullable: false, unique: true
+        calendarName nullable: false
+        calendarStatus nullable: false
+
         how nullable: true
         why nullable: true
         license nullable: true
@@ -46,10 +43,6 @@ class Calendar {
     }
 
     static embedded = ['seasons', 'organisation']
-
-    static mapping = {
-        name calendarId: [unique:true]
-    }
 
     boolean equals(Object obj) {
         return super.equals(obj)

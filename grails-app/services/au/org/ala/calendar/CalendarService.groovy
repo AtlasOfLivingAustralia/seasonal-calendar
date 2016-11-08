@@ -20,6 +20,9 @@ class CalendarService {
                 throw new IllegalArgumentException("Duplicate calendar id ${props.calendarId}")
             }
             // name is a mandatory property and hence needs to be set before dynamic properties are used (as they trigger validations)
+            if(!props?.calendarStatus) {
+                props.calendarStatus = Calendar.STATUS_UNPUBLISHED
+            }
             Calendar calendar = new Calendar(props)
             // Not flushing on create was causing that further updates to fields were overriden by old values
             calendar.save(flush: true, failOnError: true)
