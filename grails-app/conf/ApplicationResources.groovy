@@ -53,6 +53,7 @@ modules = {
         resource url: [dir:'vendor/knockoutjs/3.3.0/', file:'knockout-3.3.0.debug.js']
         resource url: [dir:'vendor/knockoutjs/3.3.0/', file:'knockout-3.3.0.min.js']
         resource url: [dir:'vendor/knockoutjs/3.3.0/', file:'knockout.mapping-latest.js']
+        resource url: [dir:'js/', file:'knockout_custombindings.js']
     }
 
     jqueryValidationEngine {

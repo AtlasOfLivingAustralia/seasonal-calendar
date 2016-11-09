@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="form-group text-right">
-                <button type="submit"  data-bind="click: $parent.deleteFeature" class="btn btn-default btn-sm text-left"><i class="fa fa-close"></i> Delete Category</button>
+                <button type="submit"  data-bind="click: $parent.deleteFeature" class="btn btn-default btn-sm text-left"><i class="fa fa-close"></i> Delete Feature</button>
             </div>
 
             <div class="row">
@@ -75,7 +75,7 @@
 
                     <div class="form-group">
                         <label for="featureDescription">Feature description: <span class="req-field"></span></label>
-                        <textarea data-validation-engine="validate[required]" data-bind="value: description" class="form-control" id="featureDescription" placeholder="Category description"></textarea>
+                        <textarea data-validation-engine="validate[required]" data-bind="value: description" class="form-control" id="featureDescription" placeholder="Feature description"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -120,7 +120,7 @@
             <!-- /ko -->
 
             <div class="form-group text-right">
-                <button type="submit"  data-bind="click: addFeature" class="btn btn-default text-right"><i class="fa fa-plus"></i> Add new category</button>
+                <button type="submit"  data-bind="click: addFeature" class="btn btn-default text-right"><i class="fa fa-plus"></i> Add new feature</button>
             </div>
 
         </div>

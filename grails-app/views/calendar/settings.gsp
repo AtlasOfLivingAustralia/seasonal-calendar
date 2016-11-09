@@ -62,6 +62,7 @@
         ko.applyBindings(SeasonalCalendarVM(), document.getElementById('calendarAddEdit'));
         ko.applyBindings(SeasonalCalendarsMenuVM(), document.getElementById('calendarList'));
         $('#calendar-validation').validationEngine();
+        $('.helphover').popover({animation: true, trigger:'hover'});
     });
 </r:script>
 
