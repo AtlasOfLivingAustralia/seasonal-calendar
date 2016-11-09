@@ -66,12 +66,7 @@ class CalendarController {
                 return
             }
 
-            String id = UUID.randomUUID().toString()
-            props.calendarId = id
-            calendarService.create(props);
-
-            Map result = [calendarId: id]
-            render result as JSON
+            render calendarService.create(props) as JSON
         } catch(Exception exception) {
             log.error("Error saving calendar", exception )
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "Error saving the calendar, please try again later."
@@ -83,22 +78,18 @@ class CalendarController {
         def props = request.JSON
 
         try{
-            props.calendarId = id
 
             if(!canCurrentUserEditCalendar(id)) {
                 render status: 401, text: 'You do not have permission to edit this calendar'
                 return
             }
 
-            calendarService.update(props)
-            Map result = [calendarId: props.calendarId]
-            render result as JSON;
+            render calendarService.update(id, props) as JSON;
+
         } catch(Exception e) {
             log.error("Error updating calendar", e)
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "Error saving the calendar, please try again later."
         }
-
-
     }
 
     @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)

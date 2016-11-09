@@ -21,28 +21,34 @@ class Calendar {
     public static final String STATUS_PUBLISHED = "published"
     public static final String STATUS_UNPUBLISHED = "unpublished"
 
-    List<Season> seasons
-    Organisation organisation
+    List seasons = []
     Map sites
+    Organisation organisation
 
     static constraints = {
         calendarId nullable: false, unique: true
         calendarName nullable: false
         calendarStatus nullable: false
 
-        how nullable: true
-        why nullable: true
-        license nullable: true
-        limitations nullable: true
-        reference nullable: true
-        referenceLink nullable: true
+        multimedia nullable: true, blank:true
+        imageUrl nullable: true, blank:true
+        description nullable: true, blank:true
+        calendarName nullable: true, blank:true
+        calendarStatus nullable: true, blank:true
+        externalLink nullable: true, blank:true
 
-        seasons nullable: true
-        organisation nullable: true
+        how nullable: true, blank:true
+        why nullable: true, blank:true
+        license nullable: true, blank:true
+        limitations nullable: true, blank:true
+        reference nullable: true, blank:true
+        referenceLink nullable: true, blank:true
+
         sites nullable: true
+        seasons nullable: true
     }
 
-    static embedded = ['seasons', 'organisation']
+    static embedded = ['organisation']
 
     boolean equals(Object obj) {
         return super.equals(obj)

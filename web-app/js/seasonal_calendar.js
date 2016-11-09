@@ -308,7 +308,7 @@ var SeasonalCalendarVM = function () {
                         showAlert("Successfully updated calendar and seasons details.", "alert-success", divId);
                     } else {
                         showAlert("Successfully added, reloading the page...", "alert-success", divId);
-                        window.location.href = scConfig.calendarHome + "/" + data.calendarId;
+                        window.location.href = scConfig.calendarHome + "/" + data.id;
                     }
                 }
             },

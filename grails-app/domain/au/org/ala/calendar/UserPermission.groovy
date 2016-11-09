@@ -17,6 +17,10 @@ class UserPermission {
 
     static constraints = {
         userId(unique: ['accessLevel', 'entityId']) // prevent duplicate entries
-        status nullable: true
+
+        entityId nullable: false
+        status nullable: false
+        accessLevel  nullable: false
+        entityType nullable: false
     }
 }

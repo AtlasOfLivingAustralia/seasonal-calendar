@@ -12,24 +12,18 @@ class CalendarService {
     UserService userService
 
 
-    Calendar create(Map props) {
+    def create(Map props) {
         try {
-            if (props.calendarId && Calendar.findByCalendarId(props.calendarId)) {
-                // clear session to avoid exception when GORM tries to autoflush the changes
-                Calendar.withSession { session -> session.clear() }
-                throw new IllegalArgumentException("Duplicate calendar id ${props.calendarId}")
-            }
-            // name is a mandatory property and hence needs to be set before dynamic properties are used (as they trigger validations)
-            if(!props?.calendarStatus) {
-                props.calendarStatus = Calendar.STATUS_UNPUBLISHED
-            }
-            Calendar calendar = new Calendar(props)
-            // Not flushing on create was causing that further updates to fields were overriden by old values
-            calendar.save(flush: true, failOnError: true)
+
+            props.remove('calendarId')
+            props.calendarStatus = props.calendarStatus ?: Calendar.STATUS_UNPUBLISHED
+
+            Calendar calendar = new Calendar(calendarId: UUID.randomUUID().toString())
+            getCommonService().updateProperties(calendar, props)
 
             permissionService.addUserAsAdminToCalendar(userService.getUser().userId, calendar.calendarId)
 
-            return calendar
+            return [status:'ok',id: calendar.calendarId]
         } catch (Exception e) {
             def error = "Error creating calendar - ${e.message}"
             log.error("Error creating calendar ${props.calendarId}", e)
@@ -39,22 +33,17 @@ class CalendarService {
         }
     }
 
-    def update(Map props) {
+    def update(String id, Map props) {
         try {
-            Calendar storedCalendar =  Calendar.findByCalendarId(props.calendarId)
-            if(storedCalendar) {
+            Calendar calendar =  Calendar.findByCalendarId(id)
+            if(calendar) {
+                props.remove('calendarId')
 
-                def seasonsMap = props.remove('seasons')
-                if(seasonsMap) {
-                    List<Season> seasons = []
-                    seasonsMap.each {
-                        seasons << new Season(it)
-                    }
-                    storedCalendar.seasons = seasons
-                }
-                commonService.updateProperties(storedCalendar, props)
+                commonService.updateProperties(calendar, props)
+
+                return [status:'ok',id:calendar.calendarId]
             } else {
-                throw new IllegalArgumentException("No such id ${props.calendarId}")
+                throw new IllegalArgumentException("No such id ${calendar.calendarId}")
             }
         } catch (Exception e) {
             def error = "Error updating calendar - ${e.message}"
