@@ -16,7 +16,7 @@
             listCalendars: "${createLink(controller: 'calendar', action: 'listCalendars')}"
         };
     </r:script>
-    <r:require modules="seasonal_calendar"/>
+    <r:require modules="seasonal_calendar, map"/>
 </head>
 
 <body>
@@ -30,6 +30,7 @@
     <section id="section-maintabs">
 
         <div class="container maintabs center">
+
             <div class="section-title-tab text-center">
                 <h1 data-bind="text: calendarName"></h1>
                 <p data-bind="text: description"></p>
@@ -112,7 +113,7 @@
 
 
     <!-- ko foreach : seasons -->
-        <!-- ko foreach : categories -->
+        <!-- ko foreach : features -->
             <!-- Start Latest News Section -->
             <div class="section-modal modal fade" data-bind="attr:{id: 'modal_'+ transients.id()}" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-content">
@@ -134,7 +135,7 @@
                                     </h2>
 
                                     <h3>
-                                        <span data-bind="text: categoryName"></span>
+                                        <span data-bind="text: featureName"></span>
                                         <span data-bind="if: speciesName() && speciesLink()">
                                         </br>
                                             <a target="_blank" data-bind="attr:{'href': speciesLink()}">Species: <span data-bind="text: speciesName"></span></a>
@@ -210,6 +211,12 @@
         <!-- /ko -->
     <!-- /ko -->
 
+    <div class="row">
+        <div class="col-lg-12">
+            <div style="height: 400px;"id="calendarMap" data-leaflet-img="${request.contextPath}/vendor/leaflet/0.7.3/images"></div>
+        </div>
+    </div>
+    <div class="margin-bottom-5"></div>
 </div>
 
 <r:script>

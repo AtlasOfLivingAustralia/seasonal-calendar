@@ -52,30 +52,30 @@
                 </div>
             </div>
 
-            <!-- ko foreach: categories -->
+            <!-- ko foreach: features -->
             <hr>
             <div class="row">
                 <div class="col-lg-12">
                     <h5 class="text-center">
-                        <strong> <span data-bind="text: $index() + 1 "></span>. Category info : <span data-bind="text:categoryName"></span></strong>
+                        <strong> <span data-bind="text: $index() + 1 "></span>. Feature info : <span data-bind="text:featureName"></span></strong>
                     </h5>
 
                 </div>
             </div>
             <div class="form-group text-right">
-                <button type="submit"  data-bind="click: $parent.deleteCategory" class="btn btn-default btn-sm text-left"><i class="fa fa-close"></i> Delete Category</button>
+                <button type="submit"  data-bind="click: $parent.deleteFeature" class="btn btn-default btn-sm text-left"><i class="fa fa-close"></i> Delete Category</button>
             </div>
 
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="categoryName">Category name: <span class="req-field"></span></label>
-                        <input data-validation-engine="validate[required]" data-bind="value: categoryName" type="text" class="form-control" id="categoryName" placeholder="Example: Danggalaba - Saltwater Crocodile">
+                        <label for="featureName">Feature name: <span class="req-field"></span></label>
+                        <input data-validation-engine="validate[required]" data-bind="value: featureName" type="text" class="form-control" id="featureName" placeholder="Example: Danggalaba - Saltwater Crocodile">
                     </div>
 
                     <div class="form-group">
-                        <label for="categoryDescription">Category description: <span class="req-field"></span></label>
-                        <textarea data-validation-engine="validate[required]" data-bind="value: description" class="form-control" id="categoryDescription" placeholder="Category description"></textarea>
+                        <label for="featureDescription">Feature description: <span class="req-field"></span></label>
+                        <textarea data-validation-engine="validate[required]" data-bind="value: description" class="form-control" id="featureDescription" placeholder="Category description"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -120,7 +120,7 @@
             <!-- /ko -->
 
             <div class="form-group text-right">
-                <button type="submit"  data-bind="click: addCategory" class="btn btn-default text-right"><i class="fa fa-plus"></i> Add new category</button>
+                <button type="submit"  data-bind="click: addFeature" class="btn btn-default text-right"><i class="fa fa-plus"></i> Add new category</button>
             </div>
 
         </div>

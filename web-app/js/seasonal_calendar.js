@@ -357,7 +357,7 @@ var SeasonVM = function (seasons) {
     self.description = ko.observable();
     self.months = ko.observable();
     self.weatherIcon = ko.observable();
-    self.categories = ko.observableArray();
+    self.features = ko.observableArray();
 
     self.transients = {};
     self.transients.weatherIcons = [
@@ -369,12 +369,12 @@ var SeasonVM = function (seasons) {
         {id: 'starry', name: 'Starry'},
         {id: 'stormy', name: 'Stormy'}
     ];
-    self.addCategory = function () {
-        self.categories.push(new CategoryVM());
+    self.addFeature = function () {
+        self.features.push(new FeatureVM());
     };
 
-    self.deleteCategory = function (category) {
-        self.categories.remove(category);
+    self.deleteFeature = function (feature) {
+        self.features.remove(feature);
     };
 
     self.loadSeason = function (seasons) {
@@ -382,30 +382,30 @@ var SeasonVM = function (seasons) {
         self.description(seasons.description);
         self.months(seasons.months);
         self.weatherIcon(seasons.weatherIcon);
-        self.categories($.map(seasons.categories ? seasons.categories : [], function (obj, i) {
-            return new CategoryVM(obj);
+        self.features($.map(seasons.features ? seasons.features : [], function (obj, i) {
+            return new FeatureVM(obj);
         }));
     };
 
     self.loadSeason(seasons);
 };
 
-var CategoryVM = function (category) {
+var FeatureVM = function (feature) {
     var self = this;
-    if (!category) category = {};
+    if (!feature) feature = {};
 
-    self.categoryName = ko.observable();
+    self.featureName = ko.observable();
     self.description = ko.observable();
     self.speciesName = ko.observable();
     self.speciesLink = ko.observable();
     self.thumbImages = ko.observableArray();
     self.images = ko.observableArray();
-    self.loadCategory = function (category) {
-        self.categoryName(category.categoryName);
-        self.description(category.description);
-        self.speciesName(category.speciesName);
-        self.speciesLink(category.speciesLink);
-        self.thumbImages($.map(category.thumbImages ? category.thumbImages : [], function (obj, i) {
+    self.loadFeature = function (feature) {
+        self.featureName(feature.featureName);
+        self.description(feature.description);
+        self.speciesName(feature.speciesName);
+        self.speciesLink(feature.speciesLink);
+        self.thumbImages($.map(feature.thumbImages ? feature.thumbImages : [], function (obj, i) {
             return new ImageUrl(obj);
         }));
     };
@@ -429,7 +429,7 @@ var CategoryVM = function (category) {
         self.thumbImages.remove(url);
     };
 
-    self.loadCategory(category);
+    self.loadFeature(feature);
 };
 
 var ImageUrl = function (image) {

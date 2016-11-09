@@ -51,7 +51,7 @@ class CalendarServiceSpec extends Specification {
         "imageUrl" : "http://www.fortresslockandsecurity.com/wp-content/uploads/2014/04/Austin-Locksmith.png",
         "seasons" : [
             {
-                "categories" : [
+                "features" : [
 
                 ],
                 "description" : "A new season",

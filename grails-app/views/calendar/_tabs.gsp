@@ -23,7 +23,7 @@
         </div>
 
         <div id="tab_2" class="tab-pane">
-            <g:render template="seasons"/>
+            <g:render template="/calendar/seasons"/>
         </div>
     </div>
 

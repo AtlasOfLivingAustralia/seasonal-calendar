@@ -34,15 +34,15 @@
             </div>
         </div>
 
-        <!-- ko foreach : categories -->
+        <!-- ko foreach : features -->
         <span data-bind="if: ($index()+1) % 3 == 0">
             <div class="row">
-                <g:render template="category"/>
+                <g:render template="features"/>
             </div>
         </span>
 
         <span data-bind="if: ($index()+1) % 3 != 0">
-            <g:render template="category"/>
+            <g:render template="features"/>
         </span>
         <!-- /ko -->
 
