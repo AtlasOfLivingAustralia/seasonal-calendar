@@ -5,6 +5,7 @@ modules = {
         resource url: [dir:'css/', file:'common.css']
         resource url: [dir:'css/', file:'weather.css']
         resource url: [dir:'js/', file:'common.js']
+
     }
 
     seasonal_calendar {
@@ -42,7 +43,9 @@ modules = {
         resource url: [dir:'egret/css/', file:'font-awesome.min.css']
         resource url: [dir:'egret/js/', file:'custom.js']
         resource url: [dir:'/egret/css/schemes/', file:'red.css']
+
     }
+
 
     lazyload {
         dependsOn 'jquery'

@@ -8,10 +8,16 @@
  **/
 function showAlert(message, alerttype, target) {
 
-    $('#'+target).append('<div id="alertdiv" class="alert ' +  alerttype + '"><a class="close" data-dismiss="alert">×</a><span>'+message+'</span></div>')
-
-    setTimeout(function() { // this will automatically close the alert and remove this if the users doesnt close it in 5 secs
-        $("#alertdiv").remove();
+    $('#'+target).append('<div id="alertdiv" class="alert ' +  alerttype + '"><a class="close" data-dismiss="alert">X</a><p align="center">'+message+'</p></div>')
+    var scrollPos = $('#'+target) ? $('#'+target).offset().top -100: 0;
+    if(scrollPos){
+        $(window).scrollTop(scrollPos);
+    }
+    setTimeout(function() {
+        $("#alertdiv").fadeOut(1000);
+        setTimeout(function() {
+            $("#alertdiv").remove();
+        },1000);
     }, 5000);
 }
 
@@ -46,3 +52,4 @@ function buildiFrame(embeddedVideo){
     }
     return iframe;
 };
+

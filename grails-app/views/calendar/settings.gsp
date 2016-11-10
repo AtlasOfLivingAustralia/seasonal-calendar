@@ -48,6 +48,12 @@
         </div>
 
         <div class="col-lg-9">
+            <div class="row">
+                <div class="col-lg-12 text-left">
+                    <div id="seasonal-calendar-result"></div>
+                </div>
+            </div>
+
             <g:render template="/calendar/tabs"/>
         </div>
     </div>

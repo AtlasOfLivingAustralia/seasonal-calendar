@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h5 class="text-center">
-               <strong> <span data-bind="text: $index() + 1 "></span>. Seasons info : <span data-bind="text:seasonName"></span></strong>
+               <strong> <span data-bind="text: $index() + 1 "></span>. Seasons information : <span data-bind="text:seasonName"></span></strong>
             </h5>
             <div class="form-group text-right">
                 <button type="submit"  data-bind="click: deleteSeason" class="btn btn-default btn-sm text-left"><i class="fa fa-close"></i> Delete Season</button>
@@ -18,15 +18,21 @@
                 <div class="col-lg-12">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="season-name">Season name: <span class="req-field"></span></label>
-                            <input data-validation-engine="validate[required]" data-bind="value: seasonName" type="text" class="form-control" id="season-name" placeholder="Example: Dalay">
+                            <label for="season-name"><g:message code="season.name"/><span class="req-field"></span></label>
+                            <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="season.name"/>', content:'<g:message code="season.name.content"/>'}">
+                                <i class="fa fa-question-circle"></i>
+                            </button>
+                            <input data-validation-engine="validate[required]" data-bind="value: seasonName" type="text" class="form-control" id="season-name" placeholder="Dalay; Ngawu">
                         </div>
 
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="season-description">Season Description: <span class="req-field"></span></label>
-                            <input data-validation-engine="validate[required]" data-bind="value: description" type="text" class="form-control" id="season-description" placeholder="Example: Monsoon Season">
+                            <label for="seasonNameEnglish"><g:message code="season.name.english"/><span class="req-field"></span></label>
+                            <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="season.name.english"/>', content:'<g:message code="season.name.english.content"/>'}">
+                                <i class="fa fa-question-circle"></i>
+                            </button>
+                            <input data-validation-engine="validate[required]" data-bind="value: seasonNameEnglish" type="text" class="form-control" id="seasonNameEnglish" placeholder="Monsoon season; hot and dry">
                         </div>
 
                     </div>
@@ -35,19 +41,37 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="col-lg-6">
+
                         <div class="form-group">
-                            <label for="month">English month: <span class="req-field"></span></label>
-                            <input data-validation-engine="validate[required]" data-bind="value: months" type="text" class="form-control" id="month" placeholder="Example: January, February, March">
+                            <label for="season-month"><g:message code="season.name.months"/><span class="req-field"></span></label>
+                            <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="season.name.months"/>', content:'<g:message code="season.name.months.content"/>'}">
+                                <i class="fa fa-question-circle"></i>
+                            </button>
+                            <input data-validation-engine="validate[required]" data-bind="value: seasonMonths" type="text" class="form-control" id="season-month" placeholder="January, February, March">
                         </div>
 
 
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="month">Weather icons:</label>
-                            <select style="width:100%;" data-bind="options: transients.weatherIcons, optionsText:'name', optionsValue:'id', value: weatherIcon, optionsCaption: 'Please select'"></select>
+                            <label for="season-weather"><g:message code="season.weather.icons"/></label>
+                            <select id="season-weather" style="width:100%;" data-bind="options: transients.weatherIcons, optionsText:'name', optionsValue:'id', value: weatherIcon, optionsCaption: 'Please select'"></select>
                         </div>
 
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="season-description"><g:message code="season.description"/><span class="req-field"></span></label>
+                            <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="season.description"/>', content:'<g:message code="season.description.content"/>'}">
+                                <i class="fa fa-question-circle"></i>
+                            </button>
+                            <textarea row="4" data-validation-engine="validate[required]" data-bind="value: description" type="text" class="form-control" id="season-description" placeholder=""></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,7 +81,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h5 class="text-center">
-                        <strong> <span data-bind="text: $index() + 1 "></span>. Feature info : <span data-bind="text:featureName"></span></strong>
+                        <strong> <span data-bind="text: $index() + 1 "></span>. Feature information : <span data-bind="text:featureName"></span></strong>
                     </h5>
 
                 </div>
@@ -69,30 +93,46 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="featureName">Feature name: <span class="req-field"></span></label>
+                        <label for="featureName"><g:message code="feature.name"/><span class="req-field"></span></label>
+                        <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="feature.name"/>', content:'<g:message code="feature.name.content"/>'}">
+                            <i class="fa fa-question-circle"></i>
+                        </button>
                         <input data-validation-engine="validate[required]" data-bind="value: featureName" type="text" class="form-control" id="featureName" placeholder="Example: Danggalaba - Saltwater Crocodile">
                     </div>
-
                     <div class="form-group">
-                        <label for="featureDescription">Feature description: <span class="req-field"></span></label>
-                        <textarea data-validation-engine="validate[required]" data-bind="value: description" class="form-control" id="featureDescription" placeholder="Feature description"></textarea>
+                        <label for="featureNameEnglish"><g:message code="feature.name.english"/><span class="req-field"></span></label>
+                        <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="feature.name.english"/>', content:'<g:message code="feature.name.english.content"/>'}">
+                            <i class="fa fa-question-circle"></i>
+                        </button>
+                        <input data-validation-engine="validate[required]" data-bind="value: featureNameEnglish" type="text" class="form-control" id="featureNameEnglish" placeholder="">
                     </div>
 
                     <div class="form-group">
-                        <label for="speciesName">Species name:</label>
+                        <label for="speciesName"><g:message code="feature.species"/></label>
                         <input data-bind="value: speciesName" type="text" class="form-control" id="speciesName" placeholder="Species name">
                     </div>
 
                     <div class="form-group">
-                        <label for="speciesLink">ALA species link:</label>
+                        <label for="speciesLink"><g:message code="feature.species.link"/></label>
                         <input data-bind="value: speciesLink" type="text" class="form-control" id="speciesLink" placeholder="Species link">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="featureDescription"><g:message code="feature.description"/><span class="req-field"></span></label>
+                        <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="feature.description"/>', content:'<g:message code="feature.description.content"/>'}">
+                            <i class="fa fa-question-circle"></i>
+                        </button>
+                        <textarea rows="4" data-validation-engine="validate[required]" data-bind="value: description" class="form-control" id="featureDescription" placeholder="Feature description"></textarea>
                     </div>
                 </div>
 
 
 
                 <div class="col-lg-6">
-                    <label for="imageUrl">Images url:</label>
+                    <label for="imageUrl"><g:message code="feature.image.url"/></label>
+                    <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="feature.image.url"/>', content:'<g:message code="feature.image.url.content"/>'}">
+                        <i class="fa fa-question-circle"></i>
+                    </button>
                     <!-- ko foreach: thumbImages -->
                     <div class="form-group">
                         <div class="col-lg-10">

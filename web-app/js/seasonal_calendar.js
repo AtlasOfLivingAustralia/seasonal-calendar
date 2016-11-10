@@ -225,9 +225,9 @@ var SeasonalCalendarVM = function () {
     };
 
     self.publish = function () {
-        if (!$('#calendar-validation').validationEngine('validate')) {
-            return;
-        }
+        if(!self.validate('publish')) return;
+
+
         var url = self.calendarId() ? scConfig.editCalendar + "/" + self.calendarId() : scConfig.addCalendar;
         var divId = "seasonal-calendar-result";
         self.calendarStatus('published');
@@ -254,11 +254,32 @@ var SeasonalCalendarVM = function () {
             }
         });
     };
+    self.validate = function(call){
+        if(!call) call = "";
+        var divId = "seasonal-calendar-result";
+        var success = true;
 
-    self.unpublish = function () {
         if (!$('#calendar-validation').validationEngine('validate')) {
-            return;
+            success = false;
         }
+
+        if(!self.calendarName()) {
+            showAlert("Calendar name is required.", "alert-danger", divId);
+            success = false;
+        }
+
+        if(call =="publish") {
+            if(self.seasons().length == 0) {
+                showAlert("Minimum one season is requied .", "alert-danger", divId);
+                success = false;
+            }
+        }
+
+        return success;
+    };
+    self.unpublish = function () {
+        if(!self.validate()) return;
+
         var url = self.calendarId() ? scConfig.editCalendar + "/" + self.calendarId() : scConfig.addCalendar;
         var divId = "seasonal-calendar-result";
 
@@ -288,11 +309,10 @@ var SeasonalCalendarVM = function () {
     };
 
     self.save = function () {
-        if (!$('#calendar-validation').validationEngine('validate')) {
-            return;
-        }
-        var url = self.calendarId() ? scConfig.editCalendar + "/" + self.calendarId() : scConfig.addCalendar;
+        if(!self.validate()) return;
+
         var divId = "seasonal-calendar-result";
+        var url = self.calendarId() ? scConfig.editCalendar + "/" + self.calendarId() : scConfig.addCalendar;
         return $.ajax({
             url: url,
             type: 'POST',
@@ -354,8 +374,9 @@ var SeasonVM = function (seasons) {
     if (!seasons) seasons = {};
 
     self.seasonName = ko.observable();
+    self.seasonNameEnglish = ko.observable();
     self.description = ko.observable();
-    self.months = ko.observable();
+    self.seasonMonths = ko.observable();
     self.weatherIcon = ko.observable();
     self.features = ko.observableArray();
 
@@ -380,7 +401,8 @@ var SeasonVM = function (seasons) {
     self.loadSeason = function (seasons) {
         self.seasonName(seasons.seasonName);
         self.description(seasons.description);
-        self.months(seasons.months);
+        self.seasonMonths(seasons.seasonMonths);
+        self.seasonNameEnglish(seasons.seasonNameEnglish);
         self.weatherIcon(seasons.weatherIcon);
         self.features($.map(seasons.features ? seasons.features : [], function (obj, i) {
             return new FeatureVM(obj);
@@ -395,6 +417,7 @@ var FeatureVM = function (feature) {
     if (!feature) feature = {};
 
     self.featureName = ko.observable();
+    self.featureNameEnglish = ko.observable();
     self.description = ko.observable();
     self.speciesName = ko.observable();
     self.speciesLink = ko.observable();
@@ -402,6 +425,7 @@ var FeatureVM = function (feature) {
     self.images = ko.observableArray();
     self.loadFeature = function (feature) {
         self.featureName(feature.featureName);
+        self.featureNameEnglish(feature.featureNameEnglish);
         self.description(feature.description);
         self.speciesName(feature.speciesName);
         self.speciesLink(feature.speciesLink);
@@ -437,3 +461,4 @@ var ImageUrl = function (image) {
     if (!image) image = {};
     self.url = ko.observable(image.url);
 };
+
