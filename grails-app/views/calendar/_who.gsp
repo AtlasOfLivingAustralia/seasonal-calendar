@@ -121,6 +121,7 @@
             <g:else>
                 <div class="col-lg-6">
                     <div class="form-group">
+                        <label for="org-url"><g:message code="calendar.organisation.url"/></label>
                         <input data-bind="value: organisation.url" type="text" class="form-control" id="org-url" placeholder="">
                     </div>
                 </div>

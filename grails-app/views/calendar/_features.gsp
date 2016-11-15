@@ -10,7 +10,7 @@
             <img src="${request.contextPath}/images/no-image.png" alt="" class="feature-image" /><!-- Feature Icon -->
             <!-- /ko -->
 
-            <h4 class="feature-title color-scheme" data-bind="text: featureName"></h4>
+            <h4 class="feature-title color-scheme" data-bind="text: featureName()  + '('+ featureNameEnglish()+')' "></h4>
             <p class="feature-text" data-bind="text: transients.shortDescription"></p>
 
             <a data-bind="attr:{href: '#modal_'+transients.id()}" href="#news-modal" data-toggle="modal" class="fancy-button button-line btn-col small zoom">

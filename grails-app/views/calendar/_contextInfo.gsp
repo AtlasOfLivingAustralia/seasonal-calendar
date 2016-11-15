@@ -2,7 +2,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <g:render template="info"/>
+            <g:render template="/calendar/info"/>
         </div>
     </div>
 

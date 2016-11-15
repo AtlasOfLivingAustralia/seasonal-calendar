@@ -23,7 +23,7 @@
             </div>
 
             <div id="calendar-detail" class="tab-pane">
-
+                <g:render template="/calendar/detailCalendar"/>
             </div>
         </div>
 

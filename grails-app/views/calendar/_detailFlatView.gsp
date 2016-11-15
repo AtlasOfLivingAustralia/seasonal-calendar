@@ -1,12 +1,12 @@
 <ul class="nav nav-tabs nav-justified">
     <!-- ko foreach : seasons -->
     <!-- ko if: $index() == 0 -->
-    <li class="active"><a data-toggle="pill" data-bind="attr:{'href': '#tab_'+$index()}"><h4 data-bind="text: seasonName"></h4></a>
+    <li class="active"><a data-toggle="pill" data-bind="attr:{'href': '#tab_'+$index()}"><h4 data-bind="text: seasonName() + '('+ seasonNameEnglish()+')' "></h4></a>
     </li>
     <!-- /ko -->
 
     <!-- ko if: $index() > 0 -->
-    <li class=""><a data-toggle="pill" data-bind="attr:{'href': '#tab_'+$index()}"><h4 data-bind="text: seasonName"></h4></a></li>
+    <li class=""><a data-toggle="pill" data-bind="attr:{'href': '#tab_'+$index()}"><h4 data-bind="text: seasonName() + '('+ seasonNameEnglish()+')'"></h4></a></li>
     <!-- /ko -->
     <!-- /ko -->
 </ul>
@@ -28,8 +28,8 @@
             <div class="col-lg-12">
 
                     <div class="section-title-tab text-center">
-                        <h2><span data-bind="text: seasonName"></span> - <span data-bind="text: description"></span></h2>
-                        <p><label class="label label-default" data-bind="text: months"></label></p>
+                        <h2><span data-bind="text: seasonName() + '('+ seasonNameEnglish()+')'"></span> - <span data-bind="text: description"></span></h2>
+                        <p><label class="label label-default" data-bind="text: seasonMonths"></label></p>
                     </div>
             </div>
         </div>

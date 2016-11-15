@@ -128,7 +128,6 @@ var SeasonalCalendarVM = function () {
 
     self.transients = {};
 
-
     self.transients.iframe = ko.pureComputed(function () {
         if (self.multimedia()) {
             return buildiFrame(self.multimedia());
