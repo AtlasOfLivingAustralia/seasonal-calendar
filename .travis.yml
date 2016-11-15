@@ -11,6 +11,7 @@ before_install:
  - chmod +x ala_common.sh
  - source ./ala_common.sh
  - ala_travis_grails_setup_env
+ - grails clean-all
 script:
  - ala_travis_grails_build
 env:
