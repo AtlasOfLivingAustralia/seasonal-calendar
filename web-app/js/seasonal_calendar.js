@@ -110,9 +110,9 @@ var SeasonalCalendarVM = function () {
 
     self.organisation = new OrganisationVM();
     self.seasons = ko.observableArray();
-
+    var mapReadonly = scConfig.mapReadonly ? true : false;
     self.map = new ALA.Map("calendarMap", {
-        drawControl: true,
+        drawControl: !mapReadonly,
         singleMarker: false,
         useMyLocation: false,
         allowSearchLocationByAddress: false,
@@ -120,12 +120,15 @@ var SeasonalCalendarVM = function () {
         draggableMarkers: false,
         showReset: true
     });
+
     self.map.subscribe(listenToMapChanges);
     function listenToMapChanges() {
         // Not required for now.
     };
 
     self.transients = {};
+
+
     self.transients.iframe = ko.pureComputed(function () {
         if (self.multimedia()) {
             return buildiFrame(self.multimedia());
@@ -154,7 +157,9 @@ var SeasonalCalendarVM = function () {
         }));
 
         //Load geoJSON sites
-        calendar.sites ? self.map.setGeoJSON(calendar.sites) : '';
+        if(calendar.sites){
+            self.map.setGeoJSON(calendar.sites);
+        }
     };
 
     self.transients.licenses = [

@@ -19,7 +19,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="season-name"><g:message code="season.name"/><span class="req-field"></span></label>
-                            <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="season.name"/>', content:'<g:message code="season.name.content"/>'}">
+                            <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="season.name"/>', content:'<g:message code="season.name.content"/>'}">
                                 <i class="fa fa-question-circle"></i>
                             </button>
                             <input data-validation-engine="validate[required]" data-bind="value: seasonName" type="text" class="form-control" id="season-name" placeholder="Dalay; Ngawu">
@@ -29,7 +29,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="seasonNameEnglish"><g:message code="season.name.english"/><span class="req-field"></span></label>
-                            <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="season.name.english"/>', content:'<g:message code="season.name.english.content"/>'}">
+                            <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="season.name.english"/>', content:'<g:message code="season.name.english.content"/>'}">
                                 <i class="fa fa-question-circle"></i>
                             </button>
                             <input data-validation-engine="validate[required]" data-bind="value: seasonNameEnglish" type="text" class="form-control" id="seasonNameEnglish" placeholder="Monsoon season; hot and dry">
@@ -44,7 +44,7 @@
 
                         <div class="form-group">
                             <label for="season-month"><g:message code="season.name.months"/><span class="req-field"></span></label>
-                            <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="season.name.months"/>', content:'<g:message code="season.name.months.content"/>'}">
+                            <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="season.name.months"/>', content:'<g:message code="season.name.months.content"/>'}">
                                 <i class="fa fa-question-circle"></i>
                             </button>
                             <input data-validation-engine="validate[required]" data-bind="value: seasonMonths" type="text" class="form-control" id="season-month" placeholder="January, February, March">
@@ -67,7 +67,7 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="season-description"><g:message code="season.description"/><span class="req-field"></span></label>
-                            <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="season.description"/>', content:'<g:message code="season.description.content"/>'}">
+                            <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="season.description"/>', content:'<g:message code="season.description.content"/>'}">
                                 <i class="fa fa-question-circle"></i>
                             </button>
                             <textarea row="4" data-validation-engine="validate[required]" data-bind="value: description" type="text" class="form-control" id="season-description" placeholder=""></textarea>
@@ -94,14 +94,14 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="featureName"><g:message code="feature.name"/><span class="req-field"></span></label>
-                        <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="feature.name"/>', content:'<g:message code="feature.name.content"/>'}">
+                        <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="feature.name"/>', content:'<g:message code="feature.name.content"/>'}">
                             <i class="fa fa-question-circle"></i>
                         </button>
                         <input data-validation-engine="validate[required]" data-bind="value: featureName" type="text" class="form-control" id="featureName" placeholder="Example: Danggalaba - Saltwater Crocodile">
                     </div>
                     <div class="form-group">
                         <label for="featureNameEnglish"><g:message code="feature.name.english"/><span class="req-field"></span></label>
-                        <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="feature.name.english"/>', content:'<g:message code="feature.name.english.content"/>'}">
+                        <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="feature.name.english"/>', content:'<g:message code="feature.name.english.content"/>'}">
                             <i class="fa fa-question-circle"></i>
                         </button>
                         <input data-validation-engine="validate[required]" data-bind="value: featureNameEnglish" type="text" class="form-control" id="featureNameEnglish" placeholder="">
@@ -119,7 +119,7 @@
 
                     <div class="form-group">
                         <label for="featureDescription"><g:message code="feature.description"/><span class="req-field"></span></label>
-                        <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="feature.description"/>', content:'<g:message code="feature.description.content"/>'}">
+                        <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="feature.description"/>', content:'<g:message code="feature.description.content"/>'}">
                             <i class="fa fa-question-circle"></i>
                         </button>
                         <textarea rows="4" data-validation-engine="validate[required]" data-bind="value: description" class="form-control" id="featureDescription" placeholder="Feature description"></textarea>
@@ -130,7 +130,7 @@
 
                 <div class="col-lg-6">
                     <label for="imageUrl"><g:message code="feature.image.url"/></label>
-                    <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="feature.image.url"/>', content:'<g:message code="feature.image.url.content"/>'}">
+                    <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="feature.image.url"/>', content:'<g:message code="feature.image.url.content"/>'}">
                         <i class="fa fa-question-circle"></i>
                     </button>
                     <!-- ko foreach: thumbImages -->

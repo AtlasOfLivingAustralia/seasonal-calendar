@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-lg-12">
-        <h4 class="text-center text-info">
+        <h4 class="text-center feature-title color-scheme">
             <strong><g:message code="calendar.name"/><span data-bind="text:calendarName"></span></strong>
         </h4>
         <p class="text-center">
@@ -25,7 +25,7 @@
             <div class="col-lg-6">
                 <div class="form-group">
                     <label for="description"><g:message code="calendar.description"/></label>
-                    <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="calendar.description"/>', content:'<g:message code="calendar.description.content"/>'}">
+                    <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.description"/>', content:'<g:message code="calendar.description.content"/>'}">
                         <i class="fa fa-question-circle"></i>
                     </button>
                     <textarea rows="4" data-bind="value: description" type="text" class="form-control" id="description" placeholder="Description"></textarea>
@@ -39,7 +39,7 @@
             <div class="col-lg-6">
                 <div class="form-group">
                     <label for="calendarImage"><g:message code="calendar.imageurl"/></label>
-                    <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="calendar.imageurl"/>', content:'<g:message code="calendar.imageurl.content"/>'}">
+                    <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.imageurl"/>', content:'<g:message code="calendar.imageurl.content"/>'}">
                         <i class="fa fa-question-circle"></i>
                     </button>
                     <input data-bind="value: imageUrl" type="text" class="form-control" id="calendarImage" placeholder="">
@@ -48,7 +48,7 @@
             <div class="col-lg-6">
                 <div class="form-group">
                     <label for="externalUrl"><g:message code="calendar.website"/></label>
-                    <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="calendar.website"/>', content:'<g:message code="calendar.website.content"/>'}">
+                    <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.website"/>', content:'<g:message code="calendar.website.content"/>'}">
                         <i class="fa fa-question-circle"></i>
                     </button>
                     <input data-bind="value: externalLink" type="text" class="form-control" id="externalUrl" placeholder="">
