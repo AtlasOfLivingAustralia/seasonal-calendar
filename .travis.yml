@@ -11,9 +11,11 @@ before_install:
  - chmod +x ala_common.sh
  - source ./ala_common.sh
  - ala_travis_grails_setup_env
- - grails clean-all
+ - MAVEN_REPO="ala-repo-snapshot"; grep '^app\.version=' ./application.properties |
+   grep -q "\-SNAPSHOT"; if [ "$?" = "1" ]; then MAVEN_REPO="ala-repo-release"; fi;
+ - echo "MAVEN_REPO:$MAVEN_REPO"
 script:
- - ala_travis_grails_build
+ - grails clean && grails refresh-dependencies --non-interactive && grails test-app --non-interactive && grails prod maven-deploy --repository=$MAVEN_REPO --non-interactive --stacktrace --verbose
 env:
   global:
   - secure: m0bpi0UaM/n+sVA7arpgFhq6Jol5ZkV3kDds4pgbpssyHWlTv4CBbfjkQkV51mljgtMJPdCvP3llNZjPkWOBsQxRSoWc/cWRkTunRTQPfXwOMpV3zRQAZOB76d2DMnJ0oRRBNRHHmDgFvN/ryCj5i2+Hm67eyBANRfGAY4YWAhcRV8qUw77XWM89Vvc/VEVpyK3k19gABCAX4FSDl2l/Qg9KHfO4sYGZyy0AeaGZkKk+n+mwXlxDqjgam29NoEngcv3HoBsvORxU8DjjmIZIw4uQLWYWTidMbtoULzPnvrNwB74XbdLnfhPpkY+cwXb1BBGx5z5YP7Koos9JEZVbmrF9XP9/eU6xCzK9oqU6moG25rWsAnTfxdrZsFw1ZwUzHhmWuPky+vFP0Jq+pu18X0MMUCpgEH0CyIVeEFayGJapxauIhzhHnzInhmBM9oz8Ud4144cRbZUhJKBy80FSEgWYUVOCQjWJ2UN/zJTJnG1wyvZDEiWdt73a1bEJYe7QHGtd4F8WXpr1Eo+jBVGuXF5FaDbQyRVnY2Vqh6Z+LzyH9PGwrHeLTmfFiZFOqsyvw8/H6NQbUboRDWnuXEwuLvj2NI9oix8177QahrJr25rwFzfwMwAln4dgYbgSm3fUWe05mFE8RwQl82qoR6tsqOpijoFy9k1GUIxHSoNcp9E=
