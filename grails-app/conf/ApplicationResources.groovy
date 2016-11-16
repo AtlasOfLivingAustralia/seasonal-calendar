@@ -5,7 +5,6 @@ modules = {
         resource url: [dir:'css/', file:'common.css']
         resource url: [dir:'css/', file:'weather.css']
         resource url: [dir:'js/', file:'common.js']
-
     }
 
     seasonal_calendar {
@@ -71,6 +70,7 @@ modules = {
     }
 
     bootbox {
-        resource url: [dir:'vendor/bootbox/3.2.0', file:'bootbox.min.js']
+        resource url: [dir:'vendor/bootbox/4.4.0', file:'bootbox.min.js']
     }
+
 }
