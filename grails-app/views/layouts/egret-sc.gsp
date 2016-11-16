@@ -4,6 +4,12 @@
     <title><g:layoutTitle/></title>
     <meta charset="utf-8">
 
+    <meta name="app.version" content="${g.meta(name:'app.version')}"/>
+    <meta name="app.build" content="${g.meta(name:'app.build')}"/>
+    <meta name="app.name" content="${g.meta(name:'app.name')}"/>
+    <meta name="description" content="Indigenous Seasonal Calendars - Atlas of Living Australia"/>
+    <meta name="author" content="Atlas of Living Australia">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--=== Google Fonts ===-->
     <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet' type='text/css'>
@@ -61,6 +67,8 @@
                                 </li>
                             </auth:ifNotLoggedIn>
                             <auth:ifLoggedIn>
+
+
                                 <li><a href="${request.contextPath}/calendar/settings"><i class="fa fa-plus"></i> Seasonal Calendar</a></li>
                                 <li>
                                     <a href="${grailsApplication.config.grails.serverURL}/logout/logout?casUrl=${grailsApplication.config.casServerUrlPrefix}/logout&appUrl=${grailsApplication.config.grails.serverURL}/">
@@ -68,6 +76,18 @@
                                         Logout
                                     </a>
                                 </li>
+
+                                %{--<li class="dropdown-submenu pull-left">--}%
+                                    %{--<a href="#" ><span class="fa fa-user"></span> Some User <sc:currentUserDisplayName/></a>--}%
+                                    %{--<ul>--}%
+                                        %{--<li>--}%
+                                            %{--<a href="${grailsApplication.config.grails.serverURL}/logout/logout?casUrl=${grailsApplication.config.casServerUrlPrefix}/logout&appUrl=${grailsApplication.config.grails.serverURL}/">--}%
+                                                %{--<i class="fa fa-sign-out"></i>--}%
+                                                %{--Logout--}%
+                                            %{--</a>--}%
+                                        %{--</li>--}%
+                                    %{--</ul>--}%
+                                %{--</li>--}%
                             </auth:ifLoggedIn>
                         </ul>
                     </div>
