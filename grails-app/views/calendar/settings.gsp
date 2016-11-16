@@ -17,7 +17,7 @@
             previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}"
         };
     </r:script>
-    <r:require modules="jqueryValidationEngine, seasonal_calendar, map"/>
+    <r:require modules="jqueryValidationEngine, seasonal_calendar, map, bootbox"/>
 </head>
 <body>
 

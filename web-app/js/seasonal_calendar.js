@@ -177,29 +177,46 @@ var SeasonalCalendarVM = function () {
         var url = scConfig.deleteCalendar + "/" + self.calendarId();
         var divId = "seasonal-calendar-result";
 
-        self.calendarStatus('deleted');
-        return $.ajax({
-            url: url,
-            type: 'POST',
-            data: self.calendarAsJson(),
-            contentType: 'application/json',
-            success: function (data) {
-                if (data.error) {
-                    showAlert("Error: " + data.error, "alert-danger", divId);
-                }
-                else {
-                    showAlert("Successfully deleted, redirecting...", "alert-success", divId);
-                    setInterval(function () {
-                        window.location.href = scConfig.calendarHome;
-                    }, 3000);
+        bootbox.confirm({
+            message: 'Are you sure you want to delete?',
+            buttons: {
+                'cancel': {
+                    label: 'No',
+                    className: 'btn-default'
+                },
+                'confirm': {
+                    label: 'Yes',
+                    className: 'btn-danger'
                 }
             },
-            error: function (data) {
-                debugger;
-                showAlert("Error code: " + data.responseText, "alert-danger", divId);
+
+            callback: function(result) {
+                if (result) {
+                    self.calendarStatus('deleted');
+                    return $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: self.calendarAsJson(),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            if (data.error) {
+                                showAlert("Error: " + data.error, "alert-danger", divId);
+                            }
+                            else {
+                                showAlert("Successfully deleted, redirecting...", "alert-success", divId);
+                                setInterval(function () {
+                                    window.location.href = scConfig.calendarHome;
+                                }, 3000);
+                            }
+                        },
+                        error: function (data) {
+                            debugger;
+                            showAlert("Error code: " + data.responseText, "alert-danger", divId);
+                        }
+                    });
+                }
             }
         });
-
     };
 
     self.loadCalendar = function () {
@@ -234,29 +251,49 @@ var SeasonalCalendarVM = function () {
 
         var url = self.calendarId() ? scConfig.editCalendar + "/" + self.calendarId() : scConfig.addCalendar;
         var divId = "seasonal-calendar-result";
-        self.calendarStatus('published');
-        return $.ajax({
-            url: url,
-            type: 'POST',
-            data: self.calendarAsJson(),
-            contentType: 'application/json',
-            success: function (data) {
-                if (data.error) {
-                    showAlert("Error: " + data.error, "alert-danger", divId);
-                }
-                else {
-                    if (self.calendarId()) {
-                        showAlert("Successfully published", "alert-success", divId);
-                    } else {
-                        showAlert("Successfully published, reloading the page...", "alert-success", divId);
-                        window.location.href = scConfig.calendarHome + "/" + data.calendarId;
-                    }
+
+        bootbox.confirm({
+            message: 'Are you sure you want to publish?',
+            buttons: {
+                'cancel': {
+                    label: 'No',
+                    className: 'btn-default'
+                },
+                'confirm': {
+                    label: 'Yes',
+                    className: 'btn-danger'
                 }
             },
-            error: function (data) {
-                showAlert("Error: " + data, "alert-danger", divId);
+
+            callback: function(result) {
+                if (result) {
+                    self.calendarStatus('published');
+                    return $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: self.calendarAsJson(),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            if (data.error) {
+                                showAlert("Error: " + data.error, "alert-danger", divId);
+                            }
+                            else {
+                                if (self.calendarId()) {
+                                    showAlert("Successfully published", "alert-success", divId);
+                                } else {
+                                    showAlert("Successfully published, reloading the page...", "alert-success", divId);
+                                    window.location.href = scConfig.calendarHome + "/" + data.calendarId;
+                                }
+                            }
+                        },
+                        error: function (data) {
+                            showAlert("Error: " + data, "alert-danger", divId);
+                        }
+                    });
+                }
             }
         });
+
     };
     self.validate = function(call){
         if(!call) call = "";
@@ -287,27 +324,47 @@ var SeasonalCalendarVM = function () {
         var url = self.calendarId() ? scConfig.editCalendar + "/" + self.calendarId() : scConfig.addCalendar;
         var divId = "seasonal-calendar-result";
 
-        self.calendarStatus('unpublished');
-        return $.ajax({
-            url: url,
-            type: 'POST',
-            data: self.calendarAsJson(),
-            contentType: 'application/json',
-            success: function (data) {
-                if (data.error) {
-                    showAlert("Error: " + data.error, "alert-danger", divId);
-                }
-                else {
-                    if (self.calendarId()) {
-                        showAlert("Successfully unpublished", "alert-success", divId);
-                    } else {
-                        showAlert("Successfully unpublished, reloading the page...", "alert-success", divId);
-                        window.location.href = scConfig.calendarHome + "/" + data.calendarId;
-                    }
+
+
+        bootbox.confirm({
+            message: 'Are you sure you want to unpublish the calendar?',
+            buttons: {
+                'cancel': {
+                    label: 'No',
+                    className: 'btn-default'
+                },
+                'confirm': {
+                    label: 'Yes',
+                    className: 'btn-danger'
                 }
             },
-            error: function (data) {
-                showAlert("Error: " + data, "alert-danger", divId);
+
+            callback: function(result) {
+                if (result) {
+                    self.calendarStatus('unpublished');
+                    return $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: self.calendarAsJson(),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            if (data.error) {
+                                showAlert("Error: " + data.error, "alert-danger", divId);
+                            }
+                            else {
+                                if (self.calendarId()) {
+                                    showAlert("Successfully unpublished", "alert-success", divId);
+                                } else {
+                                    showAlert("Successfully unpublished, reloading the page...", "alert-success", divId);
+                                    window.location.href = scConfig.calendarHome + "/" + data.calendarId;
+                                }
+                            }
+                        },
+                        error: function (data) {
+                            showAlert("Error: " + data, "alert-danger", divId);
+                        }
+                    });
+                }
             }
         });
     };

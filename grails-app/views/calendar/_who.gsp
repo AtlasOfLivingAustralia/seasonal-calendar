@@ -64,7 +64,7 @@
                         <h5><button class="btn btn-link" data-bind="attr:{'mailto:':  organisation.email}"><h5 data-bind="text: organisation.email"></h5></button></h5>
                     </g:if>
                     <g:else>
-                        <input data-bind="value: organisation.email" type="text" class="form-control" id="contact-email" placeholder="">
+                        <input data-bind="value: organisation.email" type="text" data-validation-engine="validate[custom[email]]" class="form-control" id="contact-email" placeholder="">
                     </g:else>
                 </div>
             </div>
@@ -122,14 +122,14 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="org-url"><g:message code="calendar.organisation.url"/></label>
-                        <input data-bind="value: organisation.url" type="text" class="form-control" id="org-url" placeholder="">
+                        <input data-bind="value: organisation.url" data-validation-engine="validate[custom[url]]" type="text" class="form-control" id="org-url" placeholder="">
                     </div>
                 </div>
 
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="logo-url"><g:message code="calendar.organisation.logo"/></label>
-                        <input data-bind="value: organisation.logo" type="text" class="form-control" id="logo-url" placeholder="">
+                        <input data-bind="value: organisation.logo" data-validation-engine="validate[custom[url]]" type="text" class="form-control" id="logo-url" placeholder="">
                     </div>
                 </div>
             </g:else>

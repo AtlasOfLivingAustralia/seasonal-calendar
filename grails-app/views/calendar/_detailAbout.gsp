@@ -1,6 +1,6 @@
 <div class="row">
-    <div class="col-lg-12">
-        <h1 class="text-center " data-bind="text: calendarName"></h1>
+    <div class="col-lg-12 ">
+        <h1 class="text-center" data-bind="text: calendarName"></h1>
         <p class="text-center" data-bind="text: description"></p>
     </div>
 </div>

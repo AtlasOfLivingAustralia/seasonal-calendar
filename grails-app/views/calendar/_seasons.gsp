@@ -114,7 +114,7 @@
 
                     <div class="form-group">
                         <label for="speciesLink"><g:message code="feature.species.link"/></label>
-                        <input data-bind="value: speciesLink" type="text" class="form-control" id="speciesLink" placeholder="Species link">
+                        <input data-bind="value: speciesLink" type="text" data-validation-engine="validate[custom[url]]" class="form-control" id="speciesLink" placeholder="Species link">
                     </div>
 
                     <div class="form-group">
@@ -136,7 +136,7 @@
                     <!-- ko foreach: thumbImages -->
                     <div class="form-group">
                         <div class="col-lg-10">
-                        <input  data-bind="value: url" type="text" class="form-control" id="imageUrl" placeholder="Image url">
+                        <input  data-bind="value: url" type="text" data-validation-engine="validate[custom[url]]" class="form-control" id="imageUrl" placeholder="Image url">
                         </div>
                         <div class="col-lg-2">
                         <button data-bind="click: $parent.deleteThumbImageUrl" type="submit" class="btn btn-sm btn-default">x</button>

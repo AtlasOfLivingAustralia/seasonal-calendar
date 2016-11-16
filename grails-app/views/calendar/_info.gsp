@@ -42,7 +42,7 @@
                     <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.imageurl"/>', content:'<g:message code="calendar.imageurl.content"/>'}">
                         <i class="fa fa-question-circle"></i>
                     </button>
-                    <input data-bind="value: imageUrl" type="text" class="form-control" id="calendarImage" placeholder="">
+                    <input data-bind="value: imageUrl" data-validation-engine="validate[custom[url]]" type="text" class="form-control" id="calendarImage" placeholder="">
                 </div>
             </div>
             <div class="col-lg-6">
@@ -51,7 +51,7 @@
                     <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.website"/>', content:'<g:message code="calendar.website.content"/>'}">
                         <i class="fa fa-question-circle"></i>
                     </button>
-                    <input data-bind="value: externalLink" type="text" class="form-control" id="externalUrl" placeholder="">
+                    <input data-bind="value: externalLink" type="text" data-validation-engine="validate[custom[url]]" class="form-control" id="externalUrl" placeholder="">
                 </div>
             </div>
         </div>

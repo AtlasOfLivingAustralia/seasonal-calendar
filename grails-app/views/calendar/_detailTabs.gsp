@@ -18,7 +18,7 @@
 
         <!-- tabs content -->
         <div class="tab-content">
-            <div id="calendar-about" class="tab-pane active well">
+            <div id="calendar-about" class="tab-pane active">
                 <g:render template="/calendar/detailAbout"/>
             </div>
 

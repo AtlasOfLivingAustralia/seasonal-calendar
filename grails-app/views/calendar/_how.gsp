@@ -38,7 +38,7 @@
                         <h5 data-bind="text: reference"></h5>
                     </g:if>
                     <g:else>
-                        <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="calendar.how.references"/>', content:'<g:message code="calendar.how.references.content"/>'}">
+                        <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.how.references"/>', content:'<g:message code="calendar.how.references.content"/>'}">
                             <i class="fa fa-question-circle"></i>
                         </button>
                         <input data-bind="value: reference" type="text" class="form-control" id="calendar-reference" placeholder="">
@@ -53,10 +53,10 @@
                         <h5><button class="btn btn-link" data-bind="attr:{'href': referenceLink}"><h5>Reference</h5></button></h5>
                     </g:if>
                     <g:else>
-                        <button  href="#" class="helphover btn btn-link" data-bind="popover: {title:'<g:message code="calendar.how.referenceLink"/>', content:'<g:message code="calendar.how.referenceLink.content"/>'}">
+                        <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.how.referenceLink"/>', content:'<g:message code="calendar.how.referenceLink.content"/>'}">
                             <i class="fa fa-question-circle"></i>
                         </button>
-                        <input  data-bind="value: referenceLink"  type="text" class="form-control" id="reference-link" placeholder="">
+                        <input  data-bind="value: referenceLink" data-validation-engine="validate[custom[url]]" type="text" class="form-control" id="reference-link" placeholder="">
                     </g:else>
                 </div>
             </div>
