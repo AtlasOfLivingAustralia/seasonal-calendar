@@ -51,7 +51,7 @@ class CalendarController {
     }
 
 
-    @AlaSecured(value = ['ROLE_SC','ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
+    @AlaSecured(value = ['ROLE_SC','ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true, redirectUri = '/')
     def settings() {
         return [id: params.id]
     }
@@ -74,16 +74,11 @@ class CalendarController {
     }
 
     @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
+    @PreAuthorise()
     def editCalendar(String id) {
         def props = request.JSON
 
         try{
-
-            if(!canCurrentUserEditCalendar(id)) {
-                render status: 401, text: 'You do not have permission to edit this calendar'
-                return
-            }
-
             render calendarService.update(id, props) as JSON;
 
         } catch(Exception e) {
@@ -93,13 +88,9 @@ class CalendarController {
     }
 
     @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
+    @PreAuthorise()
     def delete(String id) {
         try {
-            if (!canCurrentUserEditCalendar(id)) {
-                render status: HttpServletResponse.SC_UNAUTHORIZED, text: 'You do not have permission to delete this calendar'
-                return
-            }
-
             calendarService.delete(id)
             Map result = [calendarId: id]
             render result as JSON;
@@ -109,14 +100,5 @@ class CalendarController {
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "Error saving the calendar, please try again later."
         }
 
-    }
-
-    private Boolean canCurrentUserEditCalendar(String calendarId) {
-
-        if(userService.userIsAlaAdmin()) {
-            return true
-        } else {
-            return permissionService.isUserAdminForCalendar(userService.getUser()?.userId, calendarId)
-        }
     }
 }
