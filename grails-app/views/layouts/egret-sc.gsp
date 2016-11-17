@@ -67,27 +67,26 @@
                                 </li>
                             </auth:ifNotLoggedIn>
                             <auth:ifLoggedIn>
+                                <sc:ifUserisScAdmin>
+                                    <li><a href="${request.contextPath}/calendar/settings"><i class="fa fa-plus"></i> Seasonal Calendar</a></li>
+                                </sc:ifUserisScAdmin>
 
-
-                                <li><a href="${request.contextPath}/calendar/settings"><i class="fa fa-plus"></i> Seasonal Calendar</a></li>
-                                <li>
-                                    <a href="${grailsApplication.config.grails.serverURL}/logout/logout?casUrl=${grailsApplication.config.casServerUrlPrefix}/logout&appUrl=${grailsApplication.config.grails.serverURL}/">
-                                        <i class="fa fa-sign-out"></i>
-                                        Logout
+                                <li class="dropdown pull-left">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-user"></i> <sc:currentUserDisplayName/>
                                     </a>
+                                    <ul class="dropdown-menu">
+                                        <li role="menuitem">
+                                            <a href="${request.contextPath}/calendar/settings"><i class="fa fa-plus"></i> My Calendars</a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a href="${grailsApplication.config.grails.serverURL}/logout/logout?casUrl=${grailsApplication.config.casServerUrlPrefix}/logout&appUrl=${grailsApplication.config.grails.serverURL}/">
+                                                <i class="fa fa-sign-out"></i>
+                                                Logout
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
 
-                                %{--<li class="dropdown-submenu pull-left">--}%
-                                    %{--<a href="#" ><span class="fa fa-user"></span> Some User <sc:currentUserDisplayName/></a>--}%
-                                    %{--<ul>--}%
-                                        %{--<li>--}%
-                                            %{--<a href="${grailsApplication.config.grails.serverURL}/logout/logout?casUrl=${grailsApplication.config.casServerUrlPrefix}/logout&appUrl=${grailsApplication.config.grails.serverURL}/">--}%
-                                                %{--<i class="fa fa-sign-out"></i>--}%
-                                                %{--Logout--}%
-                                            %{--</a>--}%
-                                        %{--</li>--}%
-                                    %{--</ul>--}%
-                                %{--</li>--}%
                             </auth:ifLoggedIn>
                         </ul>
                     </div>

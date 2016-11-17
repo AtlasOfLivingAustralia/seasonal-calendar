@@ -27,14 +27,14 @@ class UserServiceSpec extends Specification {
 
         when: "No Configuration for security.cas.alaAdminRole"
         grailsApplication.config.security.cas.alaAdminRole = null
-        isAdmin = service.userIsAlaAdmin()
+        isAdmin = service.userIsScAdmin()
 
         then: "No one is regarded as admin"
         assert !isAdmin
 
         when: "One role given for security.cas.alaAdminRole"
         grailsApplication.config.security.cas.alaAdminRole = "AnyRoleName"
-        isAdmin = service.userIsAlaAdmin()
+        isAdmin = service.userIsScAdmin()
 
         then: "Our user is an admin"
         assert isAdmin
@@ -55,7 +55,7 @@ class UserServiceSpec extends Specification {
 
         when: "More than role given for security.cas.alaAdminRole"
         grailsApplication.config.security.cas.alaAdminRole = "OneRole,TwoRoles,ThreeRoles"
-        isAdmin = service.userIsAlaAdmin()
+        isAdmin = service.userIsScAdmin()
 
         then: "Our user is an admin"
         assert isAdmin
@@ -72,7 +72,7 @@ class UserServiceSpec extends Specification {
 
         when: "User is not part of the admin roles"
         grailsApplication.config.security.cas.alaAdminRole = "OneRole,TwoRoles,ThreeRoles"
-        isAdmin = service.userIsAlaAdmin()
+        isAdmin = service.userIsScAdmin()
 
         then: "Our user is NOT an admin"
         assert !isAdmin

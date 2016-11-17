@@ -265,6 +265,20 @@ font-weight: 700;
 	background: rgba(0,0,0, 1);
 }
 
+ul.dropdown-menu {
+	color: #fff;
+	background: rgba(0,0,0, 1);
+}
+
+.dropdown-menu > li > a {
+	color: #fff;
+}
+
+.dropdown-menu > li > a:hover {
+	color:#ccc !important;
+	background: none !important;
+}
+
 .nav-bg {
 	background: rgba(0,0,0, .6);
 }
@@ -307,9 +321,10 @@ ul.nav > li > a:hover, ul.nav > li > a:focus {
 	background: none !important;
 }
 
-li.current a,
+/*li.current a,*/
 ul.nav > li > a:hover {
-color:#ccc !important;
+	color:#ccc !important;
+	background: none !important;
 }
 
 .navbar-toggle .icon-bar {

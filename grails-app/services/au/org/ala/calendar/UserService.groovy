@@ -15,26 +15,25 @@ class UserService {
     private static ThreadLocal<UserDetails> _currentUser = new ThreadLocal<UserDetails>()
 
     def getCurrentUserDisplayName() {
-        def currentUser = _currentUser.get()
-        return currentUser ? currentUser.displayName : ""
+        getUser()?.displayName?:""
     }
 
     def getCurrentUserDetails() {
         return _currentUser.get();
     }
 
-//    def lookupUserDetails(String userId) {
-//
-//        def userDetails = getUserForUserId(userId)
-//        if (!userDetails) {
-//            if (log.debugEnabled) {
-//                log.debug("Unable to lookup user details for userId: ${userId}")
-//            }
-//            userDetails = new UserDetails(userId: userId, userName: 'unknown', displayName: 'Unknown')
-//        }
-//
-//        userDetails
-//    }
+    def lookupUserDetails(String userId) {
+
+        def userDetails = getUserForUserId(userId)
+        if (!userDetails) {
+            if (log.debugEnabled) {
+                log.debug("Unable to lookup user details for userId: ${userId}")
+            }
+            userDetails = new UserDetails(userId: userId, userName: 'unknown', displayName: 'Unknown')
+        }
+
+        userDetails
+    }
 
     /**
      * Gets the CAS roles for the specified user. If no id is provided, then the currently authenticated user will be used
@@ -123,7 +122,7 @@ class UserService {
         webService.doPostWithParams(grailsApplication.config.authGetKeyUrl, [userName: username, password: password])
     }
 
-    Boolean  userIsAlaAdmin() {
+    Boolean userIsScAdmin() {
         String adminRoles = grailsApplication.config.security.cas.alaAdminRole
 
         def roles = adminRoles ? adminRoles.split(",") : null

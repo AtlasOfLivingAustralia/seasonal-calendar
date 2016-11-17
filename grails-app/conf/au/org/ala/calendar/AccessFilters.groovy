@@ -30,7 +30,7 @@ class AccessFilters {
 
                     if (pa.basicAuth()) {
                         request.userId = userService.getUser()?.userId
-                        if(userService.userIsAlaAdmin()) {
+                        if(userService.userIsScAdmin()) {
                             /* Don't enforce check for ALA admin.*/
                             result.error = ''
                         }
