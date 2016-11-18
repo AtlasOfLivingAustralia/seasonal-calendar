@@ -8,13 +8,15 @@
         var scConfig = {
             serverUrl: "${grailsApplication.config.grails.serverURL}",
             id: "${id}",
-            calendarHome: "${createLink(controller: 'calendar', action: 'settings')}",
+            calendarHome: "${createLink(controller: 'calendar', action: calendarManagementHome)}",
             addCalendar: "${createLink(controller: 'calendar', action: 'addCalendar')}",
             editCalendar: "${createLink(controller: 'calendar', action: 'editCalendar')}",
             getCalendar: "${createLink(controller: 'calendar', action: 'getCalendar')}",
             deleteCalendar: "${createLink(controller: 'calendar', action: 'delete')}",
             listCalendars: "${createLink(controller: 'calendar', action: 'listCalendars')}",
-            previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}"
+            listMyCalendars: "${createLink(controller: 'calendar', action: 'listMyCalendars')}",
+            previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}",
+            onlyMyCalendars: ${onlyMyCalendars}
         };
     </r:script>
     <r:require modules="jqueryValidationEngine, seasonal_calendar, map, bootbox"/>
@@ -30,7 +32,12 @@
         <div class="col-lg-3"></div>
         <div class="col-lg-9">
             <div class="section-title section-text text-center">
-                <h3>Seasonal calendar</h3>
+                <g:if test="${userIsAdmin && !onlyMyCalendars}">
+                    <h3>Manage Calendars</h3>
+                </g:if>
+                <g:else>
+                    <h3>My Calendars</h3>
+                </g:else>
             </div>
         </div>
     </div>

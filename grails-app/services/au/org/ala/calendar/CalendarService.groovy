@@ -85,4 +85,20 @@ class CalendarService {
             throw new Exception(error,e)
         }
     }
+
+    /**
+     * Find all calendars where the user represented by the userId has explicit permission to modify
+     * @param userId The user id of the calendars owner
+     * @return The list of calendars for the user
+     */
+    List listMyCalendars(String userId) {
+        List<UserPermission> userPermissions = UserPermission.
+                findAllByUserIdAndEntityTypeAndAccessLevelInList(userId, Calendar.class.name, [AccessLevel.admin, AccessLevel.editor])
+
+        List<String> calendarIds = userPermissions.collect {
+            it.entityId
+        }
+
+        Calendar.findAllByCalendarIdInListAndCalendarStatusNotEqual(calendarIds,Calendar.STATUS_DELETED)
+    }
 }

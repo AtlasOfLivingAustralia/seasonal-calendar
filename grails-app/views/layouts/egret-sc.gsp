@@ -68,15 +68,26 @@
                             </auth:ifNotLoggedIn>
                             <auth:ifLoggedIn>
                                 <sc:ifUserisScAdmin>
-                                    <li><a href="${request.contextPath}/calendar/settings"><i class="fa fa-plus"></i> Seasonal Calendar</a></li>
+                                    <li><a href="${request.contextPath}/calendar/settings"><i class="fa fa-calendar"></i> Manage Calendars</a></li>
                                 </sc:ifUserisScAdmin>
 
                                 <li class="dropdown pull-left">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-user"></i> <sc:currentUserDisplayName/>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        <i class="fa fa-user"></i>
+                                        <sc:currentUserDisplayName/>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li role="menuitem">
-                                            <a href="${request.contextPath}/calendar/settings"><i class="fa fa-plus"></i> My Calendars</a>
+                                            <a href="${grailsApplication.config.myprofile.baseUrl}">
+                                                <i class="fa fa-user"></i>
+                                                My Profile
+                                            </a>
+                                        </li>
+                                        <li role="menuitem">
+                                            <a href="${request.contextPath}/calendar/myCalendars">
+                                                <i class="fa fa-calendar"></i>
+                                                My Calendars
+                                            </a>
                                         </li>
                                         <li role="menuitem">
                                             <a href="${grailsApplication.config.grails.serverURL}/logout/logout?casUrl=${grailsApplication.config.casServerUrlPrefix}/logout&appUrl=${grailsApplication.config.grails.serverURL}/">

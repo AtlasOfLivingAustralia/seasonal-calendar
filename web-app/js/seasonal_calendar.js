@@ -21,7 +21,7 @@ var SeasonalCalendarsMenuVM = function () {
 
     self.loadMenuItems = function () {
         return $.ajax({
-            url: scConfig.listCalendars,
+            url: scConfig.onlyMyCalendars ? scConfig.listMyCalendars : scConfig.listCalendars,
             type: 'GET',
             contentType: 'application/json',
             success: function (data) {
