@@ -481,6 +481,7 @@ var FeatureVM = function (feature) {
     self.featureNameEnglish = ko.observable();
     self.description = ko.observable();
     self.speciesName = ko.observable();
+    self.species = new SpeciesViewModel();
     self.speciesLink = ko.observable();
     self.thumbImages = ko.observableArray();
     self.images = ko.observableArray();
@@ -490,12 +491,14 @@ var FeatureVM = function (feature) {
         self.description(feature.description);
         self.speciesName(feature.speciesName);
         self.speciesLink(feature.speciesLink);
+        self.species.loadSpecies(feature.species);
         self.thumbImages($.map(feature.thumbImages ? feature.thumbImages : [], function (obj, i) {
             return new ImageUrl(obj);
         }));
     };
 
     self.transients = {};
+    self.transients.bioSearch = ko.observable(scConfig.speciesSearchUrl);
     self.transients.shortDescription = ko.pureComputed(function () {
         var limit = 100;
         if (self.description().length > limit) {

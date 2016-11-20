@@ -1,5 +1,6 @@
 package au.org.ala.calendar
 
+import au.org.ala.ws.service.WebService
 import grails.converters.JSON
 import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
 
@@ -9,6 +10,8 @@ class CommonService {
 
     //static transactional = false
     def grailsApplication, cacheService
+
+
 
     static dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ")
 
@@ -107,4 +110,6 @@ class CommonService {
         }
         result
     }
+
+
 }

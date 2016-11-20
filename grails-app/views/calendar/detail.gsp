@@ -14,7 +14,8 @@
             editCalendar: "${createLink(controller: 'calendar', action: 'editCalendar')}",
             getCalendar: "${createLink(controller: 'calendar', action: 'getCalendar')}",
             deleteCalendar: "${createLink(controller: 'calendar', action: 'delete')}",
-            listCalendars: "${createLink(controller: 'calendar', action: 'listCalendars')}"
+            listCalendars: "${createLink(controller: 'calendar', action: 'listCalendars')}",
+            bieUrl: "${grailsApplication.config.bie.url}"
         };
     </r:script>
     <r:require modules="seasonal_calendar, map"/>

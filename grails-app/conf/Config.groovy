@@ -147,3 +147,7 @@ log4j = {
             //'grails.app',
             'au.org.ala.cas'
 }
+
+if (!bie.url) {
+    bie.url = "https://bie.ala.org.au"
+}

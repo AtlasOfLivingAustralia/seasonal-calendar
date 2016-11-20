@@ -109,13 +109,24 @@
 
                     <div class="form-group">
                         <label for="speciesName"><g:message code="feature.species"/></label>
-                        <input data-bind="value: speciesName" type="text" class="form-control" id="speciesName" placeholder="Species name">
+                         </br>
+                         <input id="speciesName" class="input-xlarge" type="text" placeholder="Search species"
+                               data-bind="value:species.name,
+                                        event:{focusout: species.focusLost},
+                                        fusedAutocomplete:{
+                                            source: transients.bioSearch,
+                                            name: species.transients.name,
+                                            guid: species.transients.guid,
+                                            scientificName: species.transients.scientificName,
+                                            commonName: species.transients.commonName
+                                        }">
+
+                        <span data-bind="if: species.transients.guid">
+                            <a data-bind="attr:{href: species.transients.bioProfileUrl}" target="_blank"><button class="btn btn-sm btn-info"><i class="fa fa-info-circle"></i></button></a>
+                        </span>
+
                     </div>
 
-                    <div class="form-group">
-                        <label for="speciesLink"><g:message code="feature.species.link"/></label>
-                        <input data-bind="value: speciesLink" type="text" data-validation-engine="validate[custom[url]]" class="form-control" id="speciesLink" placeholder="Species link">
-                    </div>
 
                     <div class="form-group">
                         <label for="featureDescription"><g:message code="feature.description"/><span class="req-field"></span></label>
@@ -125,7 +136,6 @@
                         <textarea rows="4" data-validation-engine="validate[required]" data-bind="value: description" class="form-control" id="featureDescription" placeholder="Feature description"></textarea>
                     </div>
                 </div>
-
 
 
                 <div class="col-lg-6">

@@ -87,3 +87,110 @@ ko.bindingHandlers.showTabOrRedirect = {
         ko.bindingHandlers.click.init(element, newValueAccesssor, allBindingsAccessor, viewModel, bindingContext);
     }
 };
+
+
+/*
+ * Fused Autocomplete supports two versions of autocomplete (original autocomplete implementation by Jorn Zaefferer and jquery_ui)
+ * Expects three parameters source, name and guid.
+ * Ajax response lists needs name attribute.
+ * Doco url: http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/
+ * Note: Autocomplete implementation by Jorn Zaefferer is now been deprecated and its been migrated to jquery_ui.
+ *
+ */
+
+ko.bindingHandlers.fusedAutocomplete = {
+
+    init: function (element, params) {
+        var params = params();
+        var options = {};
+        var url = ko.utils.unwrapObservable(params.source);
+        options.source = function (request, response) {
+            $(element).addClass("ac_loading");
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                data: {q: request.term},
+                success: function (data) {
+                    var items = $.map(data.autoCompleteList, function (item) {
+                        return {
+                            label: item.name,
+                            value: item.name,
+                            source: item
+                        }
+                    });
+                    response(items);
+
+                },
+                error: function () {
+                    items = [{
+                        label: "Error during species lookup",
+                        value: request.term,
+                        source: {listId: 'error-unmatched', name: request.term}
+                    }];
+                    response(items);
+                },
+                complete: function () {
+                    $(element).removeClass("ac_loading");
+                }
+            });
+        };
+        options.select = function (event, ui) {
+            var selectedItem = ui.item;
+            params.name(selectedItem.source.name);
+            params.guid(selectedItem.source.guid);
+            params.scientificName(selectedItem.source.scientificName);
+            params.commonName(selectedItem.source.commonName);
+        };
+
+        if (!$(element).autocomplete(options).data("ui-autocomplete")) {
+            // Fall back mechanism to handle deprecated version of autocomplete.
+            var options = {}, unknown = {
+                guid: '',
+                name: '(Unmatched taxon)',
+                commonName: '',
+                scientificName: '',
+                value: element.value
+            };
+            options.source = url;
+            options.matchSubset = false;
+            options.formatItem = function (row, i, n) {
+                return row.name;
+            };
+            options.highlight = false;
+            options.parse = function (data) {
+                var rows = new Array();
+                if (params.matchUnknown) {
+                    unknown.value = element.value;
+                    unknown.name = element.value + ' (Unmatched taxon)'
+                    rows.push({
+                        data: unknown,
+                        value: unknown,
+                        result: unknown.name
+                    })
+                }
+                data = data && data.resp && data.resp.autoCompleteList;
+                for (var i = 0; i < data.length; i++) {
+                    rows.push({
+                        data: data[i],
+                        value: data[i],
+                        result: data[i].name
+                    });
+                }
+                return rows;
+            };
+
+            $(element).autocomplete(options.source, options).result(function (event, data, formatted) {
+                if (data) {
+                    params.guid(data.guid);
+                    params.name(data.name);
+                    if (params.commonName && params.commonName != undefined) {
+                        params.commonName(data.commonName);
+                    }
+                    if (params.scientificName && params.scientificName != undefined) {
+                        params.scientificName(data.scientificName);
+                    }
+                }
+            });
+        }
+    }
+};

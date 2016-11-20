@@ -12,6 +12,7 @@ class CalendarController {
     CalendarService calendarService
     PermissionService permissionService
     UserService userService
+    SearchService searchService
 
     def listCalendars() {
         def calendars;
@@ -100,5 +101,21 @@ class CalendarController {
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "Error saving the calendar, please try again later."
         }
 
+    }
+
+    def searchBie(String q, Integer limit) {
+        def results = searchService.searchBie(q ?: '' , limit ?: 10)
+        // standardise output - Handle some unhelpful results from the BIE.
+        results?.autoCompleteList?.removeAll { !it.name }
+
+        results?.autoCompleteList?.each { result ->
+            result.scientificName = result.name
+            if (result.commonName && result.commonName.contains(',')) {
+                // ?. doesn't use groovy truth so throws exception for JSON.NULL
+                result.commonName = result.commonName.split(',')[0]
+            }
+        }
+        log.debug(results)
+        render results as JSON
     }
 }

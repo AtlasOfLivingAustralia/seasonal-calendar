@@ -14,7 +14,9 @@
             getCalendar: "${createLink(controller: 'calendar', action: 'getCalendar')}",
             deleteCalendar: "${createLink(controller: 'calendar', action: 'delete')}",
             listCalendars: "${createLink(controller: 'calendar', action: 'listCalendars')}",
-            previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}"
+            previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}",
+            speciesSearchUrl: "${createLink(controller: 'calendar', action: 'searchBie')}",
+            bieUrl: "${grailsApplication.config.bie.url}"
         };
     </r:script>
     <r:require modules="jqueryValidationEngine, seasonal_calendar, map, bootbox"/>

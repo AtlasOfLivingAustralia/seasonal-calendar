@@ -1,13 +1,14 @@
 modules = {
 
     sc_calendar{
-        dependsOn 'egret_theme', 'knockout', 'bootbox'
+        dependsOn 'egret_theme', 'knockout', 'bootbox','autocomplete'
         resource url: [dir:'css/', file:'common.css']
         resource url: [dir:'css/', file:'weather.css']
         resource url: [dir:'js/', file:'common.js']
     }
 
     seasonal_calendar {
+        dependsOn 'species'
         resource url: [dir:'js/', file:'seasonal_calendar.js']
     }
 
@@ -71,6 +72,10 @@ modules = {
 
     bootbox {
         resource url: [dir:'vendor/bootbox/4.4.0', file:'bootbox.min.js']
+    }
+
+    species {
+        resource url: [dir:'js/', file:'speciesModel.js']
     }
 
 }

@@ -104,7 +104,7 @@
                             <span data-bind="text: featureName"></span>
                             <span data-bind="if: speciesName() && speciesLink()">
                             </br>
-                                <a target="_blank" data-bind="attr:{'href': speciesLink()}">Species: <span data-bind="text: speciesName"></span></a>
+                                <a target="_blank" data-bind="attr:{'href': species.transients.bioProfileUrl()}">Species: <span data-bind="text: species.name"></span></a>
                             </span>
                         </h3>
                     </div>
