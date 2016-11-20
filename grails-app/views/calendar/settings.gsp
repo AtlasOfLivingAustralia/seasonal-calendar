@@ -16,7 +16,7 @@
             listCalendars: "${createLink(controller: 'calendar', action: 'listCalendars')}",
             previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}",
             speciesSearchUrl: "${createLink(controller: 'calendar', action: 'searchBie')}",
-            bieUrl: "${grailsApplication.config.bie.url}"
+            bieUrl: "${grailsApplication.config.bie.url}",
             listMyCalendars: "${createLink(controller: 'calendar', action: 'listMyCalendars')}",
             previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}",
             onlyMyCalendars: ${onlyMyCalendars}
