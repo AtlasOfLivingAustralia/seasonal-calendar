@@ -1,6 +1,7 @@
 package au.org.ala.calendar
 
 import au.org.ala.web.AlaSecured
+import au.org.ala.web.UserDetails
 import grails.converters.JSON
 
 import javax.servlet.http.HttpServletRequest
@@ -13,6 +14,7 @@ class CalendarController {
     PermissionService permissionService
     UserService userService
     SearchService searchService
+
 
     def listCalendars() {
         def calendars;
@@ -28,6 +30,35 @@ class CalendarController {
 
         render ([status:'ok', calendars:calendars] as JSON)
     }
+
+    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
+    def myCalendars() {
+
+        boolean onlyMyCalendars = true
+        boolean userIsAdmin = userService.userIsScAdmin()
+        String calendarManagementHome =  (userIsAdmin && !onlyMyCalendars) ? 'settings' : 'myCalendars'
+
+        render view: 'settings', model: [id: params.id, onlyMyCalendars:onlyMyCalendars, userIsAdmin: userIsAdmin, calendarManagementHome: calendarManagementHome ]
+    }
+
+    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
+    def listMyCalendars() {
+        def calendars;
+
+        try{
+
+            UserDetails userDetails = userService.getUser()
+            List files = calendarService.listMyCalendars(userDetails?.userId)
+            calendars = files
+        }
+        catch(Exception ex){
+            log.error("Error loading calendars.", ex);
+            throw ex
+        }
+
+        render ([status:'ok', calendars:calendars] as JSON)
+    }
+
 
     def detail() {
         return [id: params.id]
@@ -51,10 +82,13 @@ class CalendarController {
         }
     }
 
-
-    @AlaSecured(value = ['ROLE_SC','ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true, redirectUri = '/')
+    @AlaSecured(value = ['ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true, redirectUri = '/')
     def settings() {
-        return [id: params.id]
+        boolean onlyMyCalendars = false
+        boolean userIsAdmin = userService.userIsScAdmin()
+        String calendarManagementHome =  (userIsAdmin && !onlyMyCalendars) ? 'settings' : 'myCalendars'
+
+        return [id: params.id, onlyMyCalendars:onlyMyCalendars, userIsAdmin: userIsAdmin, calendarManagementHome: calendarManagementHome ]
     }
 
     @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)

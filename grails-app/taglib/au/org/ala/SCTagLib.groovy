@@ -32,4 +32,11 @@ class SCTagLib {
         if (userService.userIsScAdmin()) out << body()
     }
 
+    /**
+     * Is the user a SC Admin
+     */
+    def ifUserisNotScAdmin = { attrs, body ->
+        if (!userService.userIsScAdmin()) out << body()
+    }
+
 }
