@@ -105,6 +105,7 @@
                 </nav>
             </div>
         </div>
+        <ala:systemMessage showTimestamp="true"/>
     </div>
     <!-- sticky-bar Ends-->
     <!--=== Header section Ends ===-->

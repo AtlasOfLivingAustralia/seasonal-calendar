@@ -20,3 +20,8 @@
     white-space: nowrap;
 }
 
+.alert-info {
+    color: #fff;
+    background-color: #666666;
+    border-color: #fff;
+}

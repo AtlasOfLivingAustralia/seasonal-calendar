@@ -63,6 +63,7 @@ grails.project.dependency.resolution = {
         runtime ":ala-ws-plugin:1.1"
         runtime ":ala-ws-security:1.4"
         runtime ":ala-bootstrap2:2.2"
+        runtime ":ala-admin-plugin:1.2"
 
         runtime ":mongodb:3.0.3"
         runtime ":resources:1.2.14"
