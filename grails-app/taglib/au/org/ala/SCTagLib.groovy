@@ -7,10 +7,7 @@ import groovy.xml.MarkupBuilder
 class SCTagLib {
 
     static namespace = "sc"
-
-//    static defaultEncodeAs = [taglib:'html']
-    //static encodeAsForTags = [tagName: [taglib:'html'], otherTagName: [taglib:'none']]
-
+    
     AuthService authService
     UserService userService
 
