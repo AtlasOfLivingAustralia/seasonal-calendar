@@ -31,7 +31,7 @@ class CalendarController {
         render ([status:'ok', calendars:calendars] as JSON)
     }
 
-    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
+    @AlaSecured()
     def myCalendars() {
 
         boolean onlyMyCalendars = true
@@ -41,7 +41,7 @@ class CalendarController {
         render view: 'settings', model: [id: params.id, onlyMyCalendars:onlyMyCalendars, userIsAdmin: userIsAdmin, calendarManagementHome: calendarManagementHome ]
     }
 
-    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
+    @AlaSecured()
     def listMyCalendars() {
         def calendars;
 
@@ -91,7 +91,7 @@ class CalendarController {
         return [id: params.id, onlyMyCalendars:onlyMyCalendars, userIsAdmin: userIsAdmin, calendarManagementHome: calendarManagementHome ]
     }
 
-    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
+    @AlaSecured()
     def addCalendar() {
         def props = request.JSON
         try{
@@ -108,7 +108,7 @@ class CalendarController {
         }
     }
 
-    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
+    @AlaSecured()
     @PreAuthorise()
     def editCalendar(String id) {
         def props = request.JSON
@@ -122,7 +122,7 @@ class CalendarController {
         }
     }
 
-    @AlaSecured(value = ['ROLE_SC', 'ROLE_ADMIN', 'ROLE_SC_ADMIN'], anyRole = true)
+    @AlaSecured()
     @PreAuthorise()
     def delete(String id) {
         try {
