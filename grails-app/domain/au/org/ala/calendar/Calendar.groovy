@@ -21,20 +21,18 @@ class Calendar {
     public static final String STATUS_PUBLISHED = "published"
     public static final String STATUS_UNPUBLISHED = "unpublished"
 
-    List seasons = []
+    List seasons
     Map sites
     Organisation organisation
 
     static constraints = {
-        calendarId nullable: false, unique: true
-        calendarName nullable: false
-        calendarStatus nullable: false
+        calendarId nullable: false, blank: false, unique: true
+        calendarName nullable: false, blank: false
+        calendarStatus nullable: false, blank: false
 
         multimedia nullable: true, blank:true
         imageUrl nullable: true, blank:true
         description nullable: true, blank:true
-        calendarName nullable: true, blank:true
-        calendarStatus nullable: true, blank:true
         externalLink nullable: true, blank:true
 
         how nullable: true, blank:true

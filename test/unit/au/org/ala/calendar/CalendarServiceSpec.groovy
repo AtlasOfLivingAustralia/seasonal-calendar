@@ -45,10 +45,28 @@ class CalendarServiceSpec extends Specification {
         def calendarJsonString = '''
     {
         "calendarId" : "calendarId",
-        "calendarName" : "Calendar Name",
-        "description" : "Calendar description",
-        "externalLink" : "https://www.google.com.au/",
+        "multimedia": "Multimedia",
         "imageUrl" : "http://www.fortresslockandsecurity.com/wp-content/uploads/2014/04/Austin-Locksmith.png",
+        "description" : "Calendar description",
+        "calendarName" : "Calendar Name",
+        "calendarStatus" : "unpublished",
+        "externalLink" : "https://www.google.com.au/",
+        "how": "how",
+        "why": "why",
+        "license": "license",
+        "limitations":"limitations",
+        "reference":"reference",
+        "referenceLink": "referenceLink",
+        "organisation":{
+            name:'test org',
+            "orgDescription":"description",
+            "keywords":"keywords",
+            "contactName":"contactName",
+            "logo":"logo",
+            "contributors":"contributors",
+            "url":"url",
+            "email":"email",
+        },
         "seasons" : [
             {
                 "features" : [
@@ -61,29 +79,23 @@ class CalendarServiceSpec extends Specification {
             }
         ],
         "multimedia" : "Multimedia",
-        "calendarStatus" : "unpublished"
+
     }
 '''
 
 
         when: "A calendar is created"
         def calendarJSON = JSON.parse(calendarJsonString)
-        Calendar calendar = service.create(calendarJSON)
+        def result = service.create(calendarJSON)
 
         then: "Calendar is created"
-        assert calendar.calendarId == calendarJSON.calendarId
-        assert calendar.calendarName == calendarJSON.calendarName
-        assert calendar.description == calendarJSON.description
-        assert calendar.externalLink == calendarJSON.externalLink
-        assert calendar.imageUrl == calendarJSON.imageUrl
-        assert calendar.multimedia == calendarJSON.multimedia
-        assert calendar.calendarStatus == calendarJSON.calendarStatus
+        assert result.status == "ok"
 
 
         then: "A user permission entry is created"
         def permissions = UserPermission.list()
         UserPermission userPermission = permissions[0]
-        assert userPermission.entityId == calendar.calendarId
+        assert userPermission.entityId == result.id
         assert userPermission.userId == "userId"
 
 
@@ -99,14 +111,14 @@ class CalendarServiceSpec extends Specification {
         when: "A calendar is updated"
         calendarJSON.calendarName = "different"
 
-        service.update(calendarJSON)
+        service.update(result.id, calendarJSON)
 
         then: "A new calendar name should be returned"
-        Calendar calendarUpdated = service.get(calendarJSON.calendarId)
+        Calendar calendarUpdated = service.get(result.id)
         assert calendarUpdated.calendarName == calendarJSON.calendarName
 
         when: "A calendar is deleted"
-        service.delete(calendarJSON.calendarId)
+        service.delete(result.id)
 
         then: "The list of calendars should be empty"
         def emptylist = service.list()
