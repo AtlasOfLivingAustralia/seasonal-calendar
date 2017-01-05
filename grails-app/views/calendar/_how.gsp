@@ -18,7 +18,8 @@
                         <h5 data-bind="text: how"></h5>
                     </g:if>
                     <g:else>
-                        <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.how.description"/>', content:'<g:message code="calendar.how.description.content"/>'}">
+                        <button  href="#" class="helphover btn btn-link color-scheme"
+                                 data-bind="popover: {title:'<g:message code="calendar.how.description"/>', content:'<g:message code="calendar.how.description.content"/>'}">
                             <i class="fa fa-question-circle"></i>
                         </button>
                         <textarea data-bind="value: how" rows="4" type="text" class="form-control" id="how-developed" placeholder=""></textarea>

@@ -29,7 +29,9 @@
             <h1 class="well-come">Indigenous Seasonal Calendars</h1>
 
             <div class="col-md-8 col-md-offset-2">
-                <p class="intro-message">Traditional knowledge, that captured in these Indigenous seasonal calendars, can tell us much about the ecology of Australia.</p>
+                <p class="intro-message">
+                    <g:message code="calendar.home.intro"/>
+                </p>
 
                 <div class="home-buttons">
                     <a href="#section-screenshots" class="fancy-button button-line button-white vertical">
@@ -107,9 +109,10 @@
         'use strict';
         $.vegas('slideshow', {
             backgrounds:[
-                { src:'egret/images/bg-slider/bg-1.jpg', fade:1000 },
-                { src:'egret/images/bg-slider/bg-2.jpg', fade:1000 },
-                { src:'egret/images/bg-slider/bg-3.jpg', fade:1000 }
+                { src:'images/0.jpg', fade:1000 },
+                { src:'images/1.JPG', fade:1000 },
+                { src:'images/2.jpg', fade:1000 },
+                { src:'images/3.JPG', fade:1000 }
             ]
         })();
     });

@@ -136,8 +136,9 @@
                     </ul>
                 </div>
                 -->
-
-                <p class="copyright">Atlas of Living Australia, All rights reserved &copy; 2016</p>
+                <p class="copyright">© Atlas of Living Australia</p>
+                <small class="copyright">The material in the seasonal calendars is protected by copyright laws and may be used as permitted under the Copyright Act 1968 or in accordance with licences granted by the copyright owner.</small>
+                <small class="copyright">The material in the seasonal calendars may also include Indigenous cultural and intellectual property (ICIP) which is the cultural heritage of Indigenous people which comprises all objects, sites and knowledge, the nature or use of which has been transmitted or continues to be transmitted from generation to generation, and which is regarded as pertaining to a particular Indigenous group or its territory. The heritage of an Indigenous people is a living one and includes objects, knowledge and literary and artistic works which may be created in the future based on that heritage.  Users of this website acknowledge that Indigenous people have the right to control, own and maintain their ICIP in accordance with Article 31 of the Declaration on the Rights of Indigenous Peoples.</small>
             </div>
         </div>
     </div>
