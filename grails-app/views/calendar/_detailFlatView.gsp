@@ -4,10 +4,10 @@
         <li class="active">
             <a data-toggle="pill" data-bind="attr:{'href': '#tab_'+$index()}">
             <!-- ko if: seasonName() -->
-                <strong><p data-bind="text: seasonName()"></p></strong>
+                <strong><h4 data-bind="text: seasonName()"></h4></strong>
             <!-- /ko -->
             <!-- ko if: seasonNameEnglish() -->
-                <strong><p data-bind="text: seasonNameEnglish()"></p></strong>
+                <strong><h4 data-bind="text: seasonNameEnglish()"></h4></strong>
             <!-- /ko -->
             </a>
         </li>
@@ -17,10 +17,10 @@
         <li>
             <a data-toggle="pill" data-bind="attr:{'href': '#tab_'+$index()}">
                 <!-- ko if: seasonName() -->
-                <strong><p data-bind="text: seasonName()"></p></strong>
+                <strong><h4 data-bind="text: seasonName()"></h4></strong>
                 <!-- /ko -->
                 <!-- ko if: seasonNameEnglish() -->
-                <strong><p data-bind="text: seasonNameEnglish()"></p></strong>
+                <strong><h4 data-bind="text: seasonNameEnglish()"></h4></strong>
                 <!-- /ko -->
             </a>
         </li>
