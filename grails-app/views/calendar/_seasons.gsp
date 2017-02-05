@@ -22,7 +22,7 @@
                             <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="season.name"/>', content:'<g:message code="season.name.content"/>'}">
                                 <i class="fa fa-question-circle"></i>
                             </button>
-                            <input data-validation-engine="validate[required]" data-bind="value: seasonName" type="text" class="form-control" id="season-name" placeholder="Dalay; Ngawu">
+                            <input  data-bind="value: seasonName" type="text" class="form-control" id="season-name" placeholder="Dalay; Ngawu">
                         </div>
 
                     </div>
@@ -32,7 +32,7 @@
                             <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="season.name.english"/>', content:'<g:message code="season.name.english.content"/>'}">
                                 <i class="fa fa-question-circle"></i>
                             </button>
-                            <input data-validation-engine="validate[required]" data-bind="value: seasonNameEnglish" type="text" class="form-control" id="seasonNameEnglish" placeholder="Monsoon season; hot and dry">
+                            <input data-bind="value: seasonNameEnglish" type="text" class="form-control" id="seasonNameEnglish" placeholder="Monsoon season; hot and dry">
                         </div>
 
                     </div>
@@ -97,14 +97,14 @@
                         <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="feature.name"/>', content:'<g:message code="feature.name.content"/>'}">
                             <i class="fa fa-question-circle"></i>
                         </button>
-                        <input data-validation-engine="validate[required]" data-bind="value: featureName" type="text" class="form-control" id="featureName" placeholder="Example: Danggalaba - Saltwater Crocodile">
+                        <input data-bind="value: featureName" type="text" class="form-control" id="featureName" placeholder="Example: Danggalaba - Saltwater Crocodile">
                     </div>
                     <div class="form-group">
                         <label for="featureNameEnglish"><g:message code="feature.name.english"/><span class="req-field"></span></label>
                         <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="feature.name.english"/>', content:'<g:message code="feature.name.english.content"/>'}">
                             <i class="fa fa-question-circle"></i>
                         </button>
-                        <input data-validation-engine="validate[required]" data-bind="value: featureNameEnglish" type="text" class="form-control" id="featureNameEnglish" placeholder="">
+                        <input data-bind="value: featureNameEnglish" type="text" class="form-control" id="featureNameEnglish" placeholder="">
                     </div>
 
                     <div class="form-group">

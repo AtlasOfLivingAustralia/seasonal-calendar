@@ -219,6 +219,37 @@ var SeasonalCalendarVM = function () {
         });
     };
 
+    self.validateNames = function() {
+        var seasonErrorCounter = 0;
+        var featureErrorCounter = 0;
+        var message = "";
+
+        ko.utils.arrayForEach(self.seasons(), function(season) {
+            if(!season.seasonName() && !season.seasonNameEnglish()){
+                seasonErrorCounter++;
+            }
+
+            ko.utils.arrayForEach(season.features(), function(feature) {
+                if(!feature.featureNameEnglish() && !feature.featureName()){
+                    featureErrorCounter++;
+                }
+            });
+        });
+
+
+        if(seasonErrorCounter > 0) {
+            message = "Season name(Language) or Season name (English) is required.";
+        }
+        if(featureErrorCounter > 0) {
+            if(message) {
+                message = message + "<br>";
+            }
+            message = message + "Feature name(Language) or Feature name (English) is required"
+        }
+
+        return message;
+    };
+
     self.loadCalendar = function () {
         var calendarId = scConfig.id;
 
@@ -246,12 +277,16 @@ var SeasonalCalendarVM = function () {
     };
 
     self.publish = function () {
+        var divId = "seasonal-calendar-result";
         if(!self.validate('publish')) return;
 
+        var errMsg = self.validateNames();
+        if(errMsg) {
+            showAlert(errMsg, "alert-danger", divId);
+            return;
+        }
 
         var url = self.calendarId() ? scConfig.editCalendar + "/" + self.calendarId() : scConfig.addCalendar;
-        var divId = "seasonal-calendar-result";
-
         bootbox.confirm({
             message: 'Are you sure you want to publish?',
             buttons: {
@@ -373,6 +408,12 @@ var SeasonalCalendarVM = function () {
         if(!self.validate()) return;
 
         var divId = "seasonal-calendar-result";
+        var errMsg = self.validateNames();
+        if(errMsg) {
+            showAlert(errMsg, "alert-danger", divId);
+            return;
+        }
+
         var url = self.calendarId() ? scConfig.editCalendar + "/" + self.calendarId() : scConfig.addCalendar;
         return $.ajax({
             url: url,

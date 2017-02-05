@@ -15,7 +15,7 @@
                     <label for="why-developed"><g:message code="calendar.why.description"/></label>
 
                     <g:if test="${readonly}">
-                        <h5 data-bind="text: why"></h5>
+                        <p data-bind="text: why"></p>
                     </g:if>
                     <g:else>
                         <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.why.description"/>', content:'<g:message code="calendar.why.description.content"/>'}">

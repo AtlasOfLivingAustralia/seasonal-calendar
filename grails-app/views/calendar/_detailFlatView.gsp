@@ -1,12 +1,29 @@
 <ul class="nav nav-tabs nav-justified">
     <!-- ko foreach : seasons -->
     <!-- ko if: $index() == 0 -->
-    <li class="active"><a data-toggle="pill" data-bind="attr:{'href': '#tab_'+$index()}"><h4 data-bind="text: seasonName() + '('+ seasonNameEnglish()+')' "></h4></a>
-    </li>
+        <li class="active">
+            <a data-toggle="pill" data-bind="attr:{'href': '#tab_'+$index()}">
+            <!-- ko if: seasonName() -->
+                <strong><p data-bind="text: seasonName()"></p></strong>
+            <!-- /ko -->
+            <!-- ko if: seasonNameEnglish() -->
+                <strong><p data-bind="text: seasonNameEnglish()"></p></strong>
+            <!-- /ko -->
+            </a>
+        </li>
     <!-- /ko -->
 
     <!-- ko if: $index() > 0 -->
-    <li class=""><a data-toggle="pill" data-bind="attr:{'href': '#tab_'+$index()}"><h4 data-bind="text: seasonName() + '('+ seasonNameEnglish()+')'"></h4></a></li>
+        <li>
+            <a data-toggle="pill" data-bind="attr:{'href': '#tab_'+$index()}">
+                <!-- ko if: seasonName() -->
+                <strong><p data-bind="text: seasonName()"></p></strong>
+                <!-- /ko -->
+                <!-- ko if: seasonNameEnglish() -->
+                <strong><p data-bind="text: seasonNameEnglish()"></p></strong>
+                <!-- /ko -->
+            </a>
+        </li>
     <!-- /ko -->
     <!-- /ko -->
 </ul>
@@ -25,12 +42,25 @@
         <div class="col-lg-5"></div>
     </div>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-6 text-center">
 
                     <div class="section-title-tab text-center">
-                        <h2><span data-bind="text: seasonName() + '('+ seasonNameEnglish()+')'"></span> - <span data-bind="text: description"></span></h2>
-                        <p><label class="label label-default" data-bind="text: seasonMonths"></label></p>
+
+                        <!-- ko if: seasonName() -->
+                        <h2><strong data-bind="text: seasonName()"></strong></h2>
+                        <!-- /ko -->
+                        <!-- ko if: seasonNameEnglish() -->
+                        <h2><strong data-bind="text: seasonNameEnglish()"></strong></h2>
+                        <!-- /ko -->
+
                     </div>
+            </div>
+            <div class="col-lg-6 text-center">
+
+                <div class="section-title-tab text-center">
+                    <h4><span data-bind="text: description"></span></h4>
+                    <h4 data-bind="text: seasonMonths"></h4>
+                </div>
             </div>
         </div>
 
