@@ -116,13 +116,13 @@
 
 
 <!--=== Footer section Starts ===-->
-<div id="section-footer" class="footer-wrap">
-    <div class="container footer center">
+<div id="section-footer" class="">
+    <div class="container footer">
         <div class="row">
-            <div class="col-lg-12">
-                <h4 class="footer-title"><!-- Footer Title -->
-                    <a class="site-name" href="#">Seasonal Calendars</a>
-                </h4>
+            <div>
+                <div class="center section-title">
+                    <h3>Seasonal Calendars</h3>
+                </div>
 
                 <!--
                 <div class="social-icons">
@@ -137,7 +137,10 @@
                 </div>
                 -->
 
-                <p class="copyright">Atlas of Living Australia, All rights reserved &copy; 2016</p>
+                <p class="copyright">Intellectual Property</p>
+                <p>The material in the seasonal calendars may be protected by copyright laws and may be used as permitted under the Copyright Act 1968 or in accordance with licences or notices/labels granted by the copyright owner and/or Indigenous knowledge holder(s). Even though the material exists in a digital context on this site, it is important to respect and acknowledge the community and/or cultural context within which it was created and how it can be used and shared.</p>
+                <p>The material in the seasonal calendars may also include Indigenous cultural and intellectual property (ICIP) which is the cultural heritage of Indigenous people which comprises all objects, sites and knowledge, the nature or use of which has been transmitted or continues to be transmitted from generation to generation, and which is regarded as pertaining to a particular Indigenous group or its territory. The heritage of an Indigenous people is a living one and includes objects, knowledge and literary and artistic works which may be created in the future based on that heritage. Users of this website acknowledge that Indigenous people have the right to control, own and maintain their ICIP in accordance with Article 31 of the Declaration on the Rights of Indigenous Peoples.</p>
+                <small><a target="_blank" href="http://www.ala.org.au/about-the-atlas/terms-of-use/">Terms of use for the Atlas of Living Australia </a></small>
             </div>
         </div>
     </div>

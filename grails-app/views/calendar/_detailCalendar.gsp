@@ -95,17 +95,26 @@
             <div class="row text-center">
                 <div class="col-md-12">
                     <div class="section-title text-center">
+                        <!-- ko if: $parent.seasonName() -->
                         <h2>
-                            <span data-bind="text: $parent.seasonName"></span> -
-                            <span data-bind="text: $parent.description"></span>
+                            <span data-bind="text: $parent.seasonName"></span>
                         </h2>
+                        <!-- /ko -->
+                        <!-- ko if: $parent.description() -->
+                        <p><span data-bind="text: $parent.description"></span></p>
+                        <!-- /ko -->
 
                         <h3>
-                            <span data-bind="text: featureName"></span>
+                            <!-- ko if: featureName() -->
+                            <span data-bind="text: featureName()"></span>
+                            <!-- /ko -->
+
+                            <!-- ko if: speciesName() -->
                             <span data-bind="if: speciesName() && speciesLink()">
-                            </br>
+                                </br>
                                 <a target="_blank" data-bind="attr:{'href': species.transients.bioProfileUrl()}">Species: <span data-bind="text: species.name"></span></a>
                             </span>
+                            <!-- /ko -->
                         </h3>
                     </div>
 

@@ -29,13 +29,21 @@
             <h1 class="well-come">Indigenous Seasonal Calendars</h1>
 
             <div class="col-md-8 col-md-offset-2">
-                <p class="intro-message">Traditional knowledge, that captured in these Indigenous seasonal calendars, can tell us much about the ecology of Australia.</p>
+                <p class="intro-message">
+                    <g:message code="calendar.home.intro"/>
+                </p>
 
                 <div class="home-buttons">
                     <a href="#section-screenshots" class="fancy-button button-line button-white vertical">
                         Explore
                         <span class="icon">
                             <i class="fa fa-hand-o-right"></i>
+                        </span>
+                    </a>
+                    <a href="#section-services" class="fancy-button button-line button-white vertical">
+                        Learn more
+                        <span class="icon">
+                            <i class="fa fa-info-circle"></i>
                         </span>
                     </a>
                 </div>
@@ -47,7 +55,7 @@
 <!--=== Home Section Ends ===-->
 
 <!--=== ScreenShots section Starts ===-->
-<section id="section-screenshots" class="screenshots-wrap">
+<section id="section-screenshots" class="screenshots-wrap step-even">
     <div class="container screenshots animated" data-animation="fadeInUp" data-animation-delay="1000">
 
         <div id="calendarList">
@@ -92,9 +100,47 @@
         </div><!--=== Single portfolio back button ===-->
     </div>
 </section>
+
 <!--=== ScreenShots section Ends ===-->
 
+<section id="section-services" class="section-step step-even">
+    <div class="container services">
+        <div class="row">
 
+            <div class="col-md-10 col-md-offset-1 center section-title">
+                <h3>More...</h3>
+            </div>
+
+            <!-- Single Service Starts -->
+            <div class="col-md-12 col-sm-12 service animated" data-animation="fadeInLeft" data-animation-delay="700">
+                <div class="service-desc">
+                    <h4 class="service-title color-scheme">Ongoing development</h4>
+                    <p class="service-description justify">
+                        This is a test site where we are developing with Indigenous knowledge holders and researchers an information platform that is useful for a two-way sharing of Indigenous seasonal ecological knowledge, including bio-cultural indicators, use and management practices and cultural context. It is an attempt to bridge different knowledge systems and aims to respect and recognise the value of Indigenous knowledge and give prominence to it along side western science biodiversity knowledge.
+                    </p>
+                    <p>
+                        The platform is still at a prototype stage as we work out and improve design and interface features, but also the connectivity and visualization of different types of information and data.
+                    </p>
+                    <p>
+                        It is important that each indigenous seasonal calendar is seen in context - the context or purpose for which it was created and operates, as well as how Indigenous knowledge holders want it acknowledged and used, so as to ensure that the calendar's cultural integrity is maintained and is not misinterpreted or misused. Therefore it is important to read and respect the About section of a calendar and to engage directly with the owners of the calendar to understand more.
+                    </p>
+                    <p>
+                        This platform forms part of a broader collaborative program of work by the ALA and partners regarding <a href="http://www.ala.org.au/ala-and-indigenous-ecological-knowledge-iek/" target="_blank">Indigenous Ecological Knowledge</a>.
+                    </p>
+                    <p>
+                        Your <b>feedback and interest</b> in participating is very much welcome and encouraged - please contact Stephanie. Or just login and have a play and let us know what you want think. Share any ideas on where we can improve.
+                    </p>
+                    <p>
+                        <b>Areas for further development</b> of the information platform include: optional circular representation of a calendar such as the <a href="http://www.larrakia.csiro.au" target="_blank"> Larrakia calendar</a> a map on the Home page so can see where the different calendars are from; information connected to other parts of the ALA (eg Species Profile pages); more structured administration function such as levels of access and editing, together with document management; a suite of traditional knowledge labels/notices that attach to information fields and media files.
+                    </p>
+                </div>
+            </div>
+            <!-- Single Service Ends -->
+
+        </div>
+    </div>
+</section>
+<!--=== Services section Ends ===-->
 
 <r:script>
     $(window).load(function () {
@@ -107,9 +153,10 @@
         'use strict';
         $.vegas('slideshow', {
             backgrounds:[
-                { src:'egret/images/bg-slider/bg-1.jpg', fade:1000 },
-                { src:'egret/images/bg-slider/bg-2.jpg', fade:1000 },
-                { src:'egret/images/bg-slider/bg-3.jpg', fade:1000 }
+                { src:'images/0.jpg', fade:1000 },
+                { src:'images/1.JPG', fade:1000 },
+                { src:'images/2.jpg', fade:1000 },
+                { src:'images/3.JPG', fade:1000 }
             ]
         })();
     });

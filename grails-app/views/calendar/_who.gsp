@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <label for="org-name"><g:message code="calendar.organisation.name"/></label>
                     <g:if test="${readonly}">
-                        <h5 data-bind="text: organisation.name"></h5>
+                        <p data-bind="text: organisation.name"></p>
                     </g:if>
                     <g:else>
                         <input data-bind="value: organisation.name" type="text" class="form-control" id="org-name" placeholder="">
@@ -25,7 +25,7 @@
             <div class="col-lg-6">
                 <label for="contributors"><g:message code="calendar.contributors"/></label>
                 <g:if test="${readonly}">
-                    <h5 data-bind="text: organisation.contributors"></h5>
+                    <p data-bind="text: organisation.contributors"></p>
                 </g:if>
                 <g:else>
                     <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.contributors"/>', content:'<g:message code="calendar.contributors.content"/>'}">
@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label for="contact-name"><g:message code="calendar.contact.name"/></label>
                     <g:if test="${readonly}">
-                        <h5  data-bind="text: organisation.contactName"></h5>
+                        <p  data-bind="text: organisation.contactName"></p>
                     </g:if>
                     <g:else>
                         <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.contact.name"/>', content:'<g:message code="calendar.contact.name.content"/>'}">
@@ -61,7 +61,7 @@
                 <div class="form-group">
                     <label for="contact-email">Contact email: </label>
                     <g:if test="${readonly}">
-                        <h5><button class="btn btn-link" data-bind="attr:{'mailto:':  organisation.email}"><h5 data-bind="text: organisation.email"></h5></button></h5>
+                        <p><button class="btn btn-link" data-bind="attr:{'mailto:':  organisation.email}"><h5 data-bind="text: organisation.email"></h5></button></p>
                     </g:if>
                     <g:else>
                         <input data-bind="value: organisation.email" type="text" data-validation-engine="validate[custom[email]]" class="form-control" id="contact-email" placeholder="">
@@ -78,7 +78,7 @@
                 <div class="form-group">
                     <label for="organisation-keywords"><g:message code="calendar.keywords"/></label>
                     <g:if test="${readonly}">
-                        <h5 data-bind="text: organisation.keywords"></h5>
+                        <p data-bind="text: organisation.keywords"></p>
                     </g:if>
                     <g:else>
                         <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.keywords"/>', content:'<g:message code="calendar.keywords.content"/>'}">
@@ -94,7 +94,7 @@
                 <div class="form-group">
                     <label for="organisation-description"><g:message code="calendar.general"/></label>
                     <g:if test="${readonly}">
-                        <h5 data-bind="text: organisation.orgDescription"></h5>
+                        <p data-bind="text: organisation.orgDescription"></p>
                     </g:if>
                     <g:else>
                         <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.general"/>', content:'<g:message code="calendar.general.content"/>'}">

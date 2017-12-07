@@ -25,3 +25,7 @@
     background-color: #666666;
     border-color: #fff;
 }
+
+p {
+  white-space: pre-wrap;
+}
