@@ -526,3 +526,84 @@ var ImageUrl = function (image) {
     self.url = ko.observable(image.url);
 };
 
+
+
+var SeasonalCalendarsImageIdentification = function () {
+    var self = this;
+    self.imageUrl = ko.observable("http://images.ala.org.au/image/proxyImageThumbnailLarge?imageId=2cbfcbf0-ae37-4f36-87b9-95a54b4ffdff");
+    self.jsonResult = ko.observable();
+    self.concepts = ko.observableArray();
+    self.loading = ko.observable();
+    self.matched = ko.observable(0);
+    self.loadTime = ko.observable();
+    self.load = function () {
+        var ajaxTime = new Date().getTime();
+        if(self.loading()) {
+            return;
+        }
+        self.matched(0);
+        self.loadTime();
+        var data = '{"imageUrl": "'+self.imageUrl().trim()+'"}';
+        self.loading(true);
+        self.concepts([]);
+        $.ajax({
+            cache: false,
+            url: scConfig.imagePostUrl,
+            type: 'POST',
+            data: data,
+            contentType: 'application/json',
+            success: function (data) {
+                debugger;
+                console.log(data);
+                if(data.aiResult) {
+                    var concepts = data.aiResult[0];
+                    self.concepts($.map(concepts ? concepts : [], function (obj, i) {
+                        var obj = new SeasonalCalendarsImageIdentificationConcepts(obj);
+                        if(obj.value() >= 0.2) {
+                            self.matched(1);
+                        }
+                        return obj;
+                    }));
+
+                    self.jsonResult(concepts);
+                } else {
+                    self.matched(2);
+                    self.jsonResult("Error");
+                }
+
+                if(self.matched() == 0) {
+                    self.matched(2);
+                }
+            },
+            complete:function() {
+                var totalTime = new Date().getTime() - ajaxTime;
+                console.log(totalTime);
+                self.loadTime(totalTime);
+                self.loading(false);
+            },
+            error: function (data) {
+                showAlert("Error: " + data.responseText, "alert-danger", "");
+            }
+        });
+    };
+};
+
+var SeasonalCalendarsImageIdentificationConcepts = function (o){
+    var self = this;
+    self.id = ko.observable(o.id);
+    self.name = ko.observable(o.name);
+    self.value = ko.observable(o.value);
+    self.value(self.value().toFixed(20));
+
+    //Parse
+    self.commonName = ko.observable();
+    self.scientificName = ko.observable();
+
+    var array = self.id().split('|');
+    if(array.length > 0){
+        self.commonName(array[0].replace("_", " ").toUpperCase());
+    }
+    if(array.length >= 1){
+        self.scientificName(array[1].replace("_", " ").toUpperCase());
+    }
+};

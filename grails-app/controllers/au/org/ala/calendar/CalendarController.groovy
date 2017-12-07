@@ -2,10 +2,18 @@ package au.org.ala.calendar
 
 import au.org.ala.web.AlaSecured
 import au.org.ala.web.UserDetails
+import au.org.ala.ws.service.WebService
 import grails.converters.JSON
+import org.apache.http.entity.ContentType
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+
+import static groovyx.net.http.Method.POST
+import groovyx.net.http.RESTClient
+import static groovyx.net.http.ContentType.JSON
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
 
 class CalendarController {
 
@@ -14,7 +22,38 @@ class CalendarController {
     PermissionService permissionService
     UserService userService
     SearchService searchService
+    WebService webService
 
+    // Prototype.
+    def ai(){
+    }
+
+    def imageIdentify() {
+        def props = request.JSON
+        String imageUrl = props?.imageUrl ?: ''
+        def concepts = []
+        if(imageUrl) {
+            String bodyStr = '{"inputs": [{"data": {"image": {"url": "'+imageUrl+'"}}}]}'
+            def connection = new URL("https://api.clarifai.com/v2/models/model_id_test2/outputs").openConnection() as HttpURLConnection
+            connection.setRequestProperty('Authorization', 'Key f1b7288eb92b4981bab7b36791681aab')
+            connection.setRequestProperty('Content-Type', 'application/json')
+            connection.setRequestMethod("POST")
+            connection.setDoOutput(true)
+
+            java.io.OutputStreamWriter wr = new java.io.OutputStreamWriter(connection.getOutputStream(), 'utf-8')
+            wr.write(bodyStr)
+            wr.flush()
+            wr.close()
+
+            def response = connection.inputStream.text
+            def jsonSlurper = new JsonSlurper()
+            Map object = jsonSlurper.parseText(response)
+            log.debug( connection.responseCode + ": " + response)
+            concepts = object?.outputs?.data?.concepts
+        }
+
+        render ([status:'ok', aiResult: concepts] as JSON)
+    }
 
     def listCalendars() {
         def calendars;
