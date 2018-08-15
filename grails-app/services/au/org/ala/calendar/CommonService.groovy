@@ -2,7 +2,7 @@ package au.org.ala.calendar
 
 import au.org.ala.ws.service.WebService
 import grails.converters.JSON
-import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
+import org.grails.core.artefact.DomainClassArtefactHandler
 
 import java.text.SimpleDateFormat
 
@@ -58,7 +58,7 @@ class CommonService {
         o.save(flush:true,failOnError:true)
         if (o.hasErrors()) {
             log.error("has errors:")
-            o.errors.each { log.error it }
+            o.errors.each { log.error('{}', it) }
             throw new Exception(o.errors[0] as String);
         }
     }

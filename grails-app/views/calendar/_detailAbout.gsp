@@ -36,7 +36,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div style="height: 400px;"id="calendarMap" data-leaflet-img="${request.contextPath}/vendor/leaflet/0.7.3/images"></div>
+        <div style="height: 400px;" id="calendarMap" data-leaflet-img="${assetPath(src: 'webjars/leaflet/0.7.7/dist/images/')}"></div>
     </div>
 </div>
 <div class="margin-bottom-5"></div>

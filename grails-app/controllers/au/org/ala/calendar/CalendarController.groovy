@@ -48,7 +48,7 @@ class CalendarController {
             def response = connection.inputStream.text
             def jsonSlurper = new JsonSlurper()
             Map object = jsonSlurper.parseText(response)
-            log.debug( connection.responseCode + ": " + response)
+            log.debug("${connection.responseCode}: $response")
             concepts = object?.outputs?.data?.concepts
         }
 
@@ -188,7 +188,7 @@ class CalendarController {
                 result.commonName = result.commonName.split(',')[0]
             }
         }
-        log.debug(results)
+        log.debug('{}', results)
         render results as JSON
     }
 }

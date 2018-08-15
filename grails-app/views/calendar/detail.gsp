@@ -4,7 +4,7 @@
     <meta name="layout" content="egret-sc"/>
     <title> New | Seasonal Calendars</title>
 
-    <r:script disposition="head">
+    <script type="text/javascript">
         var scConfig = {
             serverUrl: "${grailsApplication.config.grails.serverURL}",
             id: "${id}",
@@ -17,8 +17,10 @@
             listCalendars: "${createLink(controller: 'calendar', action: 'listCalendars')}",
             bieUrl: "${grailsApplication.config.bie.url}"
         };
-    </r:script>
-    <r:require modules="seasonal_calendar, map"/>
+    </script>
+    <asset:stylesheet src="ala-map.css" />
+    <asset:javascript src="seasonal_calendar.js" asset-defer="" />
+    <asset:javascript src="ala-map-no-jquery-us.js" asset-defer="" />
 </head>
 
 <body>
@@ -31,11 +33,11 @@
     <g:render template="detailTabs"/>
 </div>
 
-<r:script>
+<asset:script type="text/javascript">
     $(window).load(function () {
         ko.applyBindings(SeasonalCalendarVM(), document.getElementById('detailCalendar'));
     });
-</r:script>
+</asset:script>
 
 
 </body>

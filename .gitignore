@@ -3,3 +3,8 @@ misc.xml
 target/
 *.log
 *.tld
+build/
+.asscache
+.gradle/
+*.iml
+out/

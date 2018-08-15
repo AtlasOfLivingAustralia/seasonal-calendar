@@ -141,12 +141,6 @@ class UserService {
     }
 
     public UserDetails getUser() {
-        def u = authService.userDetails()
-        def user
-
-        if (u?.userId) {
-            user = new UserDetails(displayName: u.userDisplayName, userName: u.email, userId: u.userId)
-        }
-        return user
+        authService.userDetails()
     }
 }

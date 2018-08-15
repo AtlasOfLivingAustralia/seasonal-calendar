@@ -4,7 +4,7 @@
     <meta name="layout" content="egret-sc"/>
     <title> New | Seasonal Calendars</title>
 
-    <r:script disposition="head">
+    <script type="text/javascript">
         var scConfig = {
             serverUrl: "${grailsApplication.config.grails.serverURL}",
             id: "${id}",
@@ -21,8 +21,13 @@
             previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}",
             onlyMyCalendars: ${onlyMyCalendars}
         };
-    </r:script>
-    <r:require modules="jqueryValidationEngine, seasonal_calendar, map, bootbox"/>
+    </script>
+    <asset:stylesheet src="jqueryValidationEngine.css" />
+    <asset:stylesheet src="ala-map.css" />
+    <asset:javascript src="jqueryValidationEngine.js" asset-defer="" />
+    <asset:javascript src="seasonal_calendar.js" asset-defer="" />
+    <asset:javascript src="ala-map-no-jquery-us.js" asset-defer="" />
+
 </head>
 <body>
 
@@ -73,14 +78,14 @@
 
 <!--=== Features section Ends ===-->
 
-<r:script>
+<asset:script type="text/javascript">
     $(window).load(function () {
         ko.applyBindings(SeasonalCalendarVM(), document.getElementById('calendarAddEdit'));
         ko.applyBindings(SeasonalCalendarsMenuVM(), document.getElementById('calendarList'));
         $('#calendar-validation').validationEngine();
         $('.helphover').popover({animation: true, trigger:'hover'});
     });
-</r:script>
+</asset:script>
 
 </body>
 </html>

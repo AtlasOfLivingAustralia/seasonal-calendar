@@ -1,0 +1,14 @@
+//= require webjars/bootstrap/3.3.7-1/js/bootstrap.js
+//= require egret/js/bootstrapValidator.min.js
+//= require egret/js/color-switcher.js
+//= require egret/js/jquery.ajaxchimp.min.js
+//= require egret/js/jquery.appear.js
+//= require egret/js/jquery.baraja.js
+//= require egret/js/jquery.bxslider.min.js
+//= require egret/js/jquery.easing.1.3.js
+//= require egret/js/jquery.fitvids.js
+//= require egret/js/jquery.nav.js
+//= require egret/js/jquery.nicescroll.min.js
+//= require egret/js/jquery.vegas.min.js
+//= require egret/js/modernizr.js
+//= require egret/js/custom.js

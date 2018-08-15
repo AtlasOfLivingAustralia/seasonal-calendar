@@ -4,7 +4,7 @@
     <meta name="layout" content="egret-sc"/>
     <title>Home Page | Seasonal Calendars</title>
 
-    <r:script disposition="head">
+    <asset:script type="text/javascript">
         var scConfig = {
             serverUrl: "${grailsApplication.config.grails.serverURL}",
             id: "${id}",
@@ -16,8 +16,8 @@
             listCalendars: "${createLink(controller: 'calendar', action: 'listCalendars')}",
             previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}"
         };
-    </r:script>
-    <r:require modules="seasonal_calendar"/>
+    </asset:script>
+    <asset:javascript src="seasonal_calendar.js" asset-defer="" />
 </head>
 <body>
 
@@ -65,7 +65,7 @@
                     <div class="col-md-4 col-sm-4 col-xs-6">
                         <div class="screenshot">
                             <div class="photo-box">
-                                <img data-bind="attr:{src: imageUrl() ? imageUrl : '${request.contextPath}/images/seasons-300.png' }" alt="" />
+                                <img data-bind="attr:{src: imageUrl() ? imageUrl : '${assetPath(src: 'seasons-300.png')}" alt="" />
                                 <div class="photo-overlay">
                                     <h4><span data-bind="text: name"></span></h4>
                                 </div>
@@ -142,7 +142,7 @@
 </section>
 <!--=== Services section Ends ===-->
 
-<r:script>
+<asset:script type="text/javascript">
     $(window).load(function () {
 
         ko.applyBindings(SeasonalCalendarsMenuVM(), document.getElementById('calendarList'));
@@ -153,14 +153,14 @@
         'use strict';
         $.vegas('slideshow', {
             backgrounds:[
-                { src:'images/0.jpg', fade:1000 },
-                { src:'images/1.JPG', fade:1000 },
-                { src:'images/2.jpg', fade:1000 },
-                { src:'images/3.JPG', fade:1000 }
+                { src: '${assetPath(src: '0.jpg')}', fade:1000 },
+                { src: '${assetPath(src: '1.JPG')}', fade:1000 },
+                { src: '${assetPath(src: '2.jpg')}', fade:1000 },
+                { src: '${assetPath(src: '3.JPG')}', fade:1000 }
             ]
         })();
     });
-</r:script>
+</asset:script>
 
 
 </body>

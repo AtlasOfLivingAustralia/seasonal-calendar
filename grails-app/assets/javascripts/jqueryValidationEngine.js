@@ -1,0 +1,2 @@
+//= require webjars/github-com-cjjava-jQuery-Validation-Engine/2.6.5/js/jquery.validationEngine.js
+//= require webjars/github-com-cjjava-jQuery-Validation-Engine/2.6.5/js/languages/jquery.validationEngine-en.js

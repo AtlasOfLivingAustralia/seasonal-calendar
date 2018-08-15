@@ -11,6 +11,7 @@
     <meta name="author" content="Atlas of Living Australia">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <asset:stylesheet src="application.css" />
     <!--=== Google Fonts ===-->
     <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:300,700,400' rel='stylesheet' type='text/css'>
@@ -22,8 +23,7 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif] -->
-    <r:require modules="sc_calendar" />
-    <r:layoutResources/>
+    <g:layoutHead />
 </head>
 <body>
 
@@ -144,6 +144,7 @@
 </div>
 <!--=== Footer section Ends ===-->
 
-<r:layoutResources/>
+<asset:javascript src="application.js" />
+<asset:deferredScripts />
 </body>
 </html>
