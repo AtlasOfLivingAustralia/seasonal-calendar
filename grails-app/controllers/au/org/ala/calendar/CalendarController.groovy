@@ -56,7 +56,7 @@ class CalendarController {
     }
 
     def listCalendars() {
-        def calendars;
+        def calendars
 
         try{
             List files = calendarService.list()
