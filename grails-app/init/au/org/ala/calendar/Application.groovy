@@ -6,7 +6,6 @@ import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration
 import okhttp3.OkHttpClient
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 
 class Application extends GrailsAutoConfiguration {
@@ -14,12 +13,9 @@ class Application extends GrailsAutoConfiguration {
         GrailsApp.run(Application, args)
     }
 
-    @Value('${profile.service.baseUrl}')
-    String profileServiceBaseUrl
-
     @Bean
     Moshi moshi() {
-        new Moshi.Builder().add(new Rfc3339DateJsonAdapter()).build()
+        new Moshi.Builder().add(Date, new Rfc3339DateJsonAdapter().nullSafe()).build()
     }
 
     @Bean
@@ -29,6 +25,6 @@ class Application extends GrailsAutoConfiguration {
 
     @Bean
     ProfileServiceClient profileServiceClient() {
-        new ProfileServiceClient.Builder(okHttpClient(), profileServiceBaseUrl).moshi(moshi()).build()
+        new ProfileServiceClient.Builder(okHttpClient(), grailsApplication.config.getProperty('profile.service.baseUrl', String)).moshi(moshi()).build()
     }
 }

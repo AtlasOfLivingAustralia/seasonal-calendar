@@ -11,9 +11,9 @@ import grails.test.mongodb.MongoSpec
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(CalendarService)
+@TestFor(GormCalendarService)
 @Mock([CommonService, PermissionService])
-class CalendarServiceSpec extends MongoSpec {
+class GormCalendarServiceSpec extends MongoSpec {
 
     UserDetails userDetails = new UserDetails(userName: "userName", userId: "userId", firstName: 'display', lastName: 'Name')
 
