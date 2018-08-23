@@ -1,8 +1,8 @@
 package au.org.ala.calendar
 
 import au.org.ala.profiles.service.ProfileServiceClient
+import au.org.ala.profiles.service.moshi.MillisSinceEpochDateJsonAdapter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration
 import okhttp3.OkHttpClient
@@ -15,7 +15,7 @@ class Application extends GrailsAutoConfiguration {
 
     @Bean
     Moshi moshi() {
-        new Moshi.Builder().add(Date, new Rfc3339DateJsonAdapter().nullSafe()).build()
+        new Moshi.Builder().add(Date, new MillisSinceEpochDateJsonAdapter().nullSafe()).build()
     }
 
     @Bean
