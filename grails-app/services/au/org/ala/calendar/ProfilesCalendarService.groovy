@@ -1,5 +1,6 @@
 package au.org.ala.calendar
 
+import au.org.ala.profiles.service.ProfileServiceClient
 import org.springframework.beans.factory.annotation.Autowired
 
 class ProfilesCalendarService implements ICalendarService {
