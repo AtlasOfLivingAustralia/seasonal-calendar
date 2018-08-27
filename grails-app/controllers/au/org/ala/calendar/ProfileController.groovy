@@ -7,9 +7,11 @@ import grails.web.http.HttpHeaders
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 
+import static okio.Okio.buffer
+import static okio.Okio.sink
 import static org.springframework.http.HttpStatus.*
 
-class ProfileController {
+class ProfileController extends BaseRetrofitController {
 
     static allowedMethods = [save: "POST", update: ["PUT", "POST"], patch: "PATCH", delete: "DELETE"]
 
@@ -155,7 +157,25 @@ class ProfileController {
         }
     }
 
-    /**
+    def search() {
+        def opusId = params.get('opusId')
+        def term = params.get('term')
+        def pageSize = params.int('pageSize')
+        def offset = params.int('offset')
+        def nameOnly = params.boolean('nameOnly')
+        def includeArchived = params.boolean('includeArchived')
+        def matchAll = params.boolean('matchAll')
+        def searchAla = params.boolean('searchAla')
+        def searchNsl = params.boolean('searchNsl')
+        def includeNameAttributes = params.boolean('includeNameAttributes')
+        def hideStubs = params.boolean('hideStubs')
+
+        proxy profileServiceClient.search(opusId, term, pageSize, offset,
+                nameOnly, includeArchived, matchAll, searchAla,
+                searchNsl, includeNameAttributes, hideStubs)
+    }
+
+/**
      * handles the request for write methods (create, edit, update, save, delete) when controller is in read only mode
      *
      * @return true if controller is read only
@@ -177,7 +197,14 @@ class ProfileController {
      */
     protected Profile queryForResource(String opusId, String id) {
         def call = profileServiceClient.getProfile(opusId, id, authService.userId)
-        call.execute().body()
+        def callResponse = call.execute()
+
+        if (callResponse.successful) {
+            return callResponse.body()
+        } else {
+            log.error("Couldn't find $opusId, $id, service returned ${callResponse.code()}")
+            return null
+        }
     }
 
     /**
@@ -239,8 +266,11 @@ class ProfileController {
      */
     protected Profile saveResource(String opusId, Profile resource) {
         def call = resource.uuid ? profileServiceClient.updateProfile(opusId, resource.uuid, authService.userId, resource) : profileServiceClient.createProfile(opusId, authService.userId, resource)
-        call.execute()
-        // TODO createOpus returns id?
+        def callResponse = call.execute()
+        if (!callResponse.successful) {
+            throw new RuntimeException("Couldn't save profile")
+        }
+        // TODO createProfile returns id?
         return resource
     }
 
@@ -260,7 +290,10 @@ class ProfileController {
      * @param resource The resource to be deleted
      */
     protected void deleteResource(String opusId, Profile resource) {
-        profileServiceClient.deleteProfile(opusId, resource.uuid, authService.userId)
+        def response = profileServiceClient.deleteProfile(opusId, resource.uuid, authService.userId).execute()
+        if (!response.successful) {
+            log.error("Couldn't delete $opusId, $resource, received ${response.code()}")
+        }
     }
 
     protected String getClassMessageArg() {
@@ -268,7 +301,9 @@ class ProfileController {
     }
 
     protected void send(object) {
-        gson.toJson(object, response.writer)
+        response.contentType = 'application/json'
+        response.characterEncoding = 'UTF-8'
+        moshi.adapter(object.getClass()).toJson(buffer(sink(response.outputStream)), object)
     }
 
 }

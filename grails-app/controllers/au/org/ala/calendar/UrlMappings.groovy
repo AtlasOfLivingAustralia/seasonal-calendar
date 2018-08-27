@@ -4,6 +4,7 @@ class UrlMappings {
 
 	static mappings = {
 
+        get "/profile/search"(controller:'profile', action:'search')
         get "/opus"(controller:"opus", action:"index")
 //        get "/opus/create"(controller:"opus", action:"create")
         post "/opus"(controller:"opus", action:"save")

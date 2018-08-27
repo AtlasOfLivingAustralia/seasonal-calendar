@@ -2,13 +2,13 @@ package au.org.ala.calendar
 
 import au.org.ala.profiles.service.Opus
 import au.org.ala.profiles.service.ProfileServiceClient
-import com.google.gson.Gson
-import com.squareup.moshi.JsonReader
 import com.squareup.moshi.Moshi
 import grails.web.http.HttpHeaders
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 
+import static okio.Okio.buffer
+import static okio.Okio.sink
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -182,7 +182,14 @@ class OpusController {
      */
     protected Opus queryForResource(String id) {
         def call = profileServiceClient.getOpus(id, authService.userId)
-        call.execute().body()
+        def callResponse = call.execute()
+
+        if (callResponse.successful) {
+            return callResponse.body()
+        } else {
+            log.error("Couldn't find $id, service returned ${callResponse.code()}")
+            return null
+        }
     }
 
     /**
@@ -213,8 +220,14 @@ class OpusController {
      * @return List of resources or empty if it doesn't exist
      */
     protected List<Opus> listAllResources(Map params) {
-        def call = profileServiceClient.getOperaByTag('calendar', authService.userId)
-        call.execute().body()
+        def call = profileServiceClient.getOperaByTag('IEK', authService.userId, params)
+        def callResponse = call.execute()
+        if (callResponse.successful) {
+            callResponse.body()
+        } else {
+            log.error("Couldn't retrieve list of all opera, service returned ${callResponse.code()}")
+            []
+        }
     }
 
     /**
@@ -244,8 +257,10 @@ class OpusController {
      */
     protected Opus saveResource(Opus resource) {
         def call = resource.uuid ? profileServiceClient.updateOpus(resource.uuid, authService.userId, resource) : profileServiceClient.createOpus(authService.userId, resource)
-        call.execute()
-        // TODO createOpus returns id?
+        def callResponse = call.execute()
+        if (!callResponse.successful) {
+            throw new RuntimeException("Couldn't save collection")
+        }
         return resource
     }
 
@@ -273,7 +288,9 @@ class OpusController {
     }
 
     protected void send(object) {
-        gson.toJson(object, response.writer)
+        response.contentType = 'application/json'
+        response.characterEncoding = 'UTF-8'
+        moshi.adapter(object.getClass()).toJson(buffer(sink(response.outputStream)), object)
     }
 
 }
