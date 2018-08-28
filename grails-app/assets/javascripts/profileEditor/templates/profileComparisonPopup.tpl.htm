@@ -1,0 +1,32 @@
+<div class="modal-header">
+    <h4 class="modal-title">Comparison</h4>
+    <close-modal close="compareCtrl.close()"></close-modal>
+</div>
+
+<div class="modal-body">
+    <div class="form-inline padding-bottom-2">
+        <div class="form-group">
+            <label for="comparison" class="control-label">Select the profile to compare to</label>
+
+            <input id="comparison" type="text"
+                   class="form-control" size="50"
+                   autocomplete="off" value="bla"
+                   ng-model="compareCtrl.right.scientificName" typeahead-editable="false"
+                   typeahead="profile.uuid as profile.scientificName for profile in compareCtrl.search($viewValue) | filter:$viewValue | limitTo:10"
+                   typeahead-on-select="compareCtrl.selectProfile($item)"/>
+        </div>
+    </div>
+
+    <div ng-if="compareCtrl.loading"><span class="fa fa-spin fa-spinner"></span>&nbsp;Loading...</div>
+
+<div ng-if="compareCtrl.right">
+    <profile-comparison left="compareCtrl.left"
+                        left-title="{{compareCtrl.left.scientificName}}"
+                        right="compareCtrl.right"
+                        right-title="{{compareCtrl.right.scientificName}}"
+                        show-everything="true"></profile-comparison>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="compareCtrl.close()">Close</button>
+</div>

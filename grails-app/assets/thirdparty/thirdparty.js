@@ -1,0 +1,24 @@
+//= require angular
+//= require angular-bootstrap-colorpicker-3.0.11/js/bootstrap-colorpicker-module.min.js
+//= require angular-loading-bar/loading-bar-0.7.1.min.js
+//= require angular-bootstrap-show-errors/showErrors.js
+//= require angular/ui-bootstrap-tpls-0.14.3.js
+//= require ckeditor/ckeditor.js
+//= require ckeditor/ng-ckeditor-0.2.1.js
+//= require google-diff-match-patch/diff_match_patch_uncompressed.js
+//= require jspath/jspath.js
+//= require angular-scroll/angular-scroll.min.js
+//= require ng-file-upload/ng-file-upload-shim-5.0.7.min.js
+//= require ng-file-upload/ng-file-upload-5.0.7.min.js
+//= require checklist-model/checklist-model-0.2.4.js
+//= require angular-inview/angular-inview-1.5.6.js
+//= require ngStorage/ngStorage-0.3.10.min.js
+//= require angular-truncate/truncate.js
+//= require underscore/underscore-1.8.3.min.js
+//= require ala-keyplayer/jquery.keybase.key.js
+//= require dualMultiselect/dualmultiselect.min.js
+//= require colorjs/color.min.js
+//= require urijs-1.18.0/URI.js
+//= require web-animations-polyfill/web-animations-2.2.5.min.js
+//= require webcomponentsjs/webcomponents-0.7.24.js
+//require mapAndImages

@@ -1,0 +1,7 @@
+<h4>Table of contents</h4>
+
+<ul ng-controller="NavigationController as navCtrl" class="nav nav-stacked" ng-cloak>
+    <li ng-repeat="item in nav | orderBy:'label'" ng-show="item.category != 'pdf'">
+        <a target="_self" class="font-xxsmall" ng-click="navCtrl.navigateTo(item.key); sidebar.close()">{{item.label}}</a>
+    </li>
+</ul>

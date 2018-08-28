@@ -1,0 +1,15 @@
+<div ng-if="!taxonomyCtrl.taxonomy || taxonomyCtrl.taxonomy.length == 0">
+    The taxonomy for this profile is unknown.
+</div>
+
+<div class="pull-right">
+    <a href="" class="small" ng-click="taxonomyCtrl.hierarchialiseTaxonomy()"><span class="fa fa-refresh">&nbsp;</span>Reset</a>
+</div>
+<div class="clearfix"></div>
+
+<ul class="tree">
+    <li ng-repeat="taxon in taxonomyCtrl.hierarchy"
+        ng-if="taxonomyCtrl.taxonomy.length >= taxonomyCtrl.limit && (taxonomyCtrl.limit < 0 || $index >= taxonomyCtrl.taxonomy.length - taxonomyCtrl.limit)">
+        <span ng-include src="'/profileEditor/taxonomy-tree-item.htm'"></span>
+    </li>
+</ul>

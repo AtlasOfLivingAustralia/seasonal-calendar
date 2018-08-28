@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h4 class="modal-title">Remove vocabulary term</h4>
+    <close-modal close="removeTermCtrl.cancel()"></close-modal>
+</div>
+
+<div class="modal-body">
+    <p>
+        The vocabulary term {{removeTermCtrl.existingTerm.name}} is being used in {{removeTermCtrl.usageCount}}
+        profile(s).
+        You must either select a replacement term or manually find and remove all usages before you can delete
+        the term.
+    </p>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="editTerm" class="col-sm-3 control-label">Replacement Term:</label>
+
+            <div class="col-sm-8">
+                <select ng-options="term as term.name for term in removeTermCtrl.terms"
+                        ng-model="removeTermCtrl.newTerm" class="form-control"
+                        ng-enter="removeTermCtrl.ok()"></select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="removeTermCtrl.ok()">OK</button>
+    <button class="btn btn-default" ng-click="removeTermCtrl.cancel()">Cancel</button>
+</div>

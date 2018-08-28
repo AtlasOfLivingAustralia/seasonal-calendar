@@ -19,13 +19,13 @@
             bieUrl: "${grailsApplication.config.bie.url}",
             listMyCalendars: "${createLink(controller: 'calendar', action: 'listMyCalendars')}",
             previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}",
-            onlyMyCalendars: ${onlyMyCalendars}
+            onlyMyCalendars: true//${onlyMyCalendars}
         };
     </script>
     <asset:stylesheet src="jqueryValidationEngine.css" />
     <asset:stylesheet src="ala-map.css" />
     <asset:javascript src="jqueryValidationEngine.js" asset-defer="" />
-    <asset:javascript src="seasonal_calendar.js" asset-defer="" />
+%{--    <asset:javascript src="seasonal_calendar.js" asset-defer="" />--}%
     <asset:javascript src="ala-map-no-jquery-us.js" asset-defer="" />
 
 </head>
@@ -52,12 +52,15 @@
 
     <div class="row">
         <div class="col-lg-3 well">
-            <div id="calendarList">
+            <div id="calendarList" ng-controller="OpusController as opusCtrl" >
                 <ul>
                     <li><i class="fa fa-plus"></i><button class="btn btn-link" data-bind="click: addCalendar">Add New Calendar <span data-bind="if: transients.isNew"><i class="fa fa-chevron-right"></i></span></button></li>
-                    <!-- ko foreach: items -->
-                    <li><i class="fa fa-edit"></i><button class="btn btn-link" data-bind="click: redirect"><span data-bind="text: name"></span> <span data-bind="if: transients.isActive"><i class="fa fa-chevron-right"></i></span></button></li>
-                    <!-- /ko -->
+                    <div ng-repeat="opus in opusCtrl.opusList | orderBy: 'title'">
+                        <li><i class="fa fa-edit"></i><a class="btn btn-link" href="${createLink(uri: '')}/calendar/settings/{{opus.uuid}}"><span>{{opus.title ? opus.title : opus.uuid}}</span></a></li>
+                    %{--<!-- ko foreach: items -->--}%
+                        %{--<li><i class="fa fa-edit"></i><button class="btn btn-link" data-bind="click: redirect"><span data-bind="text: name"></span> <span data-bind="if: transients.isActive"><i class="fa fa-chevron-right"></i></span></button></li>--}%
+                    </div>
+                    %{--<!-- /ko -->--}%
                 </ul>
             </div>
         </div>
@@ -69,7 +72,7 @@
                 </div>
             </div>
 
-            <g:render template="/calendar/tabs"/>
+                <g:render template="/calendar/tabs"/>
         </div>
     </div>
 
@@ -77,11 +80,10 @@
 </div>
 
 <!--=== Features section Ends ===-->
-
 <asset:script type="text/javascript">
     $(window).load(function () {
-        ko.applyBindings(SeasonalCalendarVM(), document.getElementById('calendarAddEdit'));
-        ko.applyBindings(SeasonalCalendarsMenuVM(), document.getElementById('calendarList'));
+        //ko.applyBindings(SeasonalCalendarVM(), document.getElementById('calendarAddEdit'));
+        //ko.applyBindings(SeasonalCalendarsMenuVM(), document.getElementById('calendarList'));
         $('#calendar-validation').validationEngine();
         $('.helphover').popover({animation: true, trigger:'hover'});
     });

@@ -1,0 +1,19 @@
+<form id="form">
+    <div class="form-group">
+        <label for="florulaListId">Select filter:</label>
+        <input id="florulaListId" name="florulaListId" class="form-control" aria-describedby="helpBlock" type="text" autocomplete="off"
+               ng-model="$ctrl.selected" uib-typeahead="listItem as listItem.listName for listItem in $ctrl.listItems | filter:{listName:$viewValue}"
+               typeahead-focus
+               typeahead-editable="false"
+               typeahead-select-on-blur="true"
+               typeahead-show-hint="true"
+               typeahead-min-length="0"
+               placeholder="Autocomplete list name...">
+        <span id="helpBlock" class="help-block">This collection will be filtered by the current list (for you only).
+            Filtering <strong>only</strong> allows profiles within the collection that have an a matched name in the
+            list to be returned in search, browse results, and as keys; and shown as a profile page.  If a filter is
+            currently active on the current collection an indicator will be present near the filter item in the nav bar.</span>
+    </div>
+    <button class="btn btn-primary" ng-click="$ctrl.save()" ng-disabled="!$ctrl.selected">Submit</button>
+    <button class="btn btn-default" ng-click="$ctrl.clear()">Clear</button>
+</form>

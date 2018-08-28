@@ -1,0 +1,105 @@
+<div ng-form="InsertImageForm">
+    <div class="modal-header">
+        <h4 class="modal-title">Insert image</h4>
+        <close-modal close="attrImgCtrl.cancel()"></close-modal>
+    </div>
+
+    <div class="modal-body">
+        <div class="btn-group-sm padding-bottom-1">
+            <label class="btn btn-default ignore-save-warning" ng-model="attrImgCtrl.mode" btn-radio="'select'">Use
+                existing image</label>
+            <label class="btn btn-default ignore-save-warning" ng-model="attrImgCtrl.mode" btn-radio="'upload'">Upload a
+                new image</label>
+        </div>
+
+        <div class="row" ng-show="attrImgCtrl.mode == 'select'">
+            <div class="col-md-12">
+                <p>To select an existing image from the profile's gallery, scroll through the list below until you find the correct image, then select the size and position, and click OK. Alternatively, you can upload a new image by clicking the 'Upload a new image' button above.</p>
+                <div class="checkbox pull-right small">
+                    <label for="showExcluded" class="inline-label">
+                        <input id="showExcluded" type="checkbox" name="showExcluded" class="ignore-save-warning"
+                               ng-model="attrImgCtrl.showExcluded" ng-false-value="false">
+                        Show excluded images
+                    </label>
+                </div>
+                <div class="image-selection-list">
+                    <div ng-show="attrImgCtrl.loading"><span class="fa fa-spin fa-spinner">&nbsp;</span>Retrieving images...</div>
+                    <div ng-show="!attrImgCtrl.loading && attrImgCtrl.images.length == 0">There are no existing images for this profile</div>
+
+                    <carousel>
+                        <slide ng-repeat="image in attrImgCtrl.images" active="image.selected">
+                            <div class="imgConCarousel">
+                                <img ng-src="{{image.largeImageUrl}}" ng-if="image.largeImageUrl && image.type.name == 'OPEN'"
+                                     class="thumbnail" style="margin:auto;"/>
+                                <img ng-src="{{attrImgCtrl.contextPath}}{{image.largeImageUrl}}"
+                                     ng-if="image.largeImageUrl && image.type.name != 'OPEN'" class="thumbnail"
+                                     style="margin:auto;"/>
+                            </div>
+                        </slide>
+                    </carousel>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="attrImgCtrl.mode == 'upload'">
+            <image-upload opus="attrImgCtrl.opus" on-upload-complete="attrImgCtrl.uploadImage" url="{{ attrImgCtrl.uploadUrl }}"
+                          upload-on-event="performUpload"></image-upload>
+        </div>
+
+        <div class="row form-horizontal">
+            <div class="form-group">
+                <label for="small" class="col-sm-3 control-label">Size</label>
+
+                <div class="col-sm-9">
+                    <div class="radio">
+                        <label for="small" class="padding-right-1">
+                            <input id="small" type="radio" name="size" ng-value="'small'"
+                                   ng-model="attrImgCtrl.size">
+                            Small
+                        </label>
+                        <label for="medium" class="padding-right-1">
+                            <input id="medium" type="radio" name="size" ng-value="'medium'"
+                                   ng-model="attrImgCtrl.size">
+                            Medium
+                        </label>
+                        <label for="large" class="padding-right-1">
+                            <input id="large" type="radio" name="size" ng-value="'large'"
+                                   ng-model="attrImgCtrl.size">
+                            Large
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-horizontal">
+            <div class="form-group">
+                <label for="left" class="col-sm-3 control-label">Position</label>
+
+                <div class="col-sm-9">
+                    <div class="radio">
+                        <label for="right" class="padding-right-1">
+                            <input id="right" type="radio" name="position" ng-value="'pull-right'"
+                                   ng-model="attrImgCtrl.position">
+                            Right aligned
+                        </label>
+                        <label for="left" class="padding-right-1">
+                            <input id="left" type="radio" name="position" ng-value="'pull-left'"
+                                   ng-model="attrImgCtrl.position">
+                            Left aligned
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="attrImgCtrl.ok()"
+                ng-disabled="(attrImgCtrl.mode == 'select' && attrImgCtrl.images.length == 0) || (attrImgCtrl.mode == 'upload' && InsertImageForm.$invalid)">
+            OK
+        </button>
+        <button class="btn btn-default" ng-click="attrImgCtrl.cancel()">Cancel</button>
+    </div>
+</div>

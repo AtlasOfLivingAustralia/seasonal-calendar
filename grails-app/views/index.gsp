@@ -4,7 +4,7 @@
     <meta name="layout" content="egret-sc"/>
     <title>Home Page | Seasonal Calendars</title>
 
-    <asset:script type="text/javascript">
+    %{--<asset:script type="text/javascript">
         var scConfig = {
             serverUrl: "${grailsApplication.config.grails.serverURL}",
             id: "${id}",
@@ -17,7 +17,7 @@
             previewCalendar:  "${createLink(controller: 'calendar', action: 'detail')}"
         };
     </asset:script>
-    <asset:javascript src="seasonal_calendar.js" asset-defer="" />
+    <asset:javascript src="seasonal_calendar.js" asset-defer="" />--}%
 </head>
 <body>
 
@@ -59,8 +59,30 @@
     <div class="container screenshots animated" data-animation="fadeInUp" data-animation-delay="1000">
 
         <div id="calendarList">
-            <div class="row porfolio-container">
-                <!-- ko foreach: items -->
+            <div class="row porfolio-container" ng-controller="OpusController as opusCtrl" ng-init="opusCtrl.loadOpus()">
+                <div ng-repeat="opus in opusCtrl.opusList | orderBy: 'title'" class="col-md-4 col-sm-4 col-xs-6">
+                    <div class="screenshot">
+                        <div class="photo-box">
+                            <a href="${request.contextPath}/calendar/{{opus.shortName ? opus.shortName : opus.uuid}}"
+                               target="_self">
+                                <img class="img-responsive collection-thumbnail thumbnail" src=""
+                                     ng-src="{{opus.thumbnailUrl | default:'${asset.assetPath(src: "seasons-300.png")}' }}"
+                                     alt="{{opus.title}} logo" title="{{opus.title}}"></a>
+                                <h4 class="font-xxsmall" style="width: 160px;"><a
+                                        href="${request.contextPath}/opus/{{opus.shortName ? opus.shortName : opus.uuid}}"
+                                        target="_self"><strong>{{opus.title}}</strong></a></h4>
+
+                            %{--<img data-bind="attr:{src: imageUrl() ? imageUrl : '${assetPath(src: 'seasons-300.png')}" alt="" />
+                            <div class="photo-overlay">
+                                <h4><span data-bind="text: name"></span></h4>
+                            </div>
+                            <span class="photo-zoom">
+                                <a data-bind="click: redirectToDetailPage" href="single-project.html" class="view-project"><i class="fa fa-search-plus fa-2x"></i></a>
+                            </span>--}%
+                        </div>
+                    </div>
+
+  %{--              <!-- ko foreach: items -->
                     <!-- ko if: calendarStatus() == 'published' -->
                     <div class="col-md-4 col-sm-4 col-xs-6">
                         <div class="screenshot">
@@ -79,7 +101,7 @@
                         </div>
                     </div>
                     <!-- /ko -->
-                <!-- /ko -->
+                <!-- /ko -->--}%
            </div>
         </div>
 
@@ -145,7 +167,7 @@
 <asset:script type="text/javascript">
     $(window).load(function () {
 
-        ko.applyBindings(SeasonalCalendarsMenuVM(), document.getElementById('calendarList'));
+      //  ko.applyBindings(SeasonalCalendarsMenuVM(), document.getElementById('calendarList'));
 
         /* -----------------------------
          Backgroung slider

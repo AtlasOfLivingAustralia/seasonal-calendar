@@ -1,0 +1,41 @@
+<div class="table-responsive">
+    <table class="table table-striped" ng-show="reportCtrl.reportData.records.length > 0">
+        <thead>
+        <tr>
+            <th>Profile Name</th>
+            <th>Matched Name</th>
+            <th>In NSL?</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="profile in reportCtrl.reportData.records">
+            <td>
+                <!-- TODO test context path -->
+                <a ng-href="{{ config.contextPath }}/opus/{{ reportCtrl.opusId }}/profile/{{ profile.profileName.scientificName }}"
+                   target="_blank">
+                    <span data-ng-bind-html="profile.profileName | formatProfileName | sanitizeHtml"></span>
+                    <span ng-show="profile.manuallyMatchedName">&nbsp;*</span>
+                </a>
+            </td>
+            <td>
+                <span data-ng-bind-html="profile.matchedName | formatProfileName | default:'Not matched' | sanitizeHtml"></span>
+            </td>
+            <td>
+                <!-- TODO test grailsApplication.config.nsl.name.url.prefix -->
+                <a ng-href="{{ config.nslNameUrlPrefix }}{{profile.nslNameId}}"
+                   ng-if="profile.nslNameId" title="Click to view the NSL name" target="_blank"><i
+                        class="fa fa-check color--green"></i></a>
+                <i title="This name was not found in the NSL" class="fa fa-close color--red"
+                   ng-if="!profile.nslNameId"></i>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="pull-right small">Names marked with an asterisk * have been explicitly matched to the Matched Name by the editor</div>
+    <pagination total-items="reportCtrl.reportData.recordCount"
+                ng-change="reportCtrl.loadReport(reportCtrl.selectedReport.id, (reportCtrl.page - 1) * reportCtrl.pageSize)"
+                ng-model="reportCtrl.page" max-size="10" class="pagination-sm"
+                items-per-page="reportCtrl.pageSize"
+                previous-text="Prev" boundary-links="true"
+                ng-show="reportCtrl.reportData.recordCount > reportCtrl.pageSize"></pagination>
+</div>

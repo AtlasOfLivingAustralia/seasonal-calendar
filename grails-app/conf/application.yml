@@ -10,9 +10,9 @@ grails:
             events: false
     config:
         locations:
-            - file:///data/seasonal-calendar/config/seasonal-calendar-config.properties
-            - file:///data/seasonal-calendar/config/seasonal-calendar-config.yml
-            - file:///data/seasonal-calendar/config/seasonal-calendar-config.groovy
+            - file:///data/seasonal-calendar/config/seasonal-calendar-config-dev.properties
+            - file:///data/seasonal-calendar/config/seasonal-calendar-config-dev.yml
+            - file:///data/seasonal-calendar/config/seasonal-calendar-config-dev.groovy
 info:
     app:
         name: '@info.app.name@'
@@ -30,6 +30,10 @@ endpoints:
     enabled: false
     jmx:
         enabled: true
+
+
+server:
+  port: 8081
 
 ---
 grails:

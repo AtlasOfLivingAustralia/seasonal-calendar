@@ -1,0 +1,32 @@
+<div class="panel panel-default" ng-show="$ctrl.isEdittable" ng-cloak>
+    <div>
+        <navigation-anchor anchor-name="edit_status" title="Status"
+                           condition="$ctrl.isEdittable" ></navigation-anchor>
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="section-panel-heading">Status</h4>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div ng-form="$ctrl.StatusForm">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label for="status">Status</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <select id="status" ng-options="status for status in $ctrl.statuses" ng-model="$ctrl.profile.profileStatus"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer" ng-if="$ctrl.isEdittable">
+            <div class="row">
+                <div class="col-sm-12">
+                    <save-button form="$ctrl.StatusForm" ng-click="$ctrl.saveStatus()"></save-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

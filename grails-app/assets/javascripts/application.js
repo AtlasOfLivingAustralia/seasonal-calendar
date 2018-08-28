@@ -6,3 +6,10 @@
 //= require jquery.autocomplete-1.1/jquery.autocomplete.js
 //= require common.js
 //= require webjars/underscorejs/1.8.3/underscore.js
+//= require thirdparty.js
+//= require profileEditor/profiles.js
+//= require_tree profileEditor/controllers
+//= require_tree profileEditor/directives
+//= require_tree profileEditor/services
+//= require_tree profileEditor/templates
+//= require_tree profileEditor/utils

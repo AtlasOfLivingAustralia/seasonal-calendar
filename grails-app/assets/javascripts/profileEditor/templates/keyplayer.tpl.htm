@@ -1,0 +1,68 @@
+<div class="col-md-12"><div class="row">
+    <div class="col-md-12">
+        <alert type="danger" ng-show="keyplayer.error">{{keyplayer.error}}</alert>
+    </div>
+
+    <div class="col-md-12" ng-show="!keyplayer.hasKey">
+        <alert type="warning" ng-show="!keyplayer.loading && !keyplayer.error">There is no key available for
+            {{keyplayer.taxonName ? keyplayer.taxonName : ' this taxon'}}.
+        </alert>
+    </div>
+</div>
+</div>
+
+<div class="col-md-12" ng-cloak>
+    <div class="row" ng-show="keyplayer.hasKey">
+        <div class="col-md-12">
+            <div class="btn-group pull-right">
+                <button class="btn btn-sm {{ keyplayer.format == 'player' ? 'btn-info': 'btn-default' }}"
+                        ng-click="keyplayer.setFormat('player')"><img src=""
+                        ng-src="{{contextPath}}assets/ala-keyplayer/media/tab_icon_player.png" alt="">&nbsp;Interactive
+                </button>
+                <button class="btn btn-sm {{ keyplayer.format == 'bracketed' ? 'btn-info': 'btn-default' }}"
+                        ng-click="keyplayer.setFormat('bracketed')"><img src=""
+                        ng-src="{{contextPath}}assets/ala-keyplayer/media/tab_icon_bracketed.png" alt="">&nbsp;Bracketed
+                </button>
+                <button class="btn btn-sm {{ keyplayer.format == 'indented' ? 'btn-info': 'btn-default' }}"
+                        ng-click="keyplayer.setFormat('indented')"><img src=""
+                        ng-src="{{contextPath}}assets/ala-keyplayer/media/tab_icon_indented.png" alt="">&nbsp;Indented
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="keyplayer.projectName || keyplayer.keyName">
+        <div class="col-md-6">
+            <h4><img src="" ng-src="{{ keyplayer.projectIcon }}" alt="Keybase project icon" ng-show="keyplayer.projectIcon" class="keybase-project-logo">{{
+                keyplayer.projectName }}<span ng-show="keyplayer.projectName && keyplayer.keyName">: </span>{{ keyplayer.keyName }}</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="keybase-key-source margin-bottom-1"></div>
+
+            <a href="" ng-click="keyplayer.loadKey(keyplayer.keyId)" ng-show="!keyplayer.loading && keyplayer.keyId != keyplayer.currentKeyId">Reset to the {{ keyplayer.taxonName | default: 'original'}} key</a>
+
+            <div ng-show="keyplayer.loading" class="margin-bottom-1 margin-top-1"><span class="fa fa-spin fa-spinner"></span>&nbsp;Loading...</div>
+
+            <div class="keybase-key-player" ng-show="keyplayer.format == 'player'"></div>
+
+            <div class="keybase-key-bracketed" ng-show="keyplayer.format == 'bracketed'"></div>
+
+            <div class="keybase-key-indented" ng-show="keyplayer.format == 'indented'"></div>
+        </div>
+    </div>
+
+
+    <div class="row" ng-show="!keyplayer.loading && keyplayer.hasKey">
+        <div class="col-md-12 small">
+            <a ng-href="{{keybaseWebUrl}}" target="_blank" class="pull-right">
+                <div class="keybase-logo">
+                    <img src="" ng-src="{{contextPath}}assets/keybase-logo-80.png" alt="Keybase logo">
+                </div>
+                Powered by KeyBase
+            </a>
+        </div>
+    </div>
+</div>

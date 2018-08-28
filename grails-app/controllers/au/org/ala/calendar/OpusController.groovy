@@ -239,6 +239,17 @@ class OpusController {
         0
     }
 
+    static String enc(String value) {
+        value ? URLEncoder.encode(value, "UTF-8") : ""
+    }
+
+    def search() {
+        List queryParams = params.findResults { key, value -> SEARCH_OPTIONS.contains(key) ? "&${enc(key)}=${enc(value)}" : null }
+        def result = [:] //searchService.searchProfile(params.opusId, params.term, queryParams)
+        render result as JSON
+    }
+
+
     protected void notFound() {
         request.withFormat {
             form multipartForm {

@@ -1,0 +1,33 @@
+<!-- template for the popup displayed when the 'show children' link is clicked -->
+<div class="modal-header">
+    <h4 class="modal-title"><span ng-show="taxonChildrenCtrl.taxon.rank">{{taxonChildrenCtrl.taxon.rank | capitalize}}: </span>{{taxonChildrenCtrl.taxon.name | capitalize}}</h4>
+    <close-modal close="taxonChildrenCtrl.cancel()"></close-modal>
+</div>
+
+<div class="modal-body">
+    <table class="table table-striped" ng-show="taxonChildrenCtrl.profiles.length > 0">
+        <tr>
+            <th>Rank</th>
+            <th>Taxon</th>
+        </tr>
+        <tr ng-repeat="profile in taxonChildrenCtrl.profiles">
+            <td>{{profile.rank | capitalize}}</td>
+            <td>
+                <a ng-href="{{taxonChildrenCtrl.contextPath}}/opus/{{ taxonChildrenCtrl.opusId }}/profile/{{ profile.scientificName }}"
+                   target="_self">{{profile.scientificName}}</a>
+            </td>
+        </tr>
+    </table>
+    <pagination total-items="taxonChildrenCtrl.totalResults"
+                ng-change="taxonChildrenCtrl.loadChildren((taxonChildrenCtrl.page - 1) * taxonChildrenCtrl.pageSize)"
+                ng-model="taxonChildrenCtrl.page" max-size="10" class="pagination-sm"
+                items-per-page="taxonChildrenCtrl.pageSize"
+                previous-text="Prev" boundary-links="true"
+                ng-show="taxonChildrenCtrl.totalResults > taxonChildrenCtrl.pageSize"></pagination>
+
+    <span ng-show="taxonChildrenCtrl.profiles.length == 0">There are no child taxa for {{taxonChildrenCtrl.taxon.name | capitalize}}</span>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="taxonChildrenCtrl.cancel()">Close</button>
+</div>

@@ -1,0 +1,346 @@
+<div class="row">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <h4 class="font-xxsmall heading-underlined">{{ leftTitle }}</h4>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <h4 class="font-xxsmall heading-underlined">{{ rightTitle }}</h4>
+    </div>
+</div>
+
+<div class="row" ng-if="diff.fullName.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Profile Name</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="diff.fullName.comp | sanitizeHtml"></span>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="right.fullName | sanitizeHtml"></span>
+    </div>
+</div>
+
+<div class="row comparison-row" ng-if="diff.matchedName.fullName.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Matched Name</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="diff.matchedName.fullName.comp | sanitizeHtml"></span>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="right.matchedName.fullName | sanitizeHtml"></span>
+    </div>
+</div>
+
+<div class="row" ng-if="diff.lastAttributeChange.changed">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Attributes</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="diff.lastAttributeChange.left | sanitizeHtml"></span><br/>
+        <small>Detailed revision history for each attribute can be seen under the 'Show history' link for individual attributes.</small>
+    </div>
+</div>
+
+<div class="row comparison-row" ng-if="diff.attributes.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Attributes</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="attribute in diff.attributes.comp | orderBy:'title'" ng-if="attribute.title">
+            <div class="minor-heading">{{attribute.title}}</div>
+            <div data-ng-bind-html="attribute.plainText.left | sanitizeHtml"></div>
+            <div class="comparison-divider" ng-if="!$last"></div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="attribute in right.attributes | orderBy:'title'">
+            <div class="minor-heading">{{attribute.title}}</div>
+            <div data-ng-bind-html="attribute.plainText | sanitizeHtml"></div>
+            <div class="comparison-divider" ng-if="!$last"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row comparison-row" ng-if="diff.authorship.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Authorship & Acknowledgements</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="author in diff.authorship.comp">
+            <div class="minor-heading">{{author.category}}</div>
+            <div data-ng-bind-html="author.text.comp | sanitizeHtml"></div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="author in right.authorship">
+            <div class="minor-heading">{{author.category}}</div>
+            <div data-ng-bind-html="author.text | sanitizeHtml"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row comparison-row" ng-if="diff.links.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Links</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="link in diff.links.comp">
+            <span class="minor-heading">URL: </span><span data-ng-bind-html="link.url.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Title: </span><span data-ng-bind-html="link.title.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Description: </span><span data-ng-bind-html="link.description.comp | sanitizeHtml"></span><br/>
+            <div class="comparison-divider" ng-if="!$last"></div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="link in right.links">
+            <span class="minor-heading">URL: </span><span data-ng-bind-html="link.url | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Title: </span><span data-ng-bind-html="link.title | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Description: </span><span data-ng-bind-html="link.description | sanitizeHtml"></span><br/>
+            <div class="comparison-divider" ng-if="!$last"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row comparison-row" ng-if="diff.bhl.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Biodiversity Heritage Library references</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="link in diff.bhl.comp">
+            <span class="minor-heading">URL: </span><span data-ng-bind-html="link.url.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Title: </span><span data-ng-bind-html="link.title.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Description: </span><span data-ng-bind-html="link.description.comp | sanitizeHtml"></span><br/>
+            <div class="comparison-divider" ng-if="!$last"></div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="link in right.bhl">
+            <span class="minor-heading">URL: </span><span data-ng-bind-html="link.url | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Title: </span><span data-ng-bind-html="link.title | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Description: </span><span data-ng-bind-html="link.description | sanitizeHtml"></span><br/>
+            <div class="comparison-divider" ng-if="!$last"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row comparison-row" ng-if="diff.bibliography.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Bibliography</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="bib in diff.bibliography.comp">
+            <span data-ng-bind-html="bib.plainText.comp | sanitizeHtml"></span>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="bib in right.bibliography">
+            <span data-ng-bind-html="bib.plainText | sanitizeHtml"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row comparison-row" ng-if="diff.documents.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Multimedia</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="document in diff.documents.comp">
+            <span class="minor-heading">Name:&nbsp; </span><span data-ng-bind-html="document.name.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Attribution:&nbsp; </span><span data-ng-bind-html="document.attribution.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Licence:&nbsp; </span><span data-ng-bind-html="document.licence.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Embedded Content:&nbsp; </span><br/>
+            <div class="raw-embedded-content"><span  data-ng-bind-html="document.embeddedContent.comp | sanitizeHtml"></span><br/></div>
+            <div class="comparison-divider" ng-if="!$last"></div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="document in right.documents">
+            <span class="minor-heading">Name:&nbsp; </span><span data-ng-bind-html="document.name | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Attribution:&nbsp; </span><span data-ng-bind-html="document.attribution | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Licence:&nbsp; </span><span data-ng-bind-html="document.licence | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Embedded Content:&nbsp; </span><br/>
+            <div class="raw-embedded-content"><span  data-ng-bind="document.embeddedContent | sanitizeHtml"></span><br/></div>
+            <div class="comparison-divider" ng-if="!$last"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="diff.specimenIds.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Specimens</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="diff.specimenIds.comp | sanitizeHtml"></span>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="right.specimenIds | sanitizeHtml"></span>
+    </div>
+</div>
+
+<div class="row" ng-if="diff.primaryImage.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Primary Image</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div class="comparison-image" ng-if="left.primaryImage">
+            <img ng-src="{{getImageUrl(left, left.primaryImage)}}" class="thumbnail">
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div class="comparison-image" ng-if="right.primaryImage">
+            <img ng-src="{{getImageUrl(right, right.primaryImage)}}" class="thumbnail">
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="diff.imageSettings.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Images</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div class="comparison-image" ng-repeat="image in left.imageSettings">
+            <img ng-src="{{getImageUrl(left, image.imageId)}}" class="thumbnail">
+            {{ image.displayOption | capitalize }}d
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div class="comparison-image" ng-repeat="image in right.imageSettings">
+            <img ng-src="{{getImageUrl(right, image.imageId)}}" class="thumbnail">
+            {{ image.displayOption | capitalize }}d
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="diff.nslNomenclatureIdentifier.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Nomenclature</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="diff.nslNomenclatureIdentifier.comp | sanitizeHtml"></span>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="right.nslNomenclatureIdentifier | sanitizeHtml"></span>
+    </div>
+</div>
+
+<div class="row" ng-if="diff.archivedDate.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Archive Status</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5" ng-if="left.archivedDate != null">
+        <span>Profile Archived</span>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5" ng-if="left.archivedDate == null">
+        <span>Profile Restored</span>
+    </div>
+</div>
+
+<div class="row" ng-if="diff.privateMode.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Draft Status</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5" ng-if="left.privateMode == true">
+        <span>Draft Created</span>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5" ng-if="left.privateMode == false">
+        <span>Draft Released</span>
+    </div>
+</div>
+
+<div class="row" ng-if="diff.scientificName.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Scientific Name</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="diff.scientificName.comp | sanitizeHtml"></span>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="right.scientificName | sanitizeHtml"></span>
+    </div>
+</div>
+
+<div class="row comparison-row" ng-if="diff.attachments.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Attachments</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="attachment in diff.attachments.comp">
+            <span class="minor-heading">Title:&nbsp; </span><span data-ng-bind-html="attachment.title.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Description:&nbsp; </span><span data-ng-bind-html="attachment.description.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Rights:&nbsp; </span><span data-ng-bind-html="attachment.rights.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Rights holder:&nbsp; </span><span data-ng-bind-html="attachment.rightsHolder.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Licence:&nbsp; </span><span data-ng-bind-html="attachment.licence.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Author:&nbsp; </span><span data-ng-bind-html="attachment.creator.comp | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Date:&nbsp; </span><span data-ng-bind-html="attachment.createdDate.comp | sanitizeHtml"></span><br/>
+            <div class="comparison-divider" ng-if="!$last"></div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div ng-repeat="attachment in right.attachments">
+            <span class="minor-heading">Title:&nbsp; </span><span data-ng-bind-html="attachment.title | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Description:&nbsp; </span><span data-ng-bind-html="attachment.description | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Rights:&nbsp; </span><span data-ng-bind-html="attachment.rights | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Rights holder:&nbsp; </span><span data-ng-bind-html="attachment.rightsHolder | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Licence:&nbsp; </span><span data-ng-bind-html="attachment.licence | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Author:&nbsp; </span><span data-ng-bind-html="attachment.creator | sanitizeHtml"></span><br/>
+            <span class="minor-heading">Date:&nbsp; </span><span data-ng-bind-html="attachment.createdDate | sanitizeHtml"></span><br/>
+            <div class="comparison-divider" ng-if="!$last"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row comparison-row" ng-if="diff.privateImages.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Private Images</strong>
+        <div>
+            <em>Note that if private images are published the private images will show up as deletions in this comparison</em>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div class="comparison-image" ng-repeat="image in left.privateImages">
+            <img ng-src="{{getImageUrl(left, image.imageId)}}" missing-image="/assets/not-available.png" class="thumbnail">
+            <div class="caption">{{image.title || image.originalFileName}}</div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div class="comparison-image" ng-repeat="image in right.privateImages">
+            <img ng-src="{{getImageUrl(right, image.imageId)}}" missing-image="/assets/not-available.png" class="thumbnail">
+            <div class="caption">{{image.title || image.originalFileName}}</div>
+        </div>
+    </div>
+</div>
+
+<div class="row comparison-row" ng-if="diff.stagedImages.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Staged Images</strong>
+        <div>
+            <em>Note that when a draft is published the staged images will be displayed as deletions in this comparison</em>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div class="comparison-image" ng-repeat="image in left.stagedImages">
+            <img ng-src="{{getImageUrl(left, image.imageId)}}" missing-image="/assets/not-available.png" class="thumbnail">
+            <div class="caption">{{image.title || image.originalFileName}}</div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div class="comparison-image" ng-repeat="image in right.stagedImages">
+            <img ng-src="{{getImageUrl(right, image.imageId)}}" missing-image="/assets/not-available.png" class="thumbnail">
+            <div class="caption">{{image.title || image.originalFileName}}</div>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-if="diff.showLinkedOpusAttributes.changed || showEverything">
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <strong>Show Attributes From Supporting Collections</strong>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind-html="diff.showLinkedOpusAttributes.comp | sanitizeHtml"></span>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <span data-ng-bind="right.showLinkedOpusAttributes?'On':'Off'"></span>
+    </div>
+</div>

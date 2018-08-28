@@ -1,0 +1,4 @@
+<div class="pill pill-lg inline-block" ng-style="{background: tag.colour, 'border-color': borderColour}" title="{{ tag.name }}">
+    <a ng-hide="locked" ng-click="remove(tag, form)" title="Click to remove"><span ng-style="{color: foregroundColour}">{{ tag.abbrev }} <i class="fa fa-times-circle-o"></i></span></a>
+    <span ng-show="locked" ng-style="{color: foregroundColour}" ng-bind="tag.abbrev"></span>
+</div>

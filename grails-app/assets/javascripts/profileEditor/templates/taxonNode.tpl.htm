@@ -1,0 +1,5 @@
+<a ng-show="taxon.profileId" href="" ng-href="{{taxonomyCtrl.contextPath}}/opus/{{taxonomyCtrl.opusId}}/profile/{{taxon.profileName}}" title="View the {{taxon.name | default:taxon.scientificName}} profile" target="_self">
+    <span ng-include src="'/profileEditor/taxonName.htm'"/>
+</a>
+
+<span ng-show="!taxon.profileId" ng-include src="'/profileEditor/taxonName.htm'"></span>

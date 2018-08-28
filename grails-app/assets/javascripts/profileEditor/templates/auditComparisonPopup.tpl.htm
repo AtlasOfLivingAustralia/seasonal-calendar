@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h4 class="modal-title">Comparison</h4>
+    <close-modal close="compareCtrl.close()"></close-modal>
+</div>
+
+<div class="modal-body">
+    <profile-comparison left="compareCtrl.left.object"
+                        left-title="{{compareCtrl.left.date | date:'dd/MM/yyyy h:mm a'}}"
+                        right="compareCtrl.right.object"
+                        right-title="{{compareCtrl.right.date | date:'dd/MM/yyyy h:mm a'}}"></profile-comparison>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="compareCtrl.close()">Close</button>
+</div>

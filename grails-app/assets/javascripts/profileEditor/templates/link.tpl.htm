@@ -1,0 +1,8 @@
+<span ng-switch on="disable">
+    <a ng-href="{{href}}" target="{{target}}" title="{{title}}" ng-switch-when="false">
+        <ng-transclude></ng-transclude>
+    </a>
+    <span ng-switch-when="true">
+        <ng-transclude></ng-transclude>
+    </span>
+</span>

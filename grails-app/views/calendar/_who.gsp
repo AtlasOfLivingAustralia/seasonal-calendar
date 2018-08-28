@@ -122,14 +122,14 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="org-url"><g:message code="calendar.organisation.url"/></label>
-                        <input data-bind="value: organisation.url" data-validation-engine="validate[custom[url]]" type="text" class="form-control" id="org-url" placeholder="">
+                        <input ng-model="opusCtrl.opus.brandingConfig.logos[0].hyperlink" data-validation-engine="validate[custom[url]]" type="text" class="form-control" id="org-url" placeholder="">
                     </div>
                 </div>
 
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label for="logo-url"><g:message code="calendar.organisation.logo"/></label>
-                        <input data-bind="value: organisation.logo" data-validation-engine="validate[custom[url]]" type="text" class="form-control" id="logo-url" placeholder="">
+                        <input ng-model="opusCtrl.opus.brandingConfig.logos[0].logoUrl"  data-validation-engine="validate[custom[url]]" type="text" class="form-control" id="logo-url" placeholder="">
                     </div>
                 </div>
             </g:else>

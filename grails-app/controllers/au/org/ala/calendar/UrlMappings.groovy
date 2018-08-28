@@ -6,9 +6,11 @@ class UrlMappings {
 
         get "/profile/search"(controller:'profile', action:'search')
         get "/opus"(controller:"opus", action:"index")
+            get "/opus/list"(controller:"opus", action:"index")
+        //get "/opus/$id"(controller:"opus", action:"search")
 //        get "/opus/create"(controller:"opus", action:"create")
         post "/opus"(controller:"opus", action:"save")
-        get "/opus/$id"(controller:"opus", action:"show")
+        get "/opus/$id/json"(controller:"opus", action:"show")
 //        get "/opus/$id/edit"(controller:"opus", action:"edit")
         put "/opus/$id"(controller:"opus", action:"update")
         delete "/opus/$id"(controller:"opus", action:"delete")

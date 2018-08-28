@@ -1,0 +1,39 @@
+<span ng-if="taxon.hasChildren" title="Click to view subordinate taxa">
+    <a href="" ng-click="taxonomyCtrl.loadSubordinateTaxa(taxon.offset, taxon, true)" target="_self">
+        <span class="fa small" ng-class="{ 'fa-spin fa-spinner': taxon.loading,  'fa-minus': !taxon.loading && taxon.expanded, 'fa-plus' : !taxon.loading && !taxon.expanded }"></span>
+    </a>
+    <span ng-include src="'/profileEditor/taxonNode.htm'"></span>
+</span>
+<span ng-if="!taxon.hasChildren">
+    <span ng-include src="'/profileEditor/taxonNode.htm'"></span>
+</span>
+
+<div class="form-group" ng-form="filterForm"
+     ng-if="!taxon.showingCurrentProfileOnly && (taxon.children.length >= taxonomyCtrl.pageSize || taxon.filter) && taxon.expanded">
+    <label for="filter" class="screen-reader-label">Filter by name containing...</label>
+    <input id="filter" type="text"
+           class="form-control input-sm ignore-save-warning tree-input"
+           placeholder="Name containing..."
+           ng-enter="taxonomyCtrl.loadSubordinateTaxa(taxon.offset, taxon, false)"
+           ng-change="taxonomyCtrl.filterChanged(taxon)"
+           name="filter"
+           autocomplete="off"
+           ng-required="true"
+           ng-model="taxon.filter">
+    <button type="submit" class="btn btn-primary btn-sm input-append"
+            ng-click="taxonomyCtrl.loadSubordinateTaxa(taxon.offset, taxon, false)" ng-disabled="filterForm.$invalid">
+        <span class="fa fa-filter"></span>
+    </button>
+</div>
+
+<ul ng-if="taxon.children.length > 0 && taxon.expanded">
+    <li ng-if="taxon.showingCurrentProfileOnly">
+        <a ng-href="" ng-click="taxonomyCtrl.loadSubordinateTaxa(taxon.offset, taxon, false)"><span class="small">Show all {{ taxon.name }}...</span></a>
+    </li>
+    <li ng-repeat="taxon in taxon.children">
+        <span ng-include src="'/profileEditor/taxonomy-tree-item.htm'"></span>
+    </li>
+    <li ng-if="!taxon.showingCurrentProfileOnly && taxon.offset > -1 && taxon.mightHaveMore">
+        <a ng-href="" ng-click="taxonomyCtrl.loadSubordinateTaxa(taxon.offset, taxon, false)"><span class="small">View more...</span></a>
+    </li>
+</ul>

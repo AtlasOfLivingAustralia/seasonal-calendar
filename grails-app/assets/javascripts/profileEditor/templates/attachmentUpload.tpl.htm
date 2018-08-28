@@ -1,0 +1,150 @@
+<div ng-form="UploadForm">
+    <div class="modal-header">
+        <h4 class="modal-title">Add an attachment</h4>
+        <close-modal close="attachmentUploadCtrl.cancel()"></close-modal>
+    </div>
+
+    <div class="modal-body">
+        <alert class="alert-danger" ng-show="attachmentUploadCtrl.error">{{ attachmentUploadCtrl.error }}</alert>
+
+        <div class="form-horizontal" ng-show="!attachmentUploadCtrl.metadata.uuid">
+            <div class="form-group">
+                <label for="type" class="col-sm-3 control-label" required>Type *</label>
+
+                <div class="col-sm-9">
+                    <select id="type"
+                            ng-options="type.key as type.title for type in attachmentUploadCtrl.types | orderBy:'title'"
+                            ng-model="attachmentUploadCtrl.type" class="form-control"
+                            ng-change="attachmentUploadCtrl.typeChanged()"
+                            ng-required="true">
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
+            <div class="form-group">
+                <label for="file" class="col-sm-3 control-label">Document (pdf) *</label>
+
+                <div class="col-sm-9" ng-show="!attachmentUploadCtrl.metadata.uuid">
+                        <span class="btn btn-default btn-file">
+                            Choose file
+                            <input id="file" type="file" ngf-select="" ng-model="attachmentUploadCtrl.files" name="file"
+                                   accept="application/pdf" required="{{!attachmentUploadCtrl.metadata.uuid}}"
+                                   ng-required="!attachmentUploadCtrl.metadata.uuid && attachmentUploadCtrl.type != 'URL'">
+                        </span>
+                    <span class="font-xsmall">{{ attachmentUploadCtrl.files[0].name }}</span>
+                </div>
+
+                <div class="col-sm-9 margin-top-1" ng-show="attachmentUploadCtrl.metadata.uuid">
+                    <span>{{ attachmentUploadCtrl.metadata.filename }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal" ng-show="attachmentUploadCtrl.type == 'URL'">
+            <div class="form-group">
+                <label for="url" class="col-sm-3 control-label">URL *</label>
+
+                <div class="col-sm-9">
+                    <input id="url" type="text" ng-model="attachmentUploadCtrl.metadata.url"
+                           class="form-control"
+                           required ng-required="attachmentUploadCtrl.type == 'URL'"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="title" class="col-sm-3 control-label">Title *</label>
+
+                <div class="col-sm-9">
+                    <input id="title" type="text" ng-model="attachmentUploadCtrl.metadata.title"
+                           class="form-control"
+                           required ng-required="true"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
+            <div class="form-group">
+                <label for="createdDate" class="col-sm-3 control-label">Date created</label>
+
+                <div class="col-sm-9">
+                    <fallback-date-picker field-id="createdDate"
+                                          ng-model="attachmentUploadCtrl.metadata.createdDate"></fallback-date-picker>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="description" class="col-sm-3 control-label">Description</label>
+
+                <div class="col-sm-9">
+                        <textarea id="description" ng-model="attachmentUploadCtrl.metadata.description"
+                                  class="form-control" rows="3" maxlength="1024" ng-maxlength="1024"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
+            <div class="form-group">
+                <label for="owner" class="col-sm-3 control-label" required>Author</label>
+
+                <div class="col-sm-9">
+                    <input id="owner" type="text" ng-model="attachmentUploadCtrl.metadata.creator"
+                           class="form-control"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
+            <div class="form-group">
+                <label for="rights" class="col-sm-3 control-label" required>Rights</label>
+
+                <div class="col-sm-9">
+                    <input id="rights" type="text" ng-model="attachmentUploadCtrl.metadata.rights"
+                           class="form-control"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
+            <div class="form-group">
+                <label for="rightsHolder" class="col-sm-3 control-label" required>Rights Holder</label>
+
+                <div class="col-sm-9">
+                    <input id="rightsHolder" type="text" ng-model="attachmentUploadCtrl.metadata.rightsHolder"
+                           class="form-control"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
+            <div class="form-group">
+                <label for="licence" class="col-sm-3 control-label" required>Licence *</label>
+
+                <div class="col-sm-9">
+                    <select id="licence"
+                            ng-options="licence.name as licence.name for licence in attachmentUploadCtrl.licences | orderBy:'name'"
+                            ng-model="attachmentUploadCtrl.metadata.licence" class="form-control"
+                            ng-required="attachmentUploadCtrl.type != 'URL'">
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <p class="small pull-right">
+                Fields marked with an asterisk (*) are mandatory.
+            </p>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="attachmentUploadCtrl.ok()"
+                ng-disabled="UploadForm.$invalid">OK</button>
+        <button class="btn btn-default" ng-click="attachmentUploadCtrl.cancel()">Cancel</button>
+    </div>
+</div>

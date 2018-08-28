@@ -1,7 +1,8 @@
 <div class="row">
     <div class="col-lg-12">
         <h4 class="text-center feature-title color-scheme">
-            <strong><g:message code="calendar.name"/><span data-bind="text:calendarName"></span></strong>
+            %{--<strong><g:message code="calendar.name"/><span data-bind="text:calendarName"></span></strong>--}%
+            <strong><g:message code="calendar.name"/><span>{{opusCtrl.opus.title}}</span></strong>
         </h4>
         <p class="text-center">
             <span data-bind="if: calendarStatus() == 'unpublished'"><small class="label label-danger">Unpublished</small></span>
@@ -19,7 +20,8 @@
                 <div class="form-group">
                     <label for="calendarName"><g:message code="calendar.name"/>
                         <span class="req-field"></span></label>
-                    <input data-validation-engine="validate[required]" data-bind="value: calendarName" type="text" class="form-control" id="calendarName" placeholder="Example: Larrakia">
+                    %{--<input data-validation-engine="validate[required]" data-bind="value: calendarName" type="text" class="form-control" id="calendarName" placeholder="Example: Larrakia">--}%
+                    <input ng-model="opusCtrl.opus.title" type="text" class="form-control" id="calendarName" placeholder="Example: Larrakia">
                 </div>
             </div>
             <div class="col-lg-6">
@@ -28,7 +30,7 @@
                     <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.description"/>', content:'<g:message code="calendar.description.content"/>'}">
                         <i class="fa fa-question-circle"></i>
                     </button>
-                    <textarea rows="4" data-bind="value: description" type="text" class="form-control" id="description" placeholder="Description"></textarea>
+                    <textarea rows="4" ng-model="opusCtrl.opus.description" type="text" class="form-control" id="description" placeholder="Description"></textarea>
                 </div>
             </div>
         </div>
@@ -42,7 +44,7 @@
                     <button  href="#" class="helphover btn btn-link color-scheme" data-bind="popover: {title:'<g:message code="calendar.imageurl"/>', content:'<g:message code="calendar.imageurl.content"/>'}">
                         <i class="fa fa-question-circle"></i>
                     </button>
-                    <input data-bind="value: imageUrl" data-validation-engine="validate[custom[url]]" type="text" class="form-control" id="calendarImage" placeholder="">
+                    <input ng-model="opusCtrl.opus.opusLayoutConfig.images[0].imageUrl" type="text" class="form-control" id="calendarImage" placeholder="">
                 </div>
             </div>
             <div class="col-lg-6">

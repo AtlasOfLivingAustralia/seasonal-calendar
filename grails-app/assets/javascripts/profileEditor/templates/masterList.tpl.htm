@@ -1,0 +1,47 @@
+<div class="panel panel-default" ng-show="$ctrl.isEdittable" ng-cloak>
+    <div>
+        <a name="edit_master_list"></a>
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="section-panel-heading">Master List</h4>
+                    <div class="pull-right text-right padding-left-1" ng-show="$ctrl.helpUrl">
+                        <a ng-href="{{$ctrl.helpUrl}}" class="help-icon" title="Click to view help content" target="_blank">
+                            <span class="fa fa-question-circle"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <alert ng-show="$ctrl.isMasterListSyncing"  ng-cloak>The master list is currently being updated for this collection.</alert>
+            <p>The master list prevents any taxa not on the list from being available in the collection.</p>
+            <div ng-form="$ctrl.MasterListForm">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label for="status">Select Master List</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <select id="status" class="form-control" ng-disabled="$ctrl.isMasterListSyncing" ng-options="list.dataResourceUid as list.listName for list in $ctrl.lists" ng-model="$ctrl.masterListUid">
+                            <option value="">-- No master list --</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer" ng-if="$ctrl.isEdittable">
+            <div class="row">
+                <div class="col-sm-12 margin-bottom-1">
+                    <button class="btn btn-default" ng-disabled="!$ctrl.masterListUid || $ctrl.isMasterListSyncing" ng-click="$ctrl.clearMasterList()">Clear master list</button>
+                    <save-button form="$ctrl.MasterListForm" ng-click="$ctrl.saveMasterList()"></save-button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class="btn btn-success" ng-disabled="$ctrl.MasterListForm.$dirty || !$ctrl.masterListUid || $ctrl.isMasterListSyncing" ng-click="$ctrl.syncNow(false)">Sync now</button>
+                    <button class="btn btn-warning" ng-disabled="$ctrl.MasterListForm.$dirty || !$ctrl.masterListUid || $ctrl.isMasterListSyncing" ng-click="$ctrl.syncNow(true)">Regen stubs</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

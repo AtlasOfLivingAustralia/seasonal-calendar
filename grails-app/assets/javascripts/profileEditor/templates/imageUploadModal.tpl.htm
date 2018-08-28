@@ -1,0 +1,24 @@
+<div ng-form="UploadForm">
+    <div class="modal-header">
+        <h4 class="modal-title">{{imageUploadCtrl.modalTitle}}</h4>
+        <close-modal close="imageUploadCtrl.cancel()"></close-modal>
+    </div>
+
+    <div class="modal-body">
+        <alert class="alert-danger" ng-show="imageUploadCtrl.error">{{ imageUploadCtrl.error }}</alert>
+        <image-upload
+                opus="imageUploadCtrl.opus"
+                image="imageUploadCtrl.image"
+                on-upload-complete="imageUploadCtrl.uploadComplete"
+                upload-on-event="performUpload"
+                update-on-event="saveImageChanges"
+                url="{{imageUploadCtrl.uploadUrl}}">
+        </image-upload>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="imageUploadCtrl.ok()"
+                ng-disabled="UploadForm.$invalid">OK</button>
+        <button class="btn btn-default" ng-click="imageUploadCtrl.cancel()">Cancel</button>
+    </div>
+</div>

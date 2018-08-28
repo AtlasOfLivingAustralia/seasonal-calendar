@@ -1,0 +1,46 @@
+<!-- template for the content of a single read-only attribute, to be displayed either on the view or the edit page -->
+<div ng-show="attrCtrl.showAttribute(attribute)">
+    <div class="row" ng-class="(!$first && attrCtrl.readonly) ? 'padding-top-1' : ''">
+        <div class="col-md-12">
+            <div markup-text="attribute.text" class="display-text"></div>
+        </div>
+
+        <div class="col-md-12" ng-show="attrCtrl.opus.allowFineGrainedAttribution">
+            <div class="citation" ng-show="attribute.creators.length > 0">
+                Contributed by {{ attribute.creators.join(', ') }}
+            </div>
+
+            <div class="citation" ng-show="attribute.editors.length > 0">
+                Edited by {{ attribute.editors.join(', ') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row annotation padding-top-1" ng-show="(attrCtrl.readonly && !attribute.fromCollection && attrCtrl.opus.showLinkedOpusAttributes && $last) || attribute.fromCollection || attribute.source || attribute.original">
+        <div class="col-md-6" ng-if="attribute.source || (attribute.original && !attribute.source)">
+            <span ng-if="attribute.source">
+                Source: {{attribute.source}}
+            </span>
+            <span ng-if="attribute.original && !attribute.source">
+                Source: {{attribute.original.profile.opus.title}}
+            </span>
+        </div>
+
+        <div class="col-md-6 pull-right" ng-show="attribute.fromCollection">
+            <span class="pull-right">
+                <span class="pull-right">
+                    <!-- TODO context path -->
+                    From Collection: <a
+                        ng-href="{{ config.contextPath }}/opus/{{attribute.fromCollection.opusShortName ? attribute.fromCollection.opusShortName : attribute.fromCollection.opusId}}/profile/{{attribute.fromCollection.profileId}}"
+                        target="_self">{{attribute.fromCollection.opusTitle}}</a>
+                </span>
+            </span>
+        </div>
+        <div class="col-md-6 pull-right" ng-show="attrCtrl.readonly && !attribute.fromCollection && attrCtrl.opus.showLinkedOpusAttributes && $last">
+            <div class="pull-right">
+                <a href=""
+                   ng-click="attrCtrl.viewInOtherCollections(attribute.title)">Show {{attribute.title}} in other collections</a>
+            </div>
+        </div>
+    </div>
+</div>

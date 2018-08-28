@@ -25,7 +25,7 @@
     <![endif] -->
     <g:layoutHead />
 </head>
-<body>
+<body ng-app="profileEditor">
 
 <!--=== Preloader section starts ===-->
 <section id="preloader">
@@ -146,7 +146,22 @@
     </div>
 </div>
 <!--=== Footer section Ends ===-->
+
+%{--<asset:javascript src="webjars/jquery/2.2.4/jquery.js" />
+<asset:javascript src="webjars/jquery-migrate/1.4.1/jquery-migrate.js" />
+<asset:javascript src="thirdparty.js" />--}%
+
+<asset:script type="text/javascript">
+    angular.module('app.config', []).constant('config', {
+        contextPath: '${createLink(uri: '')}',
+        profileServiceUrl: '${grailsApplication.config.profile.service.url}',
+        imageServiceUrl: '${grailsApplication.config.images.service.url}',
+        apiKey: '${grailsApplication.config.profile.service.apiKey}'
+    });
+</asset:script>
+
 <asset:javascript src="application.js" />
 <asset:deferredScripts />
+
 </body>
 </html>

@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-10">
+        <div ng-show="publication.title">
+            <strong>Title: {{publication.title}}
+                <span ng-show="publication.version">v. {{publication.version}}</span></strong>
+        </div>
+
+        <div ng-show="publication.authors">
+            <strong>Authors: </strong>{{publication.authors}}
+        </div>
+
+        <div>
+            <strong>Publication Date: </strong> {{publication.publicationDate | date:"dd/MM/yyyy H:mm a"}}
+        </div>
+        <div ng-show="publication.doi">
+            <strong>DOI: </strong><a href="http://dx.doi.org/{{publication.doi}}" target="_blank">{{publication.doi}}</a>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <a ng-href="{{context}}/opus/{{opusId}}/profile/{{profileId}}/publication/{{publication.uuid}}/file"
+           target="_blank"><span class="fa fa-download color--green">&nbsp;Download</span></a>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="embed-responsive embed-responsive-16by9">
+    <span class="embed-responsive-item" ng-show="embedCtrl.embedDescription" ng-bind-html="embedCtrl.embedDescription.embed.html"></span>
+    <div class="embed-responsive-item center-content" ng-show="!embedCtrl.multimedia">
+        No multimedia selected
+    </div>
+    <div class="embed-responsive-item center-content" ng-show="embedCtrl.multimedia && !embedCtrl.embedDescription">
+        <i aria-label="Loading..." class="fa fa-cog fa-spin fa-4x"></i>
+    </div>
+    <div class="embed-responsive-item center-content" ng-show="!embedCtrl.embedDescription && embedCtrl.embedDescriptionFailed">
+        <div class="alert alert-danger">Failed to load embeddable multimedia</div>
+    </div>
+</div>

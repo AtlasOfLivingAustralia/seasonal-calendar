@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{createProfileCtrl.duplicateExisting ? 'Copy an existing profile' : 'Create a new profile' }}</h4>
+    <close-modal close="createProfileCtrl.cancel()"></close-modal>
+</div>
+
+<div class="modal-body">
+    <alert type="danger" class="error" ng-repeat="error in createProfileCtrl.errors">{{error}}</alert>
+
+    <div ng-show="createProfileCtrl.duplicateExisting">
+        <div class="padding-bottom-1 form-group">
+            <label for="existingProfile">Find the profile to copy</label>
+            <input id="existingProfile" type="text"
+                   autocomplete="off" required
+                   auto-focus="{{ createProfileCtrl.duplicateExisting }}"
+                   ng-change="createProfileCtrl.searchByScientificName()"
+                   typeahead="profile as profile.scientificName for profile in createProfileCtrl.profiles | filter: $viewValue"
+                   class="form-control"
+                   ng-model="createProfileCtrl.profileToCopy" placeholder="Start typing..."/>
+            <alert class="alert-danger" ng-show="createProfileCtrl.profileToCopy && !createProfileCtrl.validExistingProfileSelection()">Invalid existing profile name</alert>
+        </div>
+    </div>
+
+    <div ng-hide="createProfileCtrll.duplicateExisting && !createProfile.exisingProfile.uuid">
+        <profile-name name="createProfileCtrl.scientificName"
+                      valid="createProfileCtrl.validName"
+                      manually-matched-guid="createProfileCtrl.manuallyMatchedGuid"
+                      manual-hierarchy="createProfileCtrl.manualHierarchy"
+                      focus="!createProfileCtrl.duplicateExisting"></profile-name>
+    </div>
+
+    <div class="modal-footer">
+
+        <button class="btn btn-primary" ng-click="createProfileCtrl.ok()"
+                ng-disabled="!createProfileCtrl.validName || !createProfileCtrl.valid()">Create profile</button>
+        <button class="btn btn-default" ng-click="createProfileCtrl.cancel()">Cancel</button>
+    </div>
+</div>

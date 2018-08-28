@@ -1,0 +1,52 @@
+<div ng-if="!taxonomyCtrl.taxonomy || taxonomyCtrl.taxonomy.length == 0">
+    The taxonomy for this profile is unknown.
+</div>
+
+<ul ng-class="{ breadcrumb: taxonomyCtrl.layout == 'horizontal' }">
+    <li ng-repeat="taxon in taxonomyCtrl.taxonomy" ng-if="taxonomyCtrl.limit < 0 || $index >= taxonomyCtrl.taxonomy.length - taxonomyCtrl.limit">
+        <span ng-if="taxon.profileId">
+            <a ng-href="{{taxonomyCtrl.contextPath}}/opus/{{taxonomyCtrl.opusId}}/profile/{{taxon.profileName}}"
+               ng-class="{ 'font-xxsmall': taxonomyCtrl.layout == 'horizontal' }"
+               target="_self">
+                <span ng-if="taxonomyCtrl.includeRank  && taxon.rank">{{ taxon.rank | capitalize }}: </span>{{ taxon.name }}
+            </a>
+        </span>
+        <span ng-if="!taxon.profileId" ng-class="{ 'font-xxsmall' : taxonomyCtrl.layout == 'horizontal' }">
+            <span ng-if="taxonomyCtrl.includeRank  && taxon.rank">{{ taxon.rank | capitalize }}: </span>{{ taxon.name }}
+        </span>
+
+        <span ng-if="taxonomyCtrl.showChildren && taxon.hasChildren && (!taxonomyCtrl.showChildrenForLastOnly || $last)"
+              class="padding-left-1">
+            <a href="" class="fa fa-list-ul"
+               title="Show members of {{ taxon.rank }} {{ taxon.name }}"
+               ng-click="taxonomyCtrl.showAllSubordinateTaxaPopup(taxon.rank, taxon.name)"></a>
+        </span>
+
+        <span ng-if="taxon.rank == 'species' && taxonomyCtrl.showInfraspecific && taxonomyCtrl.layout == 'horizontal' && $last && taxon.hasChildren"
+              class="btn-group breadcrumb-dropdown" dropdown>
+            <a href="" class="fa fa-list-ul dropdown-toggle" dropdown-toggle
+               ng-click="taxonomyCtrl.showAllSubordinateTaxaList(taxon)"
+               title="Show members of {{ taxon.rank }} {{ taxon.name }}"></a>
+
+            <ul class="dropdown-menu" role="menu">
+                <span class="fa fa-spin fa-spinner" ng-show="taxon.loading"></span>
+                <li ng-repeat="profile in taxon.children">
+                    <a ng-href="{{taxonomyCtrl.contextPath}}/opus/{{ taxonomyCtrl.opusId }}/profile/{{ profile.scientificName }}"
+                       target="_self">{{profile.scientificName}}</a>
+                </li>
+            </ul>
+        </span>
+    </li>
+</ul>
+
+
+<div ng-if="taxonomyCtrl.taxonomy[taxonomyCtrl.taxonomy.length - 1].rank == 'species' && taxonomyCtrl.showInfraspecific && taxonomyCtrl.layout != 'horizontal' && taxonomyCtrl.taxonomy[taxonomyCtrl.taxonomy.length - 1].children.length > 0"
+     class="padding-top-1">
+    <h4>Infraspecific taxa</h4>
+    <ul>
+        <li ng-repeat="profile in taxonomyCtrl.taxonomy[taxonomyCtrl.taxonomy.length - 1].children">
+            <a ng-href="{{taxonomyCtrl.contextPath}}/opus/{{ taxonomyCtrl.opusId }}/profile/{{ profile.scientificName }}"
+               target="_self">{{profile.scientificName}}</a>
+        </li>
+    </ul>
+</div>

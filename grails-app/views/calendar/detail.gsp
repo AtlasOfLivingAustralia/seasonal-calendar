@@ -19,7 +19,7 @@
         };
     </script>
     <asset:stylesheet src="ala-map.css" />
-    <asset:javascript src="seasonal_calendar.js" asset-defer="" />
+    %{--<asset:javascript src="seasonal_calendar.js" asset-defer="" />--}%
     <asset:javascript src="ala-map-no-jquery-us.js" asset-defer="" />
 </head>
 
@@ -35,7 +35,7 @@
 
 <asset:script type="text/javascript">
     $(window).load(function () {
-        ko.applyBindings(SeasonalCalendarVM(), document.getElementById('detailCalendar'));
+   //     ko.applyBindings(SeasonalCalendarVM(), document.getElementById('detailCalendar'));
     });
 </asset:script>
 

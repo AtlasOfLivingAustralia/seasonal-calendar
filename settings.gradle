@@ -1,1 +1,3 @@
 rootProject.name='seasonal-calendar'
+include 'profile-service-client'
+project(':profile-service-client').projectDir = new File('../profile-service-client')

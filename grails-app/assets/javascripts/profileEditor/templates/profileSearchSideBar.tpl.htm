@@ -1,0 +1,40 @@
+<h4>Quick search</h4>
+
+<div class="padding-top-1" ng-controller="BrowseController as browseCtrl" ng-cloak>
+    <div class="padding-bottom-2 form-group">
+        <label for="searchTerm">Start typing a profile name</label>
+        <input id="searchTerm" placeholder="e.g. Acacia binervata"
+               ng-change="browseCtrl.searchByScientificName()"
+               name="searchTerm"
+               class="form-control ignore-save-warning sidebar-input"
+               autocomplete="off"
+               ng-enter="browseCtrl.selectSingleResult()"
+               ng-model="browseCtrl.searchTerm">
+        <div class="padding-top-1" ng-show="browseCtrl.searchTerm && !browseCtrl.selectedTaxon.name">
+            <label for="sort" class="compact-label small">Sort by</label>
+            <select id="sort" ng-options="sort for sort in browseCtrl.sortOptions" ng-change="browseCtrl.changeSortOrder()"
+                    ng-model="browseCtrl.sortOption" class="ignore-save-warning">
+            </select>
+        </div>
+    </div>
+
+    <div ng-show="browseCtrl.searchTerm && !browseCtrl.selectedTaxon.name">
+        <h5 class="heading-underlined">Results for "{{browseCtrl.searchTerm}}*"</h5>
+
+        <div class="table-responsive">
+            <table class="table table-striped" ng-show="browseCtrl.profiles.length > 0">
+                <tr ng-repeat="profile in browseCtrl.profiles">
+                    <td>{{profile.rank | capitalize | default:'Unknown'}}:</td>
+                    <td>
+                        <a ng-href="{{browseCtrl.contextPath}}/opus/{{ browseCtrl.opusId }}/profile/{{ profile.scientificName | enc }}"
+                           target="_self" class="scientific-name">{{profile.scientificName}}</a>
+                    </td>
+                </tr>
+            </table>
+
+            <div ng-show="browseCtrl.profiles.length == 0">
+                There are no profiles with a name matching '{{ browseCtrl.searchTerm }}*'.
+            </div>
+        </div>
+    </div>
+</div>

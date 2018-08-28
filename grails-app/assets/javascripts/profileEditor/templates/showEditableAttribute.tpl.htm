@@ -1,0 +1,135 @@
+<!-- Template for the editable view of a single attribute -->
+<div class="panel panel-default" id="browse_attributes_edit">
+    <div class="panel-body">
+        <label for="attributeTitle" class="screen-reader-label">Title</label>
+        <select id="attributeTitle" ng-show="attrCtrl.vocabularyStrict" ng-change="attrCtrl.isName(attribute)"
+                ng-model="attribute.title" class="form-control attribute-header-input margin-bottom-1">
+            <option value="">--- Select one ---</option>
+            <option ng-repeat="(key, value) in attrCtrl.allowedVocabulary | orderBy:'toString()'" value="{{value}}"
+                    ng-selected="attribute.title == value">{{value}}</option>
+        </select>
+        <input type="text"
+               autocomplete="off"
+               required
+               ng-change="attrCtrl.isName(attribute)"
+               typeahead="attributeTitle for attributeTitle in attrCtrl.allowedVocabulary | filter: $viewValue"
+               class="form-control attribute-header-input margin-bottom-1" ng-model="attribute.title" name="title"
+               value="title" placeholder="Title..."
+               ng-show="!attrCtrl.vocabularyStrict"/>
+        <alert ng-show="attribute.title && !attrCtrl.isValid(attribute.title)"
+               type="danger">You must select a value from the list of approved titles.</alert>
+
+        <label for="attributeContent" class="screen-reader-label">Content</label>
+
+        <div ng-show="attribute.matchedAsName" class="small padding-bottom-1"><i class="fa fa-info-circle">&nbsp;</i>This attribute will be displayed below the profile name. Any formatting, images, links, etc will be ignored.</div>
+        <textarea id="attributeContent" ng-model="attribute.text" name="attribute" ckeditor="richTextFullToolbar"></textarea>
+
+        <div class="row"
+             ng-if="attrCtrl.opus.allowFineGrainedAttribution && (attribute.uuid || attribute.original)">
+            <div class="col-md-3">
+                <label for="significantEdit{{$index}}" class="inline-label">
+                    <input id="significantEdit{{$index}}" type="checkbox" name="significantEdit"
+                           ng-model="attribute.significantEdit"
+                           ng-false-value="false">
+                    This is a significant edit
+                    </input>
+                </label>
+            </div>
+
+            <div class="col-md-9" ng-if="attribute.significantEdit">
+                <div class="form-inline">
+                    <div class="form-group pull-right">
+                        <label for="attributeTo" class="inline-label">Attribute To:</label>
+                        <input id="attributeTo" type="text"
+                               autocomplete="off" size="50"
+                               class="form-control" ng-model="attribute.attributeTo" name="attributeTo"
+                               value="attributeTo" placeholder="{{attrCtrl.currentUser}}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row padding-top-1">
+            <div class="col-md-12">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="source" class="inline-label">Source:</label>
+                        <input id="source" type="text"
+                               autocomplete="off" size="50"
+                               class="form-control" ng-model="attribute.source" name="source"
+                               value="source" placeholder="Source..."/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <span class="col-md-12">
+                <button class="btn btn-link" ng-click="attrCtrl.showAudit($index)"
+                        ng-hide="!attribute.uuid || attribute.auditShowing">
+                    <span class="fa fa-angle-double-down"></span> Show history
+                </button>
+                <button class="btn btn-link" ng-click="attrCtrl.hideAudit($index)"
+                        ng-show="attribute.uuid && attribute.auditShowing">
+                    <span class="fa fa-angle-double-up"></span> Hide history
+                </button>
+            </span>
+        </div>
+
+        <div ng-show="attribute.auditShowing" class="attribute-audit" class="row">
+            <span class="col-md-12"
+                  ng-show="!attribute.audit || attribute.audit.length == 0">There have been no changes to this attribute.</span>
+
+            <div class="table-responsive" style="margin-top:20px;" ng-show="attribute.audit.length > 0">
+                <table class="table table-striped">
+                    <thead>
+                    <td>Content</td>
+                    <td>Editor</td>
+                    <td>Date</td>
+                    <td></td>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="auditItem in attribute.audit">
+                        <td>
+                            <b>{{ auditItem.object.title }}</b>
+                            <br/>
+
+                            <div data-ng-bind-html="auditItem.diff | sanitizeHtml" ng-if="auditItem.diff"></div>
+
+                            <div data-ng-bind-html="auditItem.object.plainText | sanitizeHtml" ng-if="!auditItem.diff"></div>
+                        </td>
+                        <td>{{ auditItem.userDisplayName }}</td>
+                        <td>{{ auditItem.date | date:'dd/MM/yyyy h:mm a' }}</td>
+                        <td><button class="btn btn-default" title="Revert to this version"
+                                    ng-click="attrCtrl.revertAttribute($parent.$index, $index, AttributeForm)">Revert</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row-fluid vertical-pad" ng-show="attribute.source">
+            <span class="col-md-12">
+                <span class="pull-right">
+                    <span class="blockquote small">
+                        Source: {{attribute.source}}
+                    </span>
+                </span>
+            </span>
+        </div>
+    </div>
+
+    <div class="panel-footer" ng-show="!attrCtrl.readonly">
+        <div class="row">
+            <span class="col-md-12">
+                <button class="btn btn-default" ng-click="attrCtrl.deleteAttribute($index)">Delete attribute</button>
+                <save-button ng-click="attrCtrl.saveAttribute($index, AttributeForm)"
+                             disabled="!AttributeForm.$dirty || !attrCtrl.isValid(attribute.title)"
+                             dirty="AttributeForm.$dirty || !attribute.uuid"
+                             form="AttributeForm">
+                </save-button>
+            </span>
+        </div>
+    </div>
+</div>

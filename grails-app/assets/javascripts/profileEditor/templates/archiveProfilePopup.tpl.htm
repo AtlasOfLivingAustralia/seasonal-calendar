@@ -1,0 +1,37 @@
+<div ng-form="ArchiveForm">
+    <div class="modal-header">
+        <h4 class="modal-title">Archive Profile</h4>
+        <close-modal close="archiveCtrl.cancel()"></close-modal>
+    </div>
+
+    <div class="modal-body">
+        <p>
+            Archived profiles cannot be edited and will not appear in search results. Archiving is used to preserve an old representation of a treatment, such as when species treatments are merged.
+        </p>
+        <p>
+            Provide a reason for archiving this profile. This reason will be displayed on the profile page.
+        </p>
+
+        <div class="row">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label for="archiveComment" class="col-sm-3 control-label">Reason:</label>
+
+                    <div class="col-sm-8">
+                        <textarea id="archiveComment" ng-model="archiveCtrl.archiveComment" rows="4"
+                                  required="true" ng-required="true" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p>
+            Archiving may take several minutes.
+        </p>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="archiveCtrl.ok()" ng-disabled="ArchiveForm.$invalid">OK</button>
+        <button class="btn btn-default" ng-click="archiveCtrl.cancel()">Cancel</button>
+    </div>
+</div>

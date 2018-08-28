@@ -1,0 +1,42 @@
+<div ng-cloak>
+    <div ng-show="!readonly && nslNameId">
+        <div class="col-sm-12">
+            <div ng-show="loading"><span class="fa fa-spin fa-spinner"></span>&nbsp;Loading...</div>
+        </div>
+        <div class="col-sm-12" ng-show="!loading">
+            <div class="form-group">
+                <label for="concept">Select the concept to use for this profile</label>
+                <select id="concept" ng-model="selectedReference" class="form-control"
+                        ng-options="reference as reference.name for reference in references" required="true"
+                        ng-required="true">
+                    <option value="">--- No selected concept ---</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-12 nomenclature" ng-show="selectedReference && !loading">
+            <div class="concept" data-ng-bind-html="selectedReference.formattedName | sanitizeHtml"></div>
+            <div class="apc" ng-show="selectedReference.apcReference"
+                 title="This is the Australian Plant Census accepted name"><i class="fa fa-check">&nbsp;</i>APC
+            </div>
+            <div class="nsl-link"><a ng-href="{{selectedReference.url}}" target="_blank"><span class="fa fa-search">&nbsp;</span>NSL</a>
+            </div>
+            <div class="concept-detail" ng-repeat="detail in selectedReference.details"
+                 data-ng-bind-html="detail.text | sanitizeHtml"></div>
+        </div>
+    </div>
+
+    <!-- readonly view -->
+    <div class="col-md-12 nomenclature" ng-show="selectedReference && readonly">
+        <a href="" class="btn btn-link btn-sm" ng-click="toggleSynonomy()"><span class="fa" ng-class="showSynonomy ? 'fa-angle-double-up' : 'fa-angle-double-down'"></span>&nbsp;
+            <div class="concept" data-ng-bind-html="selectedReference.formattedName | sanitizeHtml"></div>
+        </a>
+
+        <div class="apc" ng-show="selectedReference.apcReference"
+             title="This is the Australian Plant Census accepted name"><i class="fa fa-check">&nbsp;</i>APC
+        </div>
+        <div class="nsl-link" ng-show="showSynonomy"><a ng-href="{{selectedReference.url}}" target="_blank"><span class="fa fa-search">&nbsp;</span>NSL</a></div>
+        <div class="concept-detail" ng-repeat="detail in selectedReference.details" ng-show="showSynonomy"
+             data-ng-bind-html="detail.text | sanitizeHtml"></div>
+    </div>
+</div>

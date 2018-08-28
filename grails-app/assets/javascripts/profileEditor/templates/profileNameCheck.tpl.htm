@@ -1,0 +1,154 @@
+<div class="form-group">
+    <label for="scientificName" class="control-label">Profile Name</label>
+
+    <div class="input-group">
+        <input id="scientificName" type="text" ng-model="name"
+               class="form-control ignore-save-warning" ng-change="resetNameCheck()" required
+               ng-enter="checkName()" auto-focus="{{ focus }}"
+               placeholder="e.g Acacia abbatiana"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary input-append"
+                                ng-click="checkName()" ng-disabled="!name">Check name
+                        </button>
+                    </span>
+    </div>
+
+    <div class="small"
+         ng-if="nameCheck.matchedName">Matched name: <span
+            data-ng-bind-html="nameCheck.matchedName.formattedName | default:'None' | sanitizeHtml"></span></div>
+</div>
+
+<alert type="danger" class="error" ng-if="nameCheck.providedNameDuplicate">
+    A profile already exists for '{{ nameCheck.providedName }}'
+</alert>
+
+<alert type="danger" ng-if="nameCheck.providedNameDuplicate && nameCheck.mismatch && nameCheck.matchedNameDuplicate">
+    The name you provided was matched to '<span
+        data-ng-bind-html="nameCheck.matchedName.formattedName | sanitizeHtml"></span>', and a
+    profile already exists for this name.
+</alert>
+<alert type="warning" class="warning"
+       ng-if="!nameCheck.providedNameDuplicate && nameCheck.mismatch && nameCheck.matchedNameDuplicate">
+    The name you provided was matched to '<span
+        data-ng-bind-html="nameCheck.matchedName.formattedName | sanitizeHtml"></span>', and a
+    profile already exists for this name. Are you sure you wish to {{currentProfileId ? "change the profile name to" :
+    "create a new profile for"}} '{{name}}'?
+</alert>
+<alert type="warning" class="warning"
+       ng-if="nameCheck.mismatch && nameCheck.matchedName.scientificName && !nameCheck.matchedNameDuplicate">
+    The name you provided was matched to '<span
+        data-ng-bind-html="nameCheck.matchedName.formattedName | sanitizeHtml"></span>'. Would
+    you like to use that instead? <br/>
+    <button class="btn btn-link" ng-click="useMatchedName()"><i
+            class="fa fa-check">&nbsp;</i>Yes, use the matched name
+    </button>
+</alert>
+<alert type="warning" class="warning" ng-if="nameCheck.noMatch && nameCheck.matchedNameDuplicates.length > 0">
+    <p class="small-text">
+        Multiple matches were found for '{{ nameCheck.providedName }}'. Please select the best match below:
+        <button class="btn btn-link" ng-repeat="match in nameCheck.matchedNameDuplicates" ng-click="checkMatch(match)"><i
+                class="fa fa-circle-o">&nbsp;</i> {{match.fullName}} | rank: {{match.rank}} | kingdom: {{match.kingdom}}
+        </button>
+    </p>
+    <p class="small-text">
+        You can choose to match your profile to an existing name by clicking "Search for a match" below,
+        or you can specify the taxonomic hierarchy for your profile by clicking "Specify the hierarchy for {{name}}" below.
+    </p>
+</alert>
+
+<alert type="warning" class="warning" ng-if="nameCheck.noMatch && !nameCheck.providedNameDuplicate && !nameCheck.matchedNameDuplicates">
+    <p class="small-text">
+        No match was found for '{{ nameCheck.providedName }}'. Please check the name before continuing.
+    </p>
+    <p class="small-text">
+        You can choose to match your profile to an existing name by clicking "Search for a match" below,
+        or you can specify the taxonomic hierarchy for your profile by clicking "Specify the hierarchy for {{name}}" below.
+    </p>
+</alert>
+<div class="padding-bottom-1">
+    <a ng-click="toggleManualMatch()" ng-if="nameCheck && !nameCheck.providedNameDuplicate" class="margin-right-2">
+        <span class="fa fa-search">&nbsp;</span>{{nameCheck.noMatch ? 'Search for a match' : 'Match to a different
+        name'}}
+    </a>
+
+    <a ng-click="toggleManualHierarchy()" ng-if="(nameCheck && nameCheck.noMatch && !nameCheck.providedNameDuplicate) || (showManualHierarchy && editMode && manualHierarchy.length > 0)">
+        <i class="fa fa-sitemap">&nbsp;</i>{{ showManualHierarchy ? 'Clear the hierarchy for ' : 'Specify the hierarchy
+        for ' }}{{name}}
+    </a>
+</div>
+
+<div class="col-md-12 padding-left-1" ng-show="showManualMatch">
+    <div class="form-group">
+        <label for="manualName" class="control-label">Search for the name you wish to match to</label>
+
+        <div class="form-group">
+            <input id="manualName" type="text"
+                   class="form-control ignore-save-warning"
+                   autocomplete="off" value="bla"
+                   ng-model="manuallyMatchedName" typeahead-editable="false"
+                   typeahead="match.guid as match.name for match in autocompleteName($viewValue) | filter:$viewValue | limitTo:10"
+                   typeahead-on-select="onSelectManualMatch($item)"/>
+        </div>
+
+        <div class="small">
+            Search the <a href="http://ala.org.au" target="_blank">Atlas of Living Australia</a> for more information on
+            the species.
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 padding-left-1" ng-show="showManualHierarchy">
+    <div class="form-group" ng-repeat="ancestor in manualHierarchy">
+        <label for="manualHierarchy" class="control-label" ng-hide="$first">Select the parent profile/taxon for {{ manualHierarchy[$index - 1].name }}</label>
+        <div ng-class="$first ? 'form-group' : 'input-group'">
+            <input id="manualHierarchy" type="text"
+                   class="form-control ignore-save-warning"
+                   autocomplete="off" value="bla"
+                   ng-hide="$first"
+                   ng-model="ancestor.name" typeahead-editable="false"
+                   typeahead="match.profileId as match.scientificName for match in autocompeteProfile($viewValue) | filter:$viewValue | limitTo:10"
+                   typeahead-on-select="onSelectManualHierarchy($index, $item)"
+                   ng-change="manualHierarchyValueChanged($index)"/>
+            <span class="input-group-btn" ng-hide="$first">
+                <button class="btn btn-primary input-append"
+                        ng-click="onSelectManualHierarchy($index)"
+                        ng-disabled="!ancestor.name || ancestor.guid != null">Check name
+                </button>
+                <button class="btn btn-default input-append" title="Remove {{ ancestor.name }}"
+                        ng-click="trimManualHierarchy($index)"><span class="fa fa-trash-o"></span>
+                </button>
+            </span>
+        </div>
+
+        <div ng-show="manualHierarchy[$index].checked">
+            <div ng-show="$first || !manualHierarchy[$index].guid">
+                <div ng-hide="$first">
+                    <span class="pull-right">
+                        <span ng-hide="$first" class="fa fa-exclamation-triangle orange">&nbsp;&nbsp;</span>{{ manualHierarchy[$index].name }} is not a recognised profile or taxon.
+                    </span>
+                </div>
+                <div ng-hide="$first" class="clearfix"></div>
+                <div class="form-inline {{ $first ? '' : 'inline-block'">
+                    <label for="rank">{{ $first ? 'Specify the taxonomic rank for ' + name : 'Rank' }} *</label>
+                    <select id="rank"
+                            ng-options="rank for rank in ranks"
+                            ng-model="manualHierarchy[$index].rank"
+                            ng-disabled="manualHierarchy[$index].guid && !editMode"
+                            class="form-control input-sm">
+                        <option label="Select one..."></option>
+                    </select>
+                </div>
+                <a ng-click="addHierarchyItem()" class="inline-block margin-top-1" ng-show="$last"><span class="fa fa-plus">&nbsp;</span>Specify the
+                    parent of {{ manualHierarchy[$index].name }}</a>
+            </div>
+
+            <div ng-show="manualHierarchy[$index].originalName && manualHierarchy[$index].name.toLowerCase() != manualHierarchy[$index].originalName.toLowerCase()">
+                <span class="fa fa-exclamation-triangle orange">&nbsp;&nbsp;</span>{{ manualHierarchy[$index].originalName }} was matched to {{ manualHierarchy[$index].name }}.
+            </div>
+            <div ng-show="manualHierarchy[$index].guid">
+                <span class="fa fa-check color--green">&nbsp;&nbsp;</span>{{ manualHierarchy[$index].name }} is a
+                recognised {{ manualHierarchy[$index].profile ? 'profile' : 'taxon' }}, so its hierarchy will be used from this point on.
+            </div>
+        </div>
+    </div>
+</div>

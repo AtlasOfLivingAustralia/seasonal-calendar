@@ -17,9 +17,10 @@
     </ul>
 
     <!-- tabs content -->
-    <div class="tab-content">
+    <div class="tab-content" ng-controller="OpusController as opusCtrl" ng-init="opusCtrl.loadOpus('calendar', true)">
         <div id="calendar-info" class="tab-pane active">
-            <g:render template="/calendar/contextInfo"/>
+            %{--<span>Test: {{opusCtrl.opus.title}}</span>--}%
+            <g:render template="/calendar/contextInfo" />
         </div>
 
         <div id="season-info" class="tab-pane">
