@@ -1,0 +1,8 @@
+<h2>Admin</h2>
+
+<ul>
+  <li *ngFor="let calendar of calendars$ | async as calendars">
+    <h3>{{ calendar.name }}</h3>
+    <a class="btn btn-primary" routerLink="">Edit</a>
+  </li>
+</ul>

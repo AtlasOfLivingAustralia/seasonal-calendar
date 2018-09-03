@@ -1,0 +1,136 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "https://nexus.ala.org.au/content/groups/public/" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.jooq:jooq-meta-extensions:3.11.4'
+        classpath 'org.jooq:jooq-codegen:3.11.4'
+        classpath "org.postgresql:postgresql:$postgresVersion"
+        classpath 'au.org.ala:jooq-postgres-bindings:1.0-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.2.61'
+    id "org.flywaydb.flyway" version "5.1.4"
+    id 'nu.studer.jooq' version '3.0.1'
+    id 'pl.codelabs.flywayJooq' version '1.3.1'
+}
+
+group 'au.org.ala'
+version '1.0-SNAPSHOT'
+
+def ci = System.env.CI == 'true'
+def localProps = file("$project.projectDir/local.properties")
+if (localProps.exists()) {
+    localProps.withReader {
+        def props = new Properties()
+        props.load(it)
+        project.ext.local = props
+    }
+} else {
+    logger.error("No local.properties file found for flyway/jooq")
+    project.ext.local = new Properties()
+}
+flyway {
+    url = project.ext.local.flywayUrl
+    user = project.ext.local.flywayUsername
+    password = project.ext.local.flywayPassword
+    baselineOnMigrate = project.ext.local.flywayBaselineOnMigrate?.toBoolean() ?: false
+    outOfOrder = project.ext.local.flywayOutOfOrder?.toBoolean() ?: false
+}
+jooq {
+    version = "$jooqVersion"
+//        edition = 'OSS'
+    seasonalCalendar(sourceSets.main) {
+        jdbc {
+            driver = 'org.postgresql.Driver'
+            url = project.ext.local.flywayUrl
+            user = project.ext.local.flywayUsername
+            password = project.ext.local.flywayPassword
+        }
+        generator {
+            name = 'org.jooq.codegen.JavaGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = 'org.jooq.meta.postgres.PostgresDatabase'
+                inputSchema = 'public'
+//                catalogVersionProvider = 'SELECT :catalog_name || \'_\' || MAX("version") FROM "flyway_schema_history"'
+                schemaVersionProvider = 'SELECT :schema_name || \'_\' || MAX("version") FROM "flyway_schema_history"'
+                forcedTypes {
+                    forcedType {
+                        userType = 'au.org.ala.jooq.postgres.Range<Integer>'
+                        binding = 'au.org.ala.jooq.postgres.Int4RangeBinding'
+                        expression = '.*'
+                        types = 'INT4RANGE'
+                    }
+//                    forcedType {
+//                        name = 'varchar'
+//                        expression = '.*'
+//                        types = 'JSONB?'
+//                    }
+//                    forcedType {
+//                        name = 'varchar'
+//                        expression = '.*'
+//                        types = 'INET'
+//                    }
+                }
+                // ...
+            }
+            generate {
+                relations = true
+                deprecated = false
+                records = true
+                immutablePojos = true
+                fluentSetters = true
+                daos = true
+                sequences = true
+                // ...
+            }
+            target {
+                packageName = 'au.org.ala.sc.domain.jooq'
+                // directory = ...
+            }
+        }
+    }
+}
+generateSeasonalCalendarJooqSchemaSource.dependsOn flywayMigrate
+
+repositories {
+    mavenLocal()
+    maven { url 'https://nexus.ala.org.au/content/group/public' }
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile 'io.dropwizard:dropwizard-core:1.3.5'
+    compile 'io.dropwizard:dropwizard-auth:1.3.5'
+    compile 'io.dropwizard:dropwizard-forms:1.3.5'
+    compile 'io.dropwizard.modules:dropwizard-flyway:1.3.0-4'
+    compile 'com.github.mtakaki:dropwizard-hikaricp:1.3.1'
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6"
+
+    compile project(':profile-service-client')
+
+    compile 'org.jooq:jooq'
+    compile 'org.jooq:jooq-meta-extensions'
+    compile 'org.jooq:jooq-codegen'
+    compile 'au.org.ala:jooq-postgres-bindings:1.0-SNAPSHOT'
+    jooqRuntime "org.postgresql:postgresql:$postgresVersion"
+    compile "org.postgresql:postgresql:$postgresVersion"
+
+    compile 'org.imgscalr:imgscalr-lib:4.2'
+    compile 'com.google.guava:guava:26.0-jre'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}

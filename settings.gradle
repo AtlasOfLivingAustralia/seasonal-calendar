@@ -1,0 +1,2 @@
+rootProject.name = 'seasonal-calendars'
+include 'profile-service-client', 'seasonal-calendar-api'
