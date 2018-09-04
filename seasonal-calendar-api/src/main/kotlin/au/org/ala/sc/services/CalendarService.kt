@@ -126,7 +126,7 @@ class CalendarService(
         })
         brandingConfig.shortLicense = calendar.licenceTerms
 //            brandingConfig.pdfLicence = calendar.limitations // TODO where is the license long description
-        mapConfig.mapDefaultLatitude = calendar.latitiude.toFloat()
+        mapConfig.mapDefaultLatitude = calendar.latitude.toFloat()
         mapConfig.mapDefaultLongitude = calendar.longitude.toFloat()
         isPrivateCollection = calendar.published
         return this
@@ -177,6 +177,7 @@ Unpublished or Published status |   Collection private or public |   When a seas
     fun constructCalendarDto(opus: Opus, calendar: Calendar) : SeasonalCalendarDto {
         return SeasonalCalendarDto(
             collectionUuid = opus.uuid,
+            shortName = opus.shortName,
             name = opus.title,
             description = opus.description,
             imageUrl = opus.opusLayoutConfig.images.first().imageUrl,
@@ -196,7 +197,7 @@ Unpublished or Published status |   Collection private or public |   When a seas
             developmentReason = calendar.developmentReason,
             limitations = "", // TODO
             licenceTerms = opus.brandingConfig.shortLicense,
-            latitiude =  opus.mapConfig.mapDefaultLatitude.toDouble(),
+            latitude =  opus.mapConfig.mapDefaultLatitude.toDouble(),
             longitude = opus.mapConfig.mapDefaultLongitude.toDouble(),
             zoom = opus.mapConfig.mapZoom,
             languageGroup = calendar.language,

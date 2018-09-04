@@ -1,0 +1,8 @@
+database:
+  driverClass: org.postgresql.Driver
+  username: postgres
+  password: password
+  url: jdbc:postgresql:seasonal-calendars
+flyway:
+  outOfOrder: false
+profileServiceBaseUrl: https://devt.ala.org.au/profile-service/

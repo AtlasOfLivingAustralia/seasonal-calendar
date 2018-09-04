@@ -19,6 +19,9 @@ class SeasonalCalendarConfiguration : Configuration() {
     @JsonProperty("flyway")
     var flyway = FlywayFactory()
 
+    @JsonProperty("corsOrigins")
+    var corsOrigins = "*"
+
     @JsonProperty("profileServiceBaseUrl")
     var profileServiceBaseUrl = "https://devt.ala.org.au/profile-service/"
     @JsonProperty("profileServiceApiKey")

@@ -21,6 +21,12 @@ import okhttp3.OkHttpClient
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import java.io.File
+import org.eclipse.jetty.servlets.CrossOriginFilter
+import javax.servlet.DispatcherType
+import java.util.EnumSet
+import javax.servlet.FilterRegistration
+
+
 
 class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>() {
 
@@ -39,6 +45,9 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
     }
 
     override fun run(configuration: SeasonalCalendarConfiguration, environment: Environment) {
+
+        addCors(environment, configuration)
+
         // TODO Daggerise
         val okHttpClient = OkHttpClient.Builder().build()
         val profilesServiceClient = ProfileServiceClient.Builder(okHttpClient, configuration.profileServiceBaseUrl, configuration.profileServiceApiKey).build()
@@ -59,6 +68,18 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
             register(calendarResource)
             register(imageResource)
         }
+    }
+
+    fun addCors(environment: Environment, configuration: SeasonalCalendarConfiguration) {
+        // CORS configuration
+        val corsFilter = environment.servlets().addFilter("CORS", CrossOriginFilter::class.java)
+        corsFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType::class.java), true, "/*")
+        corsFilter.setInitParameter(
+            CrossOriginFilter.ALLOWED_HEADERS_PARAM,
+            "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin"
+        )
+        corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS")
+        corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, configuration.corsOrigins)
     }
 }
 

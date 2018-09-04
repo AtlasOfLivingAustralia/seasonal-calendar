@@ -11,7 +11,7 @@ import java.io.IOException
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 
-@Path("image")
+@Path("images")
 class ImageResource(val baseDir: File) {
 
     companion object {

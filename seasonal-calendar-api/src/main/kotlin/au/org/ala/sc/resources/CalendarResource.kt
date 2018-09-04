@@ -3,9 +3,12 @@ package au.org.ala.sc.resources
 import au.org.ala.sc.api.SeasonalCalendarDto
 import au.org.ala.sc.services.CalendarService
 import javax.ws.rs.*
+import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
-@Path("calendar")
+@Path("calendars")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 class CalendarResource(
     val calendarService: CalendarService
 ) {

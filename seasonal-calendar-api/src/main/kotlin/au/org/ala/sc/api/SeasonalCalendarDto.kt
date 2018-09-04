@@ -2,6 +2,7 @@ package au.org.ala.sc.api
 
 data class SeasonalCalendarDto(
     val collectionUuid: String,
+    val shortName: String,
     val name: String,
     val description: String,
     val imageUrl: String,
@@ -21,7 +22,7 @@ data class SeasonalCalendarDto(
     val developmentReason: String,
     val limitations: String,
     val licenceTerms: String,
-    val latitiude: Double,
+    val latitude: Double,
     val longitude: Double,
     val zoom: Int,
     val languageGroup: String,
