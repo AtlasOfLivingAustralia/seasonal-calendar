@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from "rxjs";
-import { CalendarService } from "./calendar.service";
-import { Calendar } from "./model/calendar";
+import { Observable } from 'rxjs';
+import { CalendarService } from './calendar.service';
+import { Calendar } from './model/calendar';
 
 @Component({
   selector: 'sc-root',
@@ -17,6 +17,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.calendars$ = this.calendarService.getCalendars()
+    this.calendars$ = this.calendarService.calendars;
   }
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Calendar} from '../model/calendar';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'sc-calendars-gallery',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CalendarsGalleryComponent implements OnInit {
 
-  constructor() { }
+  calendars: Calendar[];
+
+  constructor(private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
-  }
 
+    this.route.data.subscribe((data: { calendars: Calendar[] }) => {
+      this.calendars = data.calendars;
+    });
+    // this.calendars$ = this.calendarService.calendars;
+  }
 }

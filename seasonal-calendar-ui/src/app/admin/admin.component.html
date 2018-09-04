@@ -1,8 +1,10 @@
 <h2>Admin</h2>
 
+<a class="btn btn-primary" routerLink="/admin/calendar/create">New Calendar</a>
 <ul>
-  <li *ngFor="let calendar of calendars$ | async as calendars">
+  <li *ngFor="let calendar of calendars">
     <h3>{{ calendar.name }}</h3>
-    <a class="btn btn-primary" routerLink="">Edit</a>
+    <a class="btn btn-primary" routerLink="/admin/calendar/{{calendar.collectionUuid}}">Edit</a>
+    <a class="btn btn-danger" disabled role="button">Delete</a>
   </li>
 </ul>

@@ -1,5 +1,6 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
+import {FormsModule} from "@angular/forms";
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -11,6 +12,9 @@ import { CalendarLandingComponent } from './calendar-landing/calendar-landing.co
 import { AdminComponent } from './admin/admin.component';
 import { CalendarEditComponent } from './calendar-edit/calendar-edit.component';
 import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component';
+import {ReportingErrorHandler} from "./shared/reporting-error-handler";
+import {windowProvider, WindowToken} from "./shared/window";
+import {Logger} from "./shared/logger.service";
 
 @NgModule({
   declarations: [
@@ -23,13 +27,17 @@ import { PageNotFoundComponentComponent } from './page-not-found-component/page-
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     HttpClientModule,
     AppRoutingModule,
     LeafletModule,
     NgbModule
   ],
   providers: [
-    Title
+    { provide: WindowToken, useFactory: windowProvider },
+    { provide: ErrorHandler, useClass: ReportingErrorHandler },
+    Logger,
+    Title,
   ],
   bootstrap: [AppComponent]
 })

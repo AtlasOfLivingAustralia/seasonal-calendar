@@ -1,3 +1,55 @@
-<p>
-  calendar-edit works!
-</p>
+<h2>Calendar: {{originalCalendar?.name || 'New'}}</h2>
+
+<form #calendarForm="ngForm">
+  <ngb-tabset>
+    <ngb-tab title="Calendar">
+      <ng-template ngbTabContent>
+        <div class="form-group">
+          <label for="calendarName">Name</label>
+          <input class="form-control" id="calendarName" name="calendarName" [(ngModel)]="calendar.name">
+        </div>
+
+        <div class="form-group">
+          <label for="shortName">Short Name</label>
+          <input class="form-control" id="shortName" name="shortName" [(ngModel)]="calendar.shortName">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea class="form-control" id="description" name="description" [(ngModel)]="calendar.description"></textarea>
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Language Group">
+      <ng-template ngbTabContent>
+        <div class="form-group">
+          <label for="logos">Logos</label>
+          <input class="form-control" id="logos" name="logos" [(ngModel)]="calendar.organisationLogoUrl">
+        </div>
+
+        <div class="form-group">
+          <label for="youtubeId">Youtube ID</label>
+          <input class="form-control" id="youtubeId" name="youtubeId" [(ngModel)]="calendar.youtubeId">
+        </div>
+
+        <div class="form-group">
+          <label for="longitude">Longitude</label>
+          <input class="form-control" id="longitude" name="longitude" [(ngModel)]="calendar.longitude">
+        </div>
+
+        <div class="form-group">
+          <label for="latitude">Latitude</label>
+          <input class="form-control" id="latitude" name="latitude" [(ngModel)]="calendar.latitiude">
+        </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Seasons">
+      <ng-template ngbTabContent>
+
+        <button class="btn btn-primary" (click)="addSeason()">Add Season</button>
+
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</form>
+

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarService } from "../calendar.service";
 import { Calendar } from "../model/calendar";
-import { Observable } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'sc-admin',
@@ -10,12 +9,16 @@ import { Observable } from "rxjs";
 })
 export class AdminComponent implements OnInit {
 
-  calendars$: Observable<Calendar[]>;
+  calendars: Calendar[];
 
-  constructor(private calendarService: CalendarService) { }
+  constructor(private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
-    this.calendars$ = this.calendarService.getCalendars();
+
+    this.route.data.subscribe((data: { calendars: Calendar[] }) => {
+      this.calendars = data.calendars;
+    });
   }
 
 }
