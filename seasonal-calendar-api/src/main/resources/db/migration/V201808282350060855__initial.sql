@@ -27,13 +27,15 @@ DROP TABLE IF EXISTS season;
 CREATE TABLE season(
   id serial PRIMARY KEY,
   collection_uuid uuid NOT NULL REFERENCES calendar ON DELETE CASCADE ON UPDATE CASCADE,
-  local_name text NOT NULL UNIQUE,
+  local_name text NOT NULL,
   alternate_name text,
   months int4range NOT NULL CHECK (months <@ int4range(1,12)),
   weather_icon text,
   description text NOT NULL,
 
-  profile_uuids uuid[] NOT NULL
+  profile_uuids uuid[] NOT NULL,
+
+  UNIQUE(collection_uuid, local_name)
 );
 
 -- -- TODO can this just be a uuid array on season?
