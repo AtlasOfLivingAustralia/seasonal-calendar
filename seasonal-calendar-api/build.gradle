@@ -17,6 +17,7 @@ plugins {
     id "org.flywaydb.flyway" version "5.1.4"
     id 'nu.studer.jooq' version '3.0.1'
     id 'pl.codelabs.flywayJooq' version '1.3.1'
+    id 'application'
 }
 
 group 'au.org.ala'
@@ -100,6 +101,8 @@ jooq {
 }
 generateSeasonalCalendarJooqSchemaSource.dependsOn flywayMigrate
 compileKotlin.dependsOn generateSeasonalCalendarJooqSchemaSource
+
+mainClassName = "au.org.ala.sc.SeasonalCalendarApplicationKt"
 
 repositories {
     mavenLocal()
