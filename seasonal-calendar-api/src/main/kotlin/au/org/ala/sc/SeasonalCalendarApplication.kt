@@ -11,30 +11,28 @@ import au.org.ala.sc.services.CalendarService
 import au.org.ala.sc.services.FeatureService
 import au.org.ala.sc.services.SeasonService
 import io.dropwizard.Application
-import io.dropwizard.db.DataSourceFactory
+import io.dropwizard.db.PooledDataSourceFactory
 import io.dropwizard.flyway.FlywayBundle
 import io.dropwizard.flyway.FlywayFactory
 import io.dropwizard.forms.MultiPartBundle
+import io.dropwizard.lifecycle.Managed
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import okhttp3.OkHttpClient
-import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import java.io.File
 import org.eclipse.jetty.servlets.CrossOriginFilter
+import org.jooq.DSLContext
 import javax.servlet.DispatcherType
 import java.util.EnumSet
-import javax.servlet.FilterRegistration
-
-
 
 class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>() {
 
     override fun initialize(bootstrap: Bootstrap<SeasonalCalendarConfiguration>) {
-        bootstrap.objectMapper.findAndRegisterModules() // TODO necessary?
+        bootstrap.objectMapper.findAndRegisterModules()
         bootstrap.addBundle(MultiPartBundle())
         bootstrap.addBundle(object : FlywayBundle<SeasonalCalendarConfiguration>() {
-            override fun getDataSourceFactory(configuration: SeasonalCalendarConfiguration): DataSourceFactory {
+            override fun getDataSourceFactory(configuration: SeasonalCalendarConfiguration): PooledDataSourceFactory {
                 return configuration.database
             }
 
@@ -50,9 +48,10 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
 
         // TODO Daggerise
         val okHttpClient = OkHttpClient.Builder().build()
-        val profilesServiceClient = ProfileServiceClient.Builder(okHttpClient, configuration.profileServiceBaseUrl, configuration.profileServiceApiKey).build()
-        val dataSource = configuration.database.build(environment.metrics(), "seasonal-calendars")
-        val dsl = DSL.using(dataSource, SQLDialect.POSTGRES_10)
+        val profilesServiceClient = ProfileServiceClient.Builder(okHttpClient, configuration.profileServiceBaseUrl).apiKey(configuration.profileServiceApiKey).build()
+
+        val dsl = configureJooq(configuration, environment, "seasonal-calendars")
+
         val calendarDao = CalendarDao(dsl.configuration())
         val seasonDao = SeasonDao(dsl.configuration())
         val userRoleDao = UserRoleDao(dsl.configuration())
@@ -70,7 +69,23 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
         }
     }
 
-    fun addCors(environment: Environment, configuration: SeasonalCalendarConfiguration) {
+    private fun configureJooq(configuration: SeasonalCalendarConfiguration, environment: Environment, name: String): DSLContext {
+        val dataSource = configuration.database.apply { healthCheckRegistry = environment.healthChecks() }.build(environment.metrics(), name)
+        environment.lifecycle().manage(dataSource)
+
+        val dsl = DSL.using(dataSource, configuration.jooq.dialect)
+        environment.lifecycle().manage(object: Managed {
+            override fun start() {}
+
+            override fun stop() {
+                dsl.close()
+            }
+        })
+
+        return dsl
+    }
+
+    private fun addCors(environment: Environment, configuration: SeasonalCalendarConfiguration) {
         // CORS configuration
         val corsFilter = environment.servlets().addFilter("CORS", CrossOriginFilter::class.java)
         corsFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType::class.java), true, "/*")

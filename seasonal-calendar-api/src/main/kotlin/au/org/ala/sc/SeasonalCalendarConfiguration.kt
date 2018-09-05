@@ -1,9 +1,10 @@
 package au.org.ala.sc
 
+import au.org.ala.sc.db.DataSourceFactory
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.dropwizard.Configuration
-import io.dropwizard.db.DataSourceFactory
 import io.dropwizard.flyway.FlywayFactory
+import org.jooq.SQLDialect
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -19,6 +20,11 @@ class SeasonalCalendarConfiguration : Configuration() {
     @JsonProperty("flyway")
     var flyway = FlywayFactory()
 
+    @field:Valid
+    @field:NotNull
+    @JsonProperty
+    var jooq = JooqFactory()
+
     @JsonProperty("corsOrigins")
     var corsOrigins = "*"
 
@@ -30,4 +36,11 @@ class SeasonalCalendarConfiguration : Configuration() {
     @JsonProperty("imagesBaseDir")
     var imagesBaseDir: String = "/data/seasonal-calendar/images"
 
+}
+
+class JooqFactory {
+    @field:Valid
+    @field:NotNull
+    @JsonProperty("dialect")
+    var dialect: SQLDialect = SQLDialect.POSTGRES_10
 }
