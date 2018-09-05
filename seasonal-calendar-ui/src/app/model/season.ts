@@ -1,6 +1,10 @@
 import {Feature} from "./feature";
+import {Uuid} from "../shared/uuid";
 
 export class Season {
+
+  private tempKey: string = null;
+
   constructor(
     public id: number | null | undefined = null,
     public localName: string = '',
@@ -23,6 +27,16 @@ export class Season {
       this.description,
       this.features.map((value => value.clone()))
     );
+  }
 
+  getKey() {
+    if (this.id != null) {
+      return this.id;
+    } else {
+      if (this.tempKey == null) {
+        this.tempKey = Uuid.newUuid();
+      }
+      return this.tempKey;
+    }
   }
 }

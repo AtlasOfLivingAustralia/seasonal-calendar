@@ -46,7 +46,7 @@
     <ngb-tab title="Seasons">
       <ng-template ngbTabContent>
 
-        <ng-container *ngFor="let season of calendar.seasons; index as seasonIndex;">
+        <ng-container *ngFor="let season of calendar.seasons; trackBy: trackByKey; index as seasonIndex">
 
           <button class="btn btn-warning btn-sm" (click)="deleteSeason(seasonIndex)">Remove season</button>
 
@@ -57,46 +57,46 @@
 
           <div class="form-group">
             <label>Season name (English)</label>
-            <input class="form-control" name="season-alternateName" [(ngModel)]="season.alternateName">
+            <input class="form-control" name="season-alternateName-{{seasonIndex}}" [(ngModel)]="season.alternateName">
           </div>
 
           <div class="form-group">
             <label>English Months Start</label>
-            <input class="form-control" type="number" name="season-months-start" [(ngModel)]="season.startMonth">
+            <input class="form-control" type="number" name="season-months-start-{{seasonIndex}}" [(ngModel)]="season.startMonth">
           </div>
 
           <div class="form-group">
             <label>English Months End</label>
-            <input class="form-control" type="number" name="season-months-end" [(ngModel)]="season.endMonth">
+            <input class="form-control" type="number" name="season-months-end-{{seasonIndex}}" [(ngModel)]="season.endMonth">
           </div>
 
           <div class="form-group">
             <label>Weather icons</label>
-            <input class="form-control" name="season-weather-icons" [(ngModel)]="season.weatherIcons">
+            <input class="form-control" name="season-weather-icons-{{seasonIndex}}" [(ngModel)]="season.weatherIcons">
           </div>
 
           <div class="form-group">
             <label>Season description</label>
-            <textarea class="form-control" name="season-description" [(ngModel)]="season.description"></textarea>
+            <textarea class="form-control" name="season-description-{{seasonIndex}}" [(ngModel)]="season.description"></textarea>
           </div>
 
-          <ng-container *ngFor="let feature of season.features; index as featureIndex">
+          <ng-container *ngFor="let feature of season.features; trackBy: trackByKey; index as featureIndex">
 
             <button class="btn btn-warning btn-sm" (click)="deleteFeature(season, featureIndex)">Remove feature</button>
 
             <div class="form-group">
               <label>Feature name (Language)</label>
-              <input class="form-control" name="feature-name" [(ngModel)]="feature.name">
+              <input class="form-control" name="feature-name-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.name">
             </div>
 
             <div class="form-group">
               <label>Feature name (English)</label>
-              <input class="form-control" name="feature-alternateName" [(ngModel)]="feature.commonName">
+              <input class="form-control" name="feature-alternateName-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.commonName">
             </div>
 
             <div class="form-group">
               <label>Feature species</label>
-              <input class="form-control" name="feature-species" [(ngModel)]="feature.scientificName">
+              <input class="form-control" name="feature-species-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.scientificName">
             </div>
 
             <div class="form-group">
@@ -106,7 +106,7 @@
 
             <div class="form-group">
               <label>Feature description</label>
-              <textarea class="form-control" name="feature-description" [(ngModel)]="feature.description"></textarea>
+              <textarea class="form-control" name="feature-description-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.description"></textarea>
             </div>
 
           </ng-container>

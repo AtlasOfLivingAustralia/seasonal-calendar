@@ -3,7 +3,8 @@ import {Calendar} from "../model/calendar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Season} from "../model/season";
 import {Feature} from "../model/feature";
-// import 'underscore';
+import {CalendarService} from "../calendar.service";
+import {Logger} from "../shared/logger.service";
 
 @Component({
   selector: 'sc-calendar-edit',
@@ -15,8 +16,12 @@ export class CalendarEditComponent implements OnInit {
   originalCalendar: Calendar;
   calendar: Calendar;
 
+  saving: boolean = false;
+
   constructor(private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router,
+              private calendarService: CalendarService,
+              private log: Logger) { }
 
   ngOnInit() {
 
@@ -24,6 +29,10 @@ export class CalendarEditComponent implements OnInit {
       this.originalCalendar = data.calendar.clone();
       this.calendar = data.calendar;
     });
+  }
+
+  reset() {
+    this.calendar = this.originalCalendar.clone();
   }
 
   addSeason() {
@@ -43,10 +52,18 @@ export class CalendarEditComponent implements OnInit {
   }
 
   save() {
-
+    this.saving = true;
+    this.calendarService.save(this.calendar).subscribe(
+      (value) => { this.saving = false; },
+      (error) => this.log.error(error)
+    );
   }
 
   publish() {
 
+  }
+
+  trackByKey(index, item) {
+    item.getKey();
   }
 }

@@ -1,5 +1,9 @@
+import {Uuid} from "../shared/uuid";
 
 export class Feature {
+
+  private tempKey: string = null;
+
   constructor(
     public profileUuid: string | null | undefined = '',
     public name: string = '',
@@ -18,5 +22,16 @@ export class Feature {
       this.description,
       this.imageUrls.map((value) => value)
     );
+  }
+
+  getKey() {
+    if (this.profileUuid != '') {
+      return this.profileUuid;
+    } else {
+      if (this.tempKey == null) {
+        this.tempKey = Uuid.newUuid();
+      }
+      return this.tempKey;
+    }
   }
 }

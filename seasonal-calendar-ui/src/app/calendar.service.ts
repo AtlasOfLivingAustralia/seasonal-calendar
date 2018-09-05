@@ -9,17 +9,24 @@ import { environment } from "../environments/environment";
 })
 export class CalendarService {
 
+  private readonly calendarsEndpoint : string = `${environment.api}calendars`;
+
   constructor(private httpClient: HttpClient) { }
 
   get calendars() : Observable<Calendar[]> {
-    return this.httpClient.get<Calendar[]>(`${environment.api}calendars`);
+    return this.httpClient.get<Calendar[]>(this.calendarsEndpoint);
   }
 
   findCalendar(id: string) {
-    return this.httpClient.get<Calendar>(`${environment.api}calendars/${id}`)
+    return this.httpClient.get<Calendar>(`${this.calendarsEndpoint}/${id}`);
   }
 
   newCalendar() {
     return new Calendar();
+  }
+
+  save(calendar: Calendar) {
+    let endpoint = `${this.calendarsEndpoint}${calendar.collectionUuid ? `/${calendar.collectionUuid}` : ''}`;
+    return this.httpClient.post(endpoint, calendar);
   }
 }

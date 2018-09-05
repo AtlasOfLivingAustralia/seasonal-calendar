@@ -2,7 +2,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import { HttpClientModule } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -31,7 +31,7 @@ import {Logger} from "./shared/logger.service";
     HttpClientModule,
     AppRoutingModule,
     LeafletModule,
-    NgbModule
+    NgbTabsetModule
   ],
   providers: [
     { provide: WindowToken, useFactory: windowProvider },

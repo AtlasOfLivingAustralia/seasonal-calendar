@@ -1,6 +1,10 @@
 import {Season} from "./season";
+import {Uuid} from "../shared/uuid";
 
 export class Calendar {
+
+  private tempKey: string = null;
+
   constructor(
     public collectionUuid: string = '',
     public shortName: string = '',
@@ -56,5 +60,16 @@ export class Calendar {
       this.published,
       this.seasons.map((value) => value.clone())
     )
+  }
+
+  getKey() {
+    if (this.collectionUuid != '') {
+      return this.collectionUuid;
+    } else {
+      if (this.tempKey == null) {
+        this.tempKey = Uuid.newUuid();
+      }
+      return this.tempKey;
+    }
   }
 }
