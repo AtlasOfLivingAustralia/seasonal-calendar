@@ -44,11 +44,11 @@ export class CalendarEditComponent implements OnInit {
   }
 
   deleteSeason(index: number) {
-    this.calendar.seasons.splice(index);
+    this.calendar.seasons.splice(index,1);
   }
 
   deleteFeature(season: Season, index: number) {
-    season.features.splice(index);
+    season.features.splice(index,1);
   }
 
   save() {

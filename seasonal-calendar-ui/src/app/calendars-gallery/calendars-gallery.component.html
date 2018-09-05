@@ -1,10 +1,16 @@
-<h2>Seasonal Calendars Gallery</h2>
+<div class="row">
+  <div class="col">
+    <h2>Seasonal Calendars Gallery</h2>
 
-<div class="card-columns">
-  <div class="card" *ngFor="let calendar of calendars">
-    <div class="card-body">
-      <h5 class="card-title"><a routerLink="/{{calendar.name}}">{{ calendar.name }}</a></h5>
-      <p class="card-text">{{ calendar.description }}</p>
+    <div class="card-columns">
+      <div class="card" *ngFor="let calendar of calendars">
+        <div class="card-body">
+          <h5 class="card-title"><a routerLink="/{{calendar.name}}">{{ calendar.name }}</a></h5>
+          <p class="card-text">{{ calendar.description }}</p>
+        </div>
+      </div>
     </div>
+
   </div>
 </div>
+

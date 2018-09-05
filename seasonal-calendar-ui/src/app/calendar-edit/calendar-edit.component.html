@@ -1,128 +1,133 @@
-<h2>Calendar: {{originalCalendar?.name || 'New'}}</h2>
+<div class="row">
+  <div class="col">
+    <h2>Calendar: {{originalCalendar?.name || 'New'}}</h2>
 
-<form #calendarForm="ngForm">
-  <ngb-tabset>
-    <ngb-tab title="Calendar">
-      <ng-template ngbTabContent>
-        <div class="form-group">
-          <label for="calendarName">Name</label>
-          <input class="form-control" id="calendarName" name="calendarName" [(ngModel)]="calendar.name">
-        </div>
-
-        <div class="form-group">
-          <label for="shortName">Short Name</label>
-          <input class="form-control" id="shortName" name="shortName" [(ngModel)]="calendar.shortName">
-        </div>
-
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea class="form-control" id="description" name="description" [(ngModel)]="calendar.description"></textarea>
-        </div>
-      </ng-template>
-    </ngb-tab>
-    <ngb-tab title="Language Group">
-      <ng-template ngbTabContent>
-        <div class="form-group">
-          <label for="logos">Logos</label>
-          <input class="form-control" id="logos" name="logos" [(ngModel)]="calendar.organisationLogoUrl">
-        </div>
-
-        <div class="form-group">
-          <label for="youtubeId">Youtube ID</label>
-          <input class="form-control" id="youtubeId" name="youtubeId" [(ngModel)]="calendar.youtubeId">
-        </div>
-
-        <div class="form-group">
-          <label for="longitude">Longitude</label>
-          <input class="form-control" id="longitude" name="longitude" [(ngModel)]="calendar.longitude">
-        </div>
-
-        <div class="form-group">
-          <label for="latitude">Latitude</label>
-          <input class="form-control" id="latitude" name="latitude" [(ngModel)]="calendar.latitiude">
-        </div>
-      </ng-template>
-    </ngb-tab>
-    <ngb-tab title="Seasons">
-      <ng-template ngbTabContent>
-
-        <ng-container *ngFor="let season of calendar.seasons; trackBy: trackByKey; index as seasonIndex">
-
-          <button class="btn btn-warning btn-sm" (click)="deleteSeason(seasonIndex)">Remove season</button>
-
-          <div class="form-group">
-            <label>Season name (Language)</label>
-            <input class="form-control" name="season-localName-{{seasonIndex}}" [(ngModel)]="season.localName">
-          </div>
-
-          <div class="form-group">
-            <label>Season name (English)</label>
-            <input class="form-control" name="season-alternateName-{{seasonIndex}}" [(ngModel)]="season.alternateName">
-          </div>
-
-          <div class="form-group">
-            <label>English Months Start</label>
-            <input class="form-control" type="number" name="season-months-start-{{seasonIndex}}" [(ngModel)]="season.startMonth">
-          </div>
-
-          <div class="form-group">
-            <label>English Months End</label>
-            <input class="form-control" type="number" name="season-months-end-{{seasonIndex}}" [(ngModel)]="season.endMonth">
-          </div>
-
-          <div class="form-group">
-            <label>Weather icons</label>
-            <input class="form-control" name="season-weather-icons-{{seasonIndex}}" [(ngModel)]="season.weatherIcons">
-          </div>
-
-          <div class="form-group">
-            <label>Season description</label>
-            <textarea class="form-control" name="season-description-{{seasonIndex}}" [(ngModel)]="season.description"></textarea>
-          </div>
-
-          <ng-container *ngFor="let feature of season.features; trackBy: trackByKey; index as featureIndex">
-
-            <button class="btn btn-warning btn-sm" (click)="deleteFeature(season, featureIndex)">Remove feature</button>
-
+    <form #calendarForm="ngForm">
+      <ngb-tabset>
+        <ngb-tab title="Calendar">
+          <ng-template ngbTabContent>
             <div class="form-group">
-              <label>Feature name (Language)</label>
-              <input class="form-control" name="feature-name-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.name">
+              <label for="calendarName">Name</label>
+              <input class="form-control" id="calendarName" name="calendarName" [(ngModel)]="calendar.name">
             </div>
 
             <div class="form-group">
-              <label>Feature name (English)</label>
-              <input class="form-control" name="feature-alternateName-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.commonName">
+              <label for="shortName">Short Name</label>
+              <input class="form-control" id="shortName" name="shortName" [(ngModel)]="calendar.shortName">
             </div>
 
             <div class="form-group">
-              <label>Feature species</label>
-              <input class="form-control" name="feature-species-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.scientificName">
+              <label for="description">Description</label>
+              <textarea class="form-control" id="description" name="description" [(ngModel)]="calendar.description"></textarea>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Language Group">
+          <ng-template ngbTabContent>
+            <div class="form-group">
+              <label for="logos">Logos</label>
+              <input class="form-control" id="logos" name="logos" [(ngModel)]="calendar.organisationLogoUrl">
             </div>
 
             <div class="form-group">
-              <label>Feature images</label>
-              <!--<input class="form-control" name="feature-species" [(ngModel)]="feature.scientificName">-->
+              <label for="youtubeId">Youtube ID</label>
+              <input class="form-control" id="youtubeId" name="youtubeId" [(ngModel)]="calendar.youtubeId">
             </div>
 
             <div class="form-group">
-              <label>Feature description</label>
-              <textarea class="form-control" name="feature-description-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.description"></textarea>
+              <label for="longitude">Longitude</label>
+              <input class="form-control" id="longitude" name="longitude" [(ngModel)]="calendar.longitude">
             </div>
 
-          </ng-container>
+            <div class="form-group">
+              <label for="latitude">Latitude</label>
+              <input class="form-control" id="latitude" name="latitude" [(ngModel)]="calendar.latitiude">
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Seasons">
+          <ng-template ngbTabContent>
 
-          <button class="btn btn-default" (click)="addFeature(season)">Add Feature</button>
+            <ng-container *ngFor="let season of calendar.seasons; trackBy: trackByKey; index as seasonIndex">
 
-        </ng-container>
+              <button class="btn btn-warning btn-sm" (click)="deleteSeason(seasonIndex)">Remove season</button>
 
-        <button class="btn btn-primary" (click)="addSeason()">Add Season</button>
+              <div class="form-group">
+                <label>Season name (Language)</label>
+                <input class="form-control" name="season-localName-{{seasonIndex}}" [(ngModel)]="season.localName">
+              </div>
 
-      </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+              <div class="form-group">
+                <label>Season name (English)</label>
+                <input class="form-control" name="season-alternateName-{{seasonIndex}}" [(ngModel)]="season.alternateName">
+              </div>
 
-  <button class="btn btn-success" (click)="save()">Save Calendar</button>
-  <button class="btn btn-info" (click)="publish()">PublishCalendar</button>
+              <div class="form-group">
+                <label>English Months Start</label>
+                <input class="form-control" type="number" name="season-months-start-{{seasonIndex}}" [(ngModel)]="season.startMonth">
+              </div>
 
-</form>
+              <div class="form-group">
+                <label>English Months End</label>
+                <input class="form-control" type="number" name="season-months-end-{{seasonIndex}}" [(ngModel)]="season.endMonth">
+              </div>
+
+              <div class="form-group">
+                <label>Weather icons</label>
+                <input class="form-control" name="season-weather-icons-{{seasonIndex}}" [(ngModel)]="season.weatherIcons">
+              </div>
+
+              <div class="form-group">
+                <label>Season description</label>
+                <textarea class="form-control" name="season-description-{{seasonIndex}}" [(ngModel)]="season.description"></textarea>
+              </div>
+
+              <ng-container *ngFor="let feature of season.features; trackBy: trackByKey; index as featureIndex">
+
+                <button class="btn btn-warning btn-sm" (click)="deleteFeature(season, featureIndex)">Remove feature</button>
+
+                <div class="form-group">
+                  <label>Feature name (Language)</label>
+                  <input class="form-control" name="feature-name-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.name">
+                </div>
+
+                <div class="form-group">
+                  <label>Feature name (English)</label>
+                  <input class="form-control" name="feature-alternateName-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.commonName">
+                </div>
+
+                <div class="form-group">
+                  <label>Feature species</label>
+                  <input class="form-control" name="feature-species-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.scientificName">
+                </div>
+
+                <div class="form-group">
+                  <label>Feature images</label>
+                  <!--<input class="form-control" name="feature-species" [(ngModel)]="feature.scientificName">-->
+                </div>
+
+                <div class="form-group">
+                  <label>Feature description</label>
+                  <textarea class="form-control" name="feature-description-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.description"></textarea>
+                </div>
+
+              </ng-container>
+
+              <button class="btn btn-default" (click)="addFeature(season)">Add Feature</button>
+
+            </ng-container>
+
+            <button class="btn btn-primary" (click)="addSeason()">Add Season</button>
+
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+
+      <button class="btn btn-success" (click)="save()">Save Calendar</button>
+      <button class="btn btn-info" (click)="publish()">PublishCalendar</button>
+
+    </form>
+  </div>
+</div>
+
 

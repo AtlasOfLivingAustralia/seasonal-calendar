@@ -1,10 +1,14 @@
-<h2>Admin</h2>
+<div class="row">
+  <div class="col">
+    <h2>Admin</h2>
 
-<a class="btn btn-primary" routerLink="/admin/calendar/create">New Calendar</a>
-<ul>
-  <li *ngFor="let calendar of calendars">
-    <h3>{{ calendar.name }}</h3>
-    <a class="btn btn-primary" routerLink="/admin/calendar/{{calendar.collectionUuid}}">Edit</a>
-    <a class="btn btn-danger" disabled role="button">Delete</a>
-  </li>
-</ul>
+    <a class="btn btn-primary" routerLink="/admin/calendar/create">New Calendar</a>
+    <ul>
+      <li *ngFor="let calendar of calendars">
+        <h3>{{ calendar.name }}</h3>
+        <a class="btn btn-primary" routerLink="/admin/calendar/{{calendar.collectionUuid}}">Edit</a>
+        <a class="btn btn-danger" disabled role="button">Delete</a>
+      </li>
+    </ul>
+  </div>
+</div>
