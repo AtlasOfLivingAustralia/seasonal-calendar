@@ -1,0 +1,2 @@
+<button [class]="class" (click)="selectFile()">{{label}}</button>
+<input #file type="file" hidden name="files[]" [accept]="accept" [attr.multiple]="multiple ? '' : null" (change)="select.emit($event)">

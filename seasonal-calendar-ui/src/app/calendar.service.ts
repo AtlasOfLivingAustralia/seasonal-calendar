@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import {HttpClient, HttpEvent} from "@angular/common/http";
 import { Observable } from 'rxjs';
 import { Calendar } from "./model/calendar";
 import { environment } from "../environments/environment";
@@ -10,6 +10,7 @@ import { environment } from "../environments/environment";
 export class CalendarService {
 
   private readonly calendarsEndpoint : string = `${environment.api}calendars`;
+  private readonly imageEndpoint: string = `${environment.api}images`;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -28,5 +29,20 @@ export class CalendarService {
   save(calendar: Calendar) {
     let endpoint = `${this.calendarsEndpoint}${calendar.collectionUuid ? `/${calendar.collectionUuid}` : ''}`;
     return this.httpClient.post(endpoint, calendar);
+  }
+
+  uploadImages(files/*: FileList*/): Observable<HttpEvent<Object>> {
+    const formData = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append(i.toString(), files[i], files[i].name);
+    }
+
+    return this.httpClient.post(this.imageEndpoint, formData, {
+      observe: 'events',
+      reportProgress: true,
+      responseType: 'json',
+      withCredentials: true
+    });
   }
 }

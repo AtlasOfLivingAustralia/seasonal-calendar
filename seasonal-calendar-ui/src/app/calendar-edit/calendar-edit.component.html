@@ -3,23 +3,183 @@
     <h2>Calendar: {{originalCalendar?.name || 'New'}}</h2>
 
     <form #calendarForm="ngForm">
-      <ngb-tabset>
+      <ngb-tabset justify="justified">
         <ngb-tab title="Calendar">
           <ng-template ngbTabContent>
-            <div class="form-group">
-              <label for="calendarName">Name</label>
-              <input class="form-control" id="calendarName" name="calendarName" [(ngModel)]="calendar.name">
+
+            <div class="card bg-light mt-3">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="calendarName">Name</label>
+                      <input class="form-control" id="calendarName" name="calendarName" [(ngModel)]="calendar.name">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="shortName">Short Name</label>
+                      <input class="form-control" id="shortName" name="shortName" [(ngModel)]="calendar.shortName">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="description">Description</label>
+                      <textarea class="form-control" id="description" name="description" [(ngModel)]="calendar.description"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="website">Calendar Website</label>
+                      <input type="url" class="form-control" id="website" name="website" [(ngModel)]="calendar.websiteUrl">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="calendar-image">Calendar image</label>
+                      <sc-image-upload id="calendar-image" label="Select image" accept="image/*" (select)="calendarImageChanged($event)" [multiple]="true"></sc-image-upload>
+                      <div *ngFor="let data of uploadingImages" class="media">
+                        <img class="mr-3" [src]="data.url || 'assets/loading.svg'" alt="Lorem ipsum" width="64" height="64">
+                        <div class="media-body">
+                          <h5 class="mt-0">{{data.filename}}</h5>
+                          <p>filesize: {{data.size}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label for="shortName">Short Name</label>
-              <input class="form-control" id="shortName" name="shortName" [(ngModel)]="calendar.shortName">
+            <p class="text-center text-primary"> a. <strong>WHO</strong> - background on the organisations and individuals responsible for developing the calendar</p>
+
+            <div class="card bg-light">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="organisationName">Organisation Name</label>
+                      <input class="form-control" id="organisationName" name="organisationName" [(ngModel)]="calendar.organisationName">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="contributors">Contributors</label>
+                      <input class="form-control" id="contributors" name="contributors" [(ngModel)]="calendar.contributors">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="contactName">Contact Name</label>
+                      <input class="form-control" id="contactName" name="contactName" [(ngModel)]="calendar.contactName">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="contactEmail">Contact Email</label>
+                      <input class="form-control" id="contactEmail" name="contactEmail" [(ngModel)]="calendar.contactEmail">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="keywords">Keywords</label>
+                      <input class="form-control" id="keywords" name="keywords" [(ngModel)]="calendar.keywords">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="about">About</label>
+                      <textarea class="form-control" id="about" name="about" [(ngModel)]="calendar.about"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="organisationUrl">Organisation URL</label>
+                      <input class="form-control" id="organisationUrl" name="organisationUrl" [(ngModel)]="calendar.organisationUrl">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="organisationLogo">Organisation Logo</label>
+                      <input class="form-control" id="organisationLogo" name="organisationLogo" [(ngModel)]="calendar.organisationLogoUrl">
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label for="description">Description</label>
-              <textarea class="form-control" id="description" name="description" [(ngModel)]="calendar.description"></textarea>
+            <p class="text-center text-primary">b. <strong>HOW</strong> - how the calendar was developed or created:</p>
+
+            <div class="card bg-light">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <label for="development">How the calendar was developed</label>
+                    <textarea class="form-control" id="development" name="development" [(ngModel)]="calendar.development"></textarea>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="references">References</label>
+                      <input class="form-control" id="references" name="references" [(ngModel)]="calendar.references">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="referenceLinks">Reference Links</label>
+                      <input class="form-control" id="referenceLinks" name="referenceLinks" [(ngModel)]="calendar.referenceLinks">
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <p class="text-center text-primary">c. <strong>WHY</strong> - for what purpose and for whom the calendar was created</p>
+
+            <div class="card bg-light">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <label for="developmentReason">Why the calendar was developed</label>
+                    <textarea class="form-control" id="developmentReason" name="developmentReason" [(ngModel)]="calendar.developmentReason"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-center text-primary">d. <strong>USE</strong> - any qualifications or limitations on how the calendar can be used</p>
+
+            <div class="card bg-light">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="limitations">Limitations</label>
+                      <input class="form-control" id="limitations" name="limitations" [(ngModel)]="calendar.limitations">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="licenceTerms">Licence terms</label>
+                      <input class="form-control" id="licenceTerms" name="licenceTerms" [(ngModel)]="calendar.licenceTerms">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </ng-template>
         </ngb-tab>
         <ngb-tab title="Language Group">
@@ -53,12 +213,12 @@
               <button class="btn btn-warning btn-sm" (click)="deleteSeason(seasonIndex)">Remove season</button>
 
               <div class="form-group">
-                <label>Season name (Language)</label>
+                <label>Language or local name</label>
                 <input class="form-control" name="season-localName-{{seasonIndex}}" [(ngModel)]="season.localName">
               </div>
 
               <div class="form-group">
-                <label>Season name (English)</label>
+                <label>Alternate name</label>
                 <input class="form-control" name="season-alternateName-{{seasonIndex}}" [(ngModel)]="season.alternateName">
               </div>
 
@@ -122,9 +282,15 @@
           </ng-template>
         </ngb-tab>
       </ngb-tabset>
-
-      <button class="btn btn-success" (click)="save()">Save Calendar</button>
-      <button class="btn btn-info" (click)="publish()">PublishCalendar</button>
+      <div class="card bg-light">
+        <div class="row">
+          <div class="col">
+            <button class="btn btn-success" (click)="save()">Save Calendar</button>
+            <button class="btn btn-default" (click)="next()">Next</button>
+            <button class="btn btn-info" (click)="publish()">PublishCalendar</button>
+          </div>
+        </div>
+      </div>
 
     </form>
   </div>

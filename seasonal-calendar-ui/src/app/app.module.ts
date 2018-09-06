@@ -15,6 +15,7 @@ import { PageNotFoundComponentComponent } from './page-not-found-component/page-
 import {ReportingErrorHandler} from "./shared/reporting-error-handler";
 import {windowProvider, WindowToken} from "./shared/window";
 import {Logger} from "./shared/logger.service";
+import { ImageUploadComponent } from './image-upload/image-upload.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {Logger} from "./shared/logger.service";
     CalendarLandingComponent,
     AdminComponent,
     CalendarEditComponent,
-    PageNotFoundComponentComponent
+    PageNotFoundComponentComponent,
+    ImageUploadComponent
   ],
   imports: [
     BrowserModule,

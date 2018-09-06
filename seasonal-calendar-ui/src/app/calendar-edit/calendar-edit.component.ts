@@ -59,11 +59,66 @@ export class CalendarEditComponent implements OnInit {
     );
   }
 
+  next() {
+
+  }
+
   publish() {
 
   }
 
   trackByKey(index, item) {
     item.getKey();
+  }
+
+  uploadingImages: any[] = [];
+
+  calendarImageChanged($event) {
+    let files: FileList = $event.target.files;
+    for (let i = 0; i < files.length; ++i) {
+      let file = files.item(i);
+      this.startUploadingImage(file);
+      // file.
+    }
+    this.log.log($event);
+  }
+
+  private startUploadingImage(file: File) {
+    if (file) {
+      let uploading = {
+        filename: file.name,
+        size: file.size,
+        url: null
+      };
+      this.uploadingImages.push(uploading);
+      this.ensureSize(file, 64, 64, (url) => uploading.url = url);
+      // let reader = new FileReader();
+      // reader.addEventListener("load", () => {
+      //   this.uploadingImages.push(this.ensureSize(reader.result, 64, 64));
+      // }, false);
+      // reader.readAsArrayBuffer(file);
+    }
+  }
+
+  private ensureSize(file, width: number, height: number, callback) {
+    // create an off-screen canvas
+    const canvas = document.createElement('canvas'),
+      ctx = canvas.getContext('2d');
+
+
+    let img = new Image;
+    let url = URL.createObjectURL(file);
+    img.addEventListener("load", () => {
+      ctx.drawImage(img, 0, 0, width, height);
+
+      callback(canvas.toDataURL());
+      URL.revokeObjectURL(url);
+    });
+
+    img.src = url;
+    // set its dimension to target size
+    canvas.width = width;
+    canvas.height = height;
+
   }
 }
