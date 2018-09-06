@@ -67,7 +67,7 @@ class FeatureService(
         FeatureDto(
             profileUuid = UUID.fromString(profile.uuid),
             name = profile.fullName,
-            commonName = profile.attributes.find { it.title.name == "commonName" }?.text,
+            commonName = profile.attributes.find { it.title.name == "commonName" }?.text ?: "",
             scientificName = profile.scientificName,
             description = profile.attributes.find { it.title.name == "description" }?.text ?: "",
             imageUrls = profile.privateImages.map { it.imageId }
