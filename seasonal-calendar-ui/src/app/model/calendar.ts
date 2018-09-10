@@ -1,7 +1,37 @@
-import {Season} from "./season";
+import {ISeason, Season} from "./season";
 import {Uuid} from "../shared/uuid";
 
-export class Calendar {
+export interface ICalendar {
+  collectionUuid: string;
+  shortName: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  websiteUrl: string;
+  youtubeId: string;
+  organisationName: string;
+  contributors: string[];
+  contactName: string;
+  contactEmail: string;
+  keywords: string[];
+  about: string;
+  organisationUrl: string;
+  organisationLogoUrl: string;
+  development: string;
+  references: string[];
+  referenceLinks: string[];
+  developmentReason: string;
+  limitations: string;
+  licenceTerms: string;
+  latitiude: number;
+  longitude: number;
+  zoom: number;
+  languageGroup: string;
+  published: boolean;
+  seasons: ISeason[];
+}
+
+export class Calendar implements ICalendar {
 
   private tempKey: string = null;
 
@@ -32,40 +62,43 @@ export class Calendar {
     public zoom: number = 0,
     public languageGroup: string = '',
     public published: boolean = false,
-    public seasons: Season[] = []
+    public seasons: ISeason[] = []
   ) { }
 
+  public static fromJson(calendar: ICalendar): Calendar {
+    return new Calendar(
+      calendar.collectionUuid,
+      calendar.shortName,
+      calendar.name,
+      calendar.description,
+      calendar.imageUrl,
+      calendar.websiteUrl,
+      calendar.youtubeId,
+      calendar.organisationName,
+      calendar.contributors.map((value) => value),
+      calendar.contactName,
+      calendar.contactEmail,
+      calendar.keywords.map((value) => value),
+      calendar.about,
+      calendar.organisationUrl,
+      calendar.organisationLogoUrl,
+      calendar.development,
+      calendar.references.map((value) => value),
+      calendar.referenceLinks.map((value) => value),
+      calendar.developmentReason,
+      calendar.limitations,
+      calendar.licenceTerms,
+      calendar.latitiude,
+      calendar.longitude,
+      calendar.zoom,
+      calendar.languageGroup,
+      calendar.published,
+      calendar.seasons.map((value) => Season.fromJson(value))
+    )
+  }
 
   clone(): Calendar {
-    return new Calendar(
-      this.collectionUuid,
-      this.shortName,
-      this.name,
-      this.description,
-      this.imageUrl,
-      this.websiteUrl,
-      this.youtubeId,
-      this.organisationName,
-      this.contributors.map((value) => value),
-      this.contactName,
-      this.contactEmail,
-      this.keywords.map((value) => value),
-      this.about,
-      this.organisationUrl,
-      this.organisationLogoUrl,
-      this.development,
-      this.references.map((value) => value),
-      this.referenceLinks.map((value) => value),
-      this.developmentReason,
-      this.limitations,
-      this.licenceTerms,
-      this.latitiude,
-      this.longitude,
-      this.zoom,
-      this.languageGroup,
-      this.published,
-      this.seasons.map((value) => value.clone())
-    )
+    return Calendar.fromJson(this);
   }
 
   getKey() {

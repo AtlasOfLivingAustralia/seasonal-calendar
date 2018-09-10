@@ -1,16 +1,15 @@
 import {ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot} from "@angular/router";
-import {Calendar} from "./model/calendar";
+import {ICalendar} from "./model/calendar";
 import {Observable} from "rxjs";
 import {Injectable} from "@angular/core";
 import {CalendarService} from "./calendar.service";
-import {take} from "rxjs/operators";
 
 @Injectable()
-export class CalendarsResolverService implements Resolve<Calendar[]> {
+export class CalendarsResolverService implements Resolve<ICalendar[]> {
 
   constructor(private calendarService: CalendarService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Calendar[]> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ICalendar[]> {
     return this.calendarService.calendars;
   }
 

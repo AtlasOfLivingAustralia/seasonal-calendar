@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Calendar} from '../model/calendar';
+import {ICalendar} from '../model/calendar';
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -9,14 +9,14 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class CalendarsGalleryComponent implements OnInit {
 
-  calendars: Calendar[];
+  calendars: ICalendar[];
 
   constructor(private route: ActivatedRoute,
               private router: Router) { }
 
   ngOnInit() {
 
-    this.route.data.subscribe((data: { calendars: Calendar[] }) => {
+    this.route.data.subscribe((data: { calendars: ICalendar[] }) => {
       this.calendars = data.calendars;
     });
     // this.calendars$ = this.calendarService.calendars;

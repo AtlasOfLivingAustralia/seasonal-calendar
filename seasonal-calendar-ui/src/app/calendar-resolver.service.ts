@@ -16,7 +16,7 @@ export class CalendarResolverService implements Resolve<Calendar> {
       take(1),
       map(calendar => {
         if (calendar) {
-          return calendar;
+          return Calendar.fromJson(calendar);
         } else {
           this.router.navigate(['/']);
           return null;

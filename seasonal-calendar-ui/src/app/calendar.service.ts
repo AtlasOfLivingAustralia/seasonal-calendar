@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpEvent} from "@angular/common/http";
 import { Observable } from 'rxjs';
-import { Calendar } from "./model/calendar";
+import {Calendar, ICalendar} from "./model/calendar";
 import { environment } from "../environments/environment";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +11,16 @@ import { environment } from "../environments/environment";
 export class CalendarService {
 
   private readonly calendarsEndpoint : string = `${environment.api}calendars`;
-  private readonly imageEndpoint: string = `${environment.api}images`;
+  private readonly imageEndpoint: string = `${environment.api}images/upload`;
 
   constructor(private httpClient: HttpClient) { }
 
-  get calendars() : Observable<Calendar[]> {
+  get calendars() : Observable<ICalendar[]> {
     return this.httpClient.get<Calendar[]>(this.calendarsEndpoint);
   }
 
-  findCalendar(id: string) {
-    return this.httpClient.get<Calendar>(`${this.calendarsEndpoint}/${id}`);
+  findCalendar(id: string) : Observable<ICalendar> {
+    return this.httpClient.get<ICalendar>(`${this.calendarsEndpoint}/${id}`);
   }
 
   newCalendar() {
@@ -35,10 +36,10 @@ export class CalendarService {
     const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
-      formData.append(i.toString(), files[i], files[i].name);
+      formData.append("images", files[i], files[i].name);
     }
 
-    return this.httpClient.post(this.imageEndpoint, formData, {
+    return this.httpClient.post<string[]>(this.imageEndpoint, formData, {
       observe: 'events',
       reportProgress: true,
       responseType: 'json',

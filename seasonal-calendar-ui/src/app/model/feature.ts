@@ -1,6 +1,15 @@
 import {Uuid} from "../shared/uuid";
 
-export class Feature {
+export interface IFeature {
+  profileUuid: string | null | undefined;
+  name: string;
+  commonName: string | null | undefined;
+  scientificName: string | null | undefined;
+  description: string;
+  imageUrls: string[];
+}
+
+export class Feature implements IFeature {
 
   private tempKey: string = null;
 
@@ -13,15 +22,19 @@ export class Feature {
     public imageUrls: string[] = []
   ) { }
 
-  clone() {
+  public static fromJson(feature: IFeature) {
     return new Feature(
-      this.profileUuid,
-      this.name,
-      this.commonName,
-      this.scientificName,
-      this.description,
-      this.imageUrls.map((value) => value)
+      feature.profileUuid,
+      feature.name,
+      feature.commonName,
+      feature.scientificName,
+      feature.description,
+      feature.imageUrls.map((value) => value)
     );
+  }
+
+  clone() {
+    return Feature.fromJson(this);
   }
 
   getKey() {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CalendarService } from './calendar.service';
-import { Calendar } from './model/calendar';
+import {ICalendar} from './model/calendar';
 
 @Component({
   selector: 'sc-root',
@@ -11,7 +11,7 @@ import { Calendar } from './model/calendar';
 export class AppComponent implements OnInit {
   title = 'seasonal-calendar-ui';
 
-  calendars$: Observable<Calendar[]>;
+  calendars$: Observable<ICalendar[]>;
 
   constructor(private calendarService: CalendarService) {
   }

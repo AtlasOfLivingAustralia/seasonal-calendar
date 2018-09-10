@@ -1,7 +1,18 @@
-import {Feature} from "./feature";
+import {IFeature, Feature} from "./feature";
 import {Uuid} from "../shared/uuid";
 
-export class Season {
+export interface ISeason {
+  id: number | null | undefined
+  localName: string
+  alternateName: string | null | undefined
+  startMonth: number
+  endMonth: number
+  weatherIcons: string | null | undefined
+  description: string
+  features: IFeature[];
+}
+
+export class Season implements ISeason {
 
   private tempKey: string = null;
 
@@ -13,20 +24,24 @@ export class Season {
     public endMonth: number = 12,
     public weatherIcons: string | null | undefined = '',
     public description: string = '',
-    public features: Feature[] = []
+    public features: IFeature[] = []
   ) { }
 
-  clone() {
+  static fromJson(season: ISeason) {
     return new Season(
-      this.id,
-      this.localName,
-      this.alternateName,
-      this.startMonth,
-      this.endMonth,
-      this.weatherIcons,
-      this.description,
-      this.features.map((value => value.clone()))
+      season.id,
+      season.localName,
+      season.alternateName,
+      season.startMonth,
+      season.endMonth,
+      season.weatherIcons,
+      season.description,
+      season.features.map((value => Feature.fromJson(value)))
     );
+  }
+
+  clone() {
+    return Season.fromJson(this);
   }
 
   getKey() {
