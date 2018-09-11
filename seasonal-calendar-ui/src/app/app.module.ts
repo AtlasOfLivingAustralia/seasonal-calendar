@@ -4,7 +4,7 @@ import {FormsModule} from "@angular/forms";
 import { HttpClientModule } from '@angular/common/http';
 import { NgbProgressbarModule, NgbTabsetModule, NgbModalModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-
+import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CalendarsGalleryComponent } from './calendars-gallery/calendars-gallery.component';
@@ -18,6 +18,7 @@ import {Logger} from "./shared/logger.service";
 import { ImageUploadModalComponent } from './image-upload-modal/image-upload-modal.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { ListInputComponent } from './list-input/list-input.component';
+import { CalendarMapComponent } from './calendar-map/calendar-map.component';
 
 @NgModule({
   declarations: [
@@ -30,13 +31,15 @@ import { ListInputComponent } from './list-input/list-input.component';
     ImageUploadModalComponent,
     ImageUploadComponent,
     ListInputComponent
+    CalendarMapComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-    LeafletModule,
+    LeafletModule.forRoot(),
+    LeafletDrawModule.forRoot(),
     NgbTabsetModule,
     NgbProgressbarModule,
     NgbModalModule,
