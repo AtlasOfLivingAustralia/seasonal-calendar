@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import {Calendar} from "../model/calendar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Season} from "../model/season";
-import {Feature} from "../model/feature";
+import {Feature, IFeature} from "../model/feature";
 import {CalendarService} from "../calendar.service";
 import {Logger} from "../shared/logger.service";
 import {NgbActiveModal, NgbModal, NgbModalConfig, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
 import {ImageUploadModalComponent} from "../image-upload-modal/image-upload-modal.component";
+import {Observable, of} from "rxjs";
+import {catchError, debounceTime, distinctUntilChanged, map, switchMap, tap} from "rxjs/operators";
 
 @Component({
   selector: 'sc-calendar-edit',
@@ -97,5 +99,26 @@ export class CalendarEditComponent implements OnInit {
     });
   }
 
+  searching = false;
+  searchFailed = false;
+
+  search = (text$: Observable<string>) => {
+    return text$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+      tap(() => this.searching = true),
+      switchMap(term =>
+        this.calendarService.speciesSearch(term).pipe(
+          tap(() => this.searchFailed = false),
+          map( ((value, index) => value.autoCompleteList
+            .filter((val, idx, arr) => val.name != null && val.name != '')
+            .map((val, idx, arr) => val.name))),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          }))
+      ),
+      tap(() => this.searching = false)
+    )
   }
 }

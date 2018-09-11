@@ -174,34 +174,34 @@ Unpublished or Published status |   Collection private or public |   When a seas
         )
     }
 
-    fun constructCalendarDto(opus: Opus, calendar: Calendar) : SeasonalCalendarDto {
+    fun constructCalendarDto(opus: Opus, calendar: Calendar?) : SeasonalCalendarDto {
         return SeasonalCalendarDto(
             collectionUuid = opus.uuid,
             shortName = opus.shortName,
             name = opus.title,
             description = opus.description,
             imageUrl = opus.opusLayoutConfig.images?.firstOrNull()?.imageUrl ?: "",
-            websiteUrl = calendar.website,
-            youtubeId = calendar.youtubeId,
-            organisationName =  calendar.organisationName,
-            contributors = calendar.contributors.toList(),
-            contactName = calendar.contactName,
+            websiteUrl = calendar?.website ?: "",
+            youtubeId = calendar?.youtubeId ?: "",
+            organisationName =  calendar?.organisationName ?: "",
+            contributors = calendar?.contributors?.toList() ?: mutableListOf(),
+            contactName = calendar?.contactName ?: "",
             contactEmail = opus.email,
-            keywords = calendar.keywords.toList(),
+            keywords = calendar?.keywords?.toList() ?: mutableListOf(),
             about = opus.aboutHtml,
             organisationUrl = opus.brandingConfig.logos?.firstOrNull()?.hyperlink ?: "",
             organisationLogoUrl = opus.brandingConfig.logos?.firstOrNull()?.logoUrl ?: "",
-            development = calendar.development,
-            references = calendar.references.toList(),
-            referenceLinks = calendar.referenceLinks.toList(),
-            developmentReason = calendar.developmentReason,
+            development = calendar?.development ?: "",
+            references = calendar?.references?.toList() ?: mutableListOf(),
+            referenceLinks = calendar?.referenceLinks?.toList() ?: mutableListOf(),
+            developmentReason = calendar?.developmentReason ?: "",
             limitations = "", // TODO
             licenceTerms = opus.brandingConfig.shortLicense,
             latitude =  opus.mapConfig.mapDefaultLatitude.toDouble(),
             longitude = opus.mapConfig.mapDefaultLongitude.toDouble(),
             zoom = opus.mapConfig.mapZoom,
-            languageGroup = calendar.language,
-            published = calendar.published
+            languageGroup = calendar?.language ?: "",
+            published = calendar?.published ?: false
         )
     }
 }

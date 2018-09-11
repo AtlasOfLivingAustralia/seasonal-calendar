@@ -7,13 +7,13 @@
         <ngb-tab title="Calendar">
           <ng-template ngbTabContent>
 
-            <div class="card bg-light mt-3">
+            <div class="card bg-light my-3">
               <div class="card-body">
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
                       <label for="calendarName">Name</label>
-                      <input class="form-control" id="calendarName" name="calendarName" [(ngModel)]="calendar.name">
+                      <input class="form-control" id="calendarName" name="calendarName" required [(ngModel)]="calendar.name">
                     </div>
                   </div>
                   <div class="col">
@@ -51,7 +51,7 @@
 
             <p class="text-center text-primary"> a. <strong>WHO</strong> - background on the organisations and individuals responsible for developing the calendar</p>
 
-            <div class="card bg-light">
+            <div class="card bg-light mb-3">
               <div class="card-body">
                 <div class="form-row">
                   <div class="col">
@@ -63,7 +63,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="contributors">Contributors</label>
-                      <input class="form-control" id="contributors" name="contributors" [(ngModel)]="calendar.contributors">
+                      <sc-list-input intput-id="contributors" name="contributors" placeholder="Add contributor" [(inputs)]="calendar.contributors"></sc-list-input>
                     </div>
                   </div>
                 </div>
@@ -85,7 +85,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="keywords">Keywords</label>
-                      <input class="form-control" id="keywords" name="keywords" [(ngModel)]="calendar.keywords">
+                      <sc-list-input intput-id="keywords" name="keywords" placeholder="Add keyword" [(inputs)]="calendar.keywords"></sc-list-input>
                     </div>
                   </div>
                   <div class="col">
@@ -99,7 +99,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="organisationUrl">Organisation URL</label>
-                      <input class="form-control" id="organisationUrl" name="organisationUrl" [(ngModel)]="calendar.organisationUrl">
+                      <input type="url" class="form-control" id="organisationUrl" name="organisationUrl" [(ngModel)]="calendar.organisationUrl">
                     </div>
                   </div>
                   <div class="col">
@@ -114,7 +114,7 @@
 
             <p class="text-center text-primary">b. <strong>HOW</strong> - how the calendar was developed or created:</p>
 
-            <div class="card bg-light">
+            <div class="card bg-light mb-3">
               <div class="card-body">
                 <div class="form-row">
                   <div class="col">
@@ -126,13 +126,13 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="references">References</label>
-                      <input class="form-control" id="references" name="references" [(ngModel)]="calendar.references">
+                      <sc-list-input intput-id="references" name="references" placeholder="Add reference" [(inputs)]="calendar.references"></sc-list-input>
                     </div>
                   </div>
                   <div class="col">
                     <div class="form-group">
                       <label for="referenceLinks">Reference Links</label>
-                      <input class="form-control" id="referenceLinks" name="referenceLinks" [(ngModel)]="calendar.referenceLinks">
+                      <sc-list-input intput-id="referenceLinks" name="referenceLinks" placeholder="Add reference link" [(inputs)]="calendar.referenceLinks"></sc-list-input>
                     </div>
                   </div>
                 </div>
@@ -141,7 +141,7 @@
 
             <p class="text-center text-primary">c. <strong>WHY</strong> - for what purpose and for whom the calendar was created</p>
 
-            <div class="card bg-light">
+            <div class="card bg-light mb-3">
               <div class="card-body">
                 <div class="form-row">
                   <div class="col">
@@ -154,19 +154,26 @@
 
             <p class="text-center text-primary">d. <strong>USE</strong> - any qualifications or limitations on how the calendar can be used</p>
 
-            <div class="card bg-light">
+            <div class="card bg-light mb-3">
               <div class="card-body">
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
                       <label for="limitations">Limitations</label>
-                      <input class="form-control" id="limitations" name="limitations" [(ngModel)]="calendar.limitations">
+                      <textarea class="form-control" id="limitations" name="limitations" [(ngModel)]="calendar.limitations"></textarea>
                     </div>
                   </div>
                   <div class="col">
                     <div class="form-group">
                       <label for="licenceTerms">Licence terms</label>
-                      <input class="form-control" id="licenceTerms" name="licenceTerms" [(ngModel)]="calendar.licenceTerms">
+                      <select class="custom-select" id="licenceTerms" name="licenceTerms" [(ngModel)]="calendar.licenceTerms">
+                        <option value="">Please select</option>
+                        <option value="creative-commons">Creative Commons Attribution-NonCommercial-NoDerivatives (CC-BY-NC-ND)</option>
+                        <option value="copyright-all">Copyright-All rights reserved</option>
+                        <option value="cc-by">Creative Commons Attribution (CC-BY)</option>
+                        <option value="cc-by-nc">Creative Commons Attribution-NonCommercial (CC-BY-NC)</option>
+                        <option value="cc-by-sa">Creative Commons Attribution-ShareAlike (CC-BY-SA)</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -179,7 +186,7 @@
           <ng-template ngbTabContent>
             <div class="form-group">
               <label for="logos">Logos</label>
-              <input class="form-control" id="logos" name="logos" [(ngModel)]="calendar.organisationLogoUrl">
+              <input type="url" class="form-control" id="logos" name="logos" [(ngModel)]="calendar.organisationLogoUrl">
             </div>
 
             <div class="form-group">
@@ -201,89 +208,177 @@
         <ngb-tab title="Seasons">
           <ng-template ngbTabContent>
 
-            <ng-container *ngFor="let season of calendar.seasons; trackBy: trackByKey; index as seasonIndex">
+            <div class="card bg-light mb-3" *ngFor="let season of calendar.seasons; trackBy: trackByKey; index as seasonIndex">
 
-              <button class="btn btn-warning btn-sm" (click)="deleteSeason(seasonIndex)">Remove season</button>
-
-              <div class="form-group">
-                <label>Language or local name</label>
-                <input class="form-control" name="season-localName-{{seasonIndex}}" [(ngModel)]="season.localName">
+              <div class="card-header">
+                  <button class="btn btn-danger btn-sm float-right" (click)="deleteSeason(seasonIndex)" aria-label="Delete season">&times;</button>
+                  Season: {{ season.localName || 'New Season' }}
               </div>
 
-              <div class="form-group">
-                <label>Alternate name</label>
-                <input class="form-control" name="season-alternateName-{{seasonIndex}}" [(ngModel)]="season.alternateName">
-              </div>
+              <div class="card-body">
 
-              <div class="form-group">
-                <label>English Months Start</label>
-                <input class="form-control" type="number" name="season-months-start-{{seasonIndex}}" [(ngModel)]="season.startMonth">
-              </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label>Language or local name</label>
+                      <input class="form-control" name="season-localName-{{seasonIndex}}" required [(ngModel)]="season.localName">
+                    </div>
+                  </div>
 
-              <div class="form-group">
-                <label>English Months End</label>
-                <input class="form-control" type="number" name="season-months-end-{{seasonIndex}}" [(ngModel)]="season.endMonth">
-              </div>
-
-              <div class="form-group">
-                <label>Weather icons</label>
-                <input class="form-control" name="season-weather-icons-{{seasonIndex}}" [(ngModel)]="season.weatherIcons">
-              </div>
-
-              <div class="form-group">
-                <label>Season description</label>
-                <textarea class="form-control" name="season-description-{{seasonIndex}}" [(ngModel)]="season.description"></textarea>
-              </div>
-
-              <ng-container *ngFor="let feature of season.features; trackBy: trackByKey; index as featureIndex">
-
-                <button class="btn btn-warning btn-sm" (click)="deleteFeature(season, featureIndex)">Remove feature</button>
-
-                <div class="form-group">
-                  <label>Feature name (Language)</label>
-                  <input class="form-control" name="feature-name-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.name">
+                  <div class="col">
+                    <div class="form-group">
+                      <label>Alternate name</label>
+                      <input class="form-control" name="season-alternateName-{{seasonIndex}}" required [(ngModel)]="season.alternateName">
+                    </div>
+                  </div>
                 </div>
 
-                <div class="form-group">
-                  <label>Feature name (English)</label>
-                  <input class="form-control" name="feature-alternateName-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.commonName">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label>English Months Start</label>
+                      <!--<input class="form-control" type="number" name="season-months-start-{{seasonIndex}}" [(ngModel)]="season.startMonth">-->
+                      <select name="season-months-start-{{seasonIndex}}" required [(ngModel)]="season.startMonth" class="custom-select">
+                        <option value="">Please select</option>
+                        <option [value]="1">January</option>
+                        <option [value]="2">February</option>
+                        <option [value]="3">March</option>
+                        <option [value]="4">April</option>
+                        <option [value]="5">May</option>
+                        <option [value]="6">June</option>
+                        <option [value]="7">July</option>
+                        <option [value]="8">August</option>
+                        <option [value]="9">September</option>
+                        <option [value]="10">October</option>
+                        <option [value]="11">November</option>
+                        <option [value]="12">December</option>
+                      </select>
+                    </div>
+
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label>English Months End</label>
+                      <!--<input class="form-control" type="number" name="season-months-end-{{seasonIndex}}" [(ngModel)]="season.endMonth">-->
+                      <select name="season-months-end-{{seasonIndex}}" required [(ngModel)]="season.endMonth" class="custom-select">
+                        <option value="">Please select</option>
+                        <option [value]="1">January</option>
+                        <option [value]="2">February</option>
+                        <option [value]="3">March</option>
+                        <option [value]="4">April</option>
+                        <option [value]="5">May</option>
+                        <option [value]="6">June</option>
+                        <option [value]="7">July</option>
+                        <option [value]="8">August</option>
+                        <option [value]="9">September</option>
+                        <option [value]="10">October</option>
+                        <option [value]="11">November</option>
+                        <option [value]="12">December</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label>Weather icons</label>
+                      <select name="season-weather-icons-{{seasonIndex}}" [(ngModel)]="season.weatherIcons" class="custom-select">
+                        <option value="">Please select</option>
+                        <option value="sunny">Sunny</option>
+                        <option value="cloudy">Cloudy</option>
+                        <option value="rainy">Rainy</option>
+                        <option value="snowy">Snowy</option>
+                        <option value="rainbow">Rainbow</option>
+                        <option value="starry">Starry</option>
+                        <option value="stormy">Stormy</option>
+                      </select>
+                      <!--<input class="form-control" name="season-weather-icons-{{seasonIndex}}" [(ngModel)]="season.weatherIcons">-->
+                    </div>
+                  </div>
                 </div>
 
-                <div class="form-group">
-                  <label>Feature species</label>
-                  <input class="form-control" name="feature-species-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.scientificName">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label>Season description</label>
+                      <textarea class="form-control" name="season-description-{{seasonIndex}}" required [(ngModel)]="season.description"></textarea>
+                    </div>
+                  </div>
                 </div>
 
-                <div class="form-group">
-                  <label>Feature images</label>
-                  <!--<input class="form-control" name="feature-species" [(ngModel)]="feature.scientificName">-->
+
+                <div class="card-columns">
+                  <div class="card bg-dark text-white" *ngFor="let feature of season.features; trackBy: trackByKey; index as featureIndex">
+
+
+                    <!--<div class="">-->
+
+                      <div class="card-header">
+                        <button class="btn btn-danger btn-sm float-right" (click)="deleteFeature(season, featureIndex)" aria-label="Delete feature">&times;</button>
+                        Feature: {{feature.name || "New feature"}}
+                      </div>
+
+                      <div class="card-body">
+
+                        <div class="form-group">
+                          <label>Feature name (Language)</label>
+                          <input class="form-control" name="feature-name-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.name">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Feature name (English)</label>
+                          <input class="form-control" name="feature-alternateName-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.commonName">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Feature species</label>
+                          <input class="form-control" name="feature-species-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.scientificName" [class.is-invalid]="searchFailed" [ngbTypeahead]="search">
+                          <span *ngIf="searching">searching...</span>
+                          <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
+                        </div>
+
+                        <div class="form-group">
+                          <label>Feature images</label>
+                          <div class="form-row">
+                            <div *ngFor="let imageUrl of feature.imageUrls; trackBy: trackByIndex" class="col-xl-3 col-lg-4 col-md-6 mb-1">
+                              <img class="img-fluid" [src]="imageUrl">
+                            </div>
+                          </div>
+                          <button class="btn btn-secondary" (click)="imageUploadModal(feature)">Add images</button>
+                        </div>
+
+                        <div class="form-group">
+                          <label>Feature description</label>
+                          <textarea class="form-control" name="feature-description-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.description"></textarea>
+                        </div>
+                      </div>
+
+                    <div class="card-footer">
+                      <button class="btn btn-danger btn-sm" (click)="deleteFeature(season, featureIndex)">Delete {{ feature.name || 'feature' }}</button>
+                    </div>
+
+                    <!--</div>-->
+                  </div>
+
                 </div>
 
-                <div class="form-group">
-                  <label>Feature description</label>
-                  <textarea class="form-control" name="feature-description-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.description"></textarea>
-                </div>
+              </div>
 
-              </ng-container>
+              <div class="card-footer">
+                <button class="btn btn-default" (click)="addFeature(season)">Add Feature</button>&ngsp;
+                <button class="btn btn-danger float-right" (click)="deleteSeason(seasonIndex)">Delete {{ season.localName || 'season'}}</button>
+              </div>
 
-              <button class="btn btn-default" (click)="addFeature(season)">Add Feature</button>
+            </div>
 
-            </ng-container>
 
             <button class="btn btn-primary" (click)="addSeason()">Add Season</button>
 
           </ng-template>
         </ngb-tab>
       </ngb-tabset>
-      <div class="card bg-light">
-        <div class="row">
-          <div class="col">
-            <button class="btn btn-success" (click)="save()">Save Calendar</button>
-            <button class="btn btn-default" (click)="next()">Next</button>
-            <button class="btn btn-info" (click)="publish()">PublishCalendar</button>
-          </div>
-        </div>
-      </div>
+
+      <button class="btn btn-primary" [disabled]="calendarForm.invalid" (click)="save()">Save Calendar</button>&ngsp;
+      <button class="btn btn-outline-secondary" (click)="next()">Next</button>&ngsp;
+      <button class="btn btn-success" [disabled]="calendarForm.invalid" (click)="publish()">Publish Calendar</button>&ngsp;
 
     </form>
   </div>

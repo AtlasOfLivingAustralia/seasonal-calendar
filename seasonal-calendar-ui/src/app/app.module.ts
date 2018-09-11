@@ -17,6 +17,7 @@ import {windowProvider, WindowToken} from "./shared/window";
 import {Logger} from "./shared/logger.service";
 import { ImageUploadModalComponent } from './image-upload-modal/image-upload-modal.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
+import { ListInputComponent } from './list-input/list-input.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ImageUploadComponent } from './image-upload/image-upload.component';
     PageNotFoundComponentComponent,
     ImageUploadModalComponent,
     ImageUploadComponent,
+    ListInputComponent
   ],
   imports: [
     BrowserModule,

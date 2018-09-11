@@ -1,13 +1,18 @@
 package au.org.ala.sc
 
 import au.org.ala.profiles.service.ProfileServiceClient
+import au.org.ala.profiles.service.moshi.MillisSinceEpochDateJsonAdapter
 import au.org.ala.sc.domain.jooq.tables.daos.CalendarDao
 import au.org.ala.sc.domain.jooq.tables.daos.RoleDao
 import au.org.ala.sc.domain.jooq.tables.daos.SeasonDao
 import au.org.ala.sc.domain.jooq.tables.daos.UserRoleDao
+import au.org.ala.sc.modules.InstrumentedOkHttpClient
 import au.org.ala.sc.resources.CalendarResource
 import au.org.ala.sc.resources.ImageResource
+import au.org.ala.sc.resources.SearchResource
 import au.org.ala.sc.services.*
+import com.codahale.metrics.MetricRegistry
+import com.squareup.moshi.Moshi
 import io.dropwizard.Application
 import io.dropwizard.db.PooledDataSourceFactory
 import io.dropwizard.flyway.FlywayBundle
@@ -21,8 +26,10 @@ import org.jooq.impl.DSL
 import java.io.File
 import org.eclipse.jetty.servlets.CrossOriginFilter
 import org.jooq.DSLContext
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.*
 import javax.servlet.DispatcherType
-import java.util.EnumSet
 
 class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>() {
 
@@ -46,7 +53,8 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
 
         // TODO Daggerise
         val okHttpClient = OkHttpClient.Builder().build()
-        val profilesServiceClient = ProfileServiceClient.Builder(okHttpClient, configuration.profileServiceBaseUrl).apiKey(configuration.profileServiceApiKey).build()
+        val profilesServiceClient = profileServiceClient(configuration.profileServiceBaseUrl, configuration.profileServiceApiKey, okHttpClient, environment.metrics())
+        val searchClient = searchClient(configuration.bieBaseUrl, okHttpClient, environment.metrics())
 
         val dsl = configureJooq(configuration, environment, "seasonal-calendars")
 
@@ -63,11 +71,42 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
 
         val calendarResource = CalendarResource(calendarService)
         val imageResource = ImageResource(imagesBaseDir, imageService)
+        val searchResource = SearchResource(searchClient)
 
         environment.jersey().apply {
             register(calendarResource)
             register(imageResource)
+            register(searchResource)
         }
+    }
+
+    /**
+     * Use a custom profile service client builder to use an instrumented client
+     */
+    private fun profileServiceClient(profileServiceBaseUrl: String, apiKey: String?, okHttpClient: OkHttpClient, metricRegistry: MetricRegistry): ProfileServiceClient {
+        val client = if (apiKey != null) {
+            okHttpClient.newBuilder().addInterceptor { it.proceed(it.request().newBuilder().addHeader(ProfileServiceClient.DEFAULT_API_KEY_HEADER, apiKey).build()) }.build()
+        } else {
+            okHttpClient
+        }
+        val moshi = Moshi.Builder().add(Date::class.java, MillisSinceEpochDateJsonAdapter().nullSafe()).build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(profileServiceBaseUrl)
+            .callFactory(InstrumentedOkHttpClient(okHttpClient, metricRegistry, "profileServiceClient"))
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
+        return retrofit.create(ProfileServiceClient::class.java)
+    }
+
+    private fun searchClient(bieBaseUrl: String, okHttpClient: OkHttpClient, registry: MetricRegistry): BieSearchClient {
+        val client = InstrumentedOkHttpClient(okHttpClient, registry, "bieSearchClient")
+        val retrofit = Retrofit.Builder()
+            .baseUrl(bieBaseUrl)
+            .callFactory(client)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+        return retrofit.create(BieSearchClient::class.java)
     }
 
     private fun configureJooq(configuration: SeasonalCalendarConfiguration, environment: Environment, name: String): DSLContext {

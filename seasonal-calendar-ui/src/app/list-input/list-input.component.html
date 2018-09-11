@@ -1,0 +1,8 @@
+<div *ngFor="let stringValue of inputs; trackBy: trackByIndex; index as index; last as last;" class="input-group" [class.mb-1]="last">
+  <input type="text" class="form-control" name="{{name}}-{{index}}" [(ngModel)]="inputs[index]">
+  <div class="input-group-append">
+    <button class="btn btn-danger" (click)="deleteInput(index)">&times;</button>
+  </div>
+</div>
+<input type="text" class="form-control" [placeholder]="placeholder || ('Add ' + name)" id="{{id || name}}" [attr.name]="name" [name]="name" [(ngModel)]="newInput" (keydown.tab)="onKeydown($event)" (keypress)="onKeypress($event)" (blur)="onBlur($event)">
+

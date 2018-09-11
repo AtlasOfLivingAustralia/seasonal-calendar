@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {Calendar, ICalendar} from "./model/calendar";
 import { environment } from "../environments/environment";
 import {map} from "rxjs/operators";
+import {BieSearchResponse} from "./model/bie-search-response";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import {map} from "rxjs/operators";
 export class CalendarService {
 
   private readonly calendarsEndpoint : string = `${environment.api}calendars`;
+  private readonly searchEndpoint : string = `${environment.api}search/bie`;
   private readonly imageEndpoint: string = `${environment.api}images/upload`;
 
   constructor(private httpClient: HttpClient) { }
@@ -21,6 +23,10 @@ export class CalendarService {
 
   findCalendar(id: string) : Observable<ICalendar> {
     return this.httpClient.get<ICalendar>(`${this.calendarsEndpoint}/${id}`);
+  }
+
+  speciesSearch(query: string) : Observable<BieSearchResponse> {
+    return this.httpClient.get<BieSearchResponse>(`${this.searchEndpoint}`, { params : {'q': query} })
   }
 
   newCalendar() {

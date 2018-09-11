@@ -36,6 +36,9 @@ class SeasonalCalendarConfiguration : Configuration() {
     @JsonProperty("imagesBaseDir")
     var imagesBaseDir: String = "/data/seasonal-calendar/images"
 
+    @JsonProperty("bieBaseUrl")
+    val bieBaseUrl: String = "https://bie.ala.org.au/"
+
 }
 
 class JooqFactory {
