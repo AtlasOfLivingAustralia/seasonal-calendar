@@ -42,14 +42,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="calendar-image">Calendar image</label>
-                      <sc-image-upload id="calendar-image" label="Select image" accept="image/*" (select)="calendarImageChanged($event)" [multiple]="true"></sc-image-upload>
-                      <div *ngFor="let data of uploadingImages" class="media">
-                        <img class="mr-3" [src]="data.url || 'assets/loading.svg'" alt="Lorem ipsum" width="64" height="64">
-                        <div class="media-body">
-                          <h5 class="mt-0">{{data.filename}}</h5>
-                          <p>filesize: {{data.size}}</p>
-                        </div>
-                      </div>
+                      <sc-image-upload id="calendar-image" label="Select image" accept="image/*" [(imageUrl)]="calendar.imageUrl"></sc-image-upload>
                     </div>
                   </div>
                 </div>
@@ -112,7 +105,7 @@
                   <div class="col">
                     <div class="form-group">
                       <label for="organisationLogo">Organisation Logo</label>
-                      <input class="form-control" id="organisationLogo" name="organisationLogo" [(ngModel)]="calendar.organisationLogoUrl">
+                      <sc-image-upload id="organisationLogo" label="Select organisation logo" accept="image/*" [(imageUrl)]="calendar.organisationLogoUrl"></sc-image-upload>
                     </div>
                   </div>
                 </div>

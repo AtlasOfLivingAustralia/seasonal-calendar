@@ -1,13 +1,18 @@
 package au.org.ala.sc.resources
 
+import au.org.ala.sc.services.ImageService
 import com.google.common.hash.Hashing
 import com.google.common.hash.HashingInputStream
 import io.dropwizard.jersey.caching.CacheControl
+import org.apache.tika.Tika
 import org.glassfish.jersey.media.multipart.BodyPartEntity
+import org.glassfish.jersey.media.multipart.FormDataBodyPart
 import org.glassfish.jersey.media.multipart.FormDataMultiPart
+import org.imgscalr.Scalr
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
+import java.nio.file.Files
 import java.util.*
 import javax.ws.rs.*
 import javax.ws.rs.core.Context
@@ -16,10 +21,20 @@ import javax.ws.rs.core.Request
 import javax.ws.rs.core.Response
 
 @Path("images")
-class ImageResource(val baseDir: File) {
+class ImageResource(val baseDir: File, val imageService: ImageService) {
 
     companion object {
         val log = LoggerFactory.getLogger(ImageResource::class.java)
+        private val mediaTypeToExtension = mapOf(
+            "image/jpeg" to "jpg",
+            "image/png" to "png",
+            "image/gif" to "gif",
+            "image/bmp" to "bmp",
+            "image/tiff" to "tiff",
+            "image/webp" to "webp"
+        )
+        private val extensionToMediaType = mediaTypeToExtension.entries.associate { it.value to it.key }
+        private val tika = Tika()
     }
 
     @POST
@@ -28,51 +43,68 @@ class ImageResource(val baseDir: File) {
     @Produces(MediaType.APPLICATION_JSON)
     fun upload(multiPart: FormDataMultiPart) : List<String> {
         val fields = multiPart.getFields("images")
-        return fields.map { it.entity as? BodyPartEntity }.filterNotNull().map(this::saveFile)
+        return fields.map { it to it.entity as? BodyPartEntity }.filter { it.second != null }.map{ (part, entity) -> saveFile(part, entity!!) }
     }
 
     @GET
     @Path("{id}")
     @CacheControl(immutable = true)
-    @Produces("image/jpg")
-    fun download(@PathParam("id") id: String, @Context request: Request) : Response {
-        val file = File(baseDir, "$id.jpg")
+    @Produces("image/*")
+    fun download(@PathParam("id") id: String, @QueryParam("w") width: Int?, @QueryParam("h") height: Int?, @Context request: Request) : Response {
+        val file = File(baseDir, id)
         if (!file.canonicalFile.startsWith(baseDir.canonicalFile)) {
             throw WebApplicationException(400)
         }
-        val lastModified = Date(file.lastModified())
+        val resultFile = imageService.getImageFile(file, width, height)
+
+        val lastModified = Date(resultFile.lastModified())
         val builder = request.evaluatePreconditions()
-        if (builder == null)
-            return Response.ok(file).lastModified(lastModified).build()
-        else
-            throw WebApplicationException(builder.build())
+        return if (builder == null) {
+            if (!resultFile.exists()) {
+                throw WebApplicationException(404)
+            }
+            Response
+                .ok(resultFile)
+                .type(extensionToMediaType[resultFile.extension])
+                .lastModified(lastModified)
+                .header("Content-Disposition", "attachment; filename=${resultFile.name}")
+                .build()
+        } else
+            builder.build()
     }
 
-    private fun saveFile(entity: BodyPartEntity): String {
+    private fun checkContentType(contentType: String) = mediaTypeToExtension.containsKey(contentType)
+
+    private fun saveFile(data: FormDataBodyPart, entity: BodyPartEntity): String {
         val hashingInputStream = HashingInputStream(Hashing.murmur3_128(), entity.inputStream)
 
-        val tempFile = File.createTempFile("image", "jpg")
+        val tempFile = Files.createTempFile("image", "")
         try {
             hashingInputStream.use { hashingIn ->
-                tempFile.outputStream().use { out ->
+                tempFile.toFile().outputStream().use { out ->
                     hashingIn.copyTo(out)
                 }
             }
+            val contentType = tika.detect(tempFile)
+            if (!checkContentType(contentType)) {
+                throw IllegalStateException("Unknown content type $contentType")
+            }
+            val extension = mediaTypeToExtension[contentType]
             val id = hashingInputStream.hash().toString()
             log.debug("Uploaded file to {} with hash {}", tempFile, id)
-            val dest = File(baseDir, "$id.jpg")
+            val dest = File(baseDir, "$id.$extension")
             if (!dest.exists()) {
                 try {
-                    tempFile.copyTo(dest)
+                    Files.move(tempFile, dest.toPath())
                 } catch (e: IOException) {
                     dest.delete()
                     throw e
                 }
             }
             log.debug("Moved upload to destination {}", dest)
-            return id
+            return dest.name
         } finally {
-            tempFile.delete()
+            Files.deleteIfExists(tempFile)
             try {
                 entity.cleanup()
             } catch (e: Exception) {

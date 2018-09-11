@@ -7,9 +7,7 @@ import au.org.ala.sc.domain.jooq.tables.daos.SeasonDao
 import au.org.ala.sc.domain.jooq.tables.daos.UserRoleDao
 import au.org.ala.sc.resources.CalendarResource
 import au.org.ala.sc.resources.ImageResource
-import au.org.ala.sc.services.CalendarService
-import au.org.ala.sc.services.FeatureService
-import au.org.ala.sc.services.SeasonService
+import au.org.ala.sc.services.*
 import io.dropwizard.Application
 import io.dropwizard.db.PooledDataSourceFactory
 import io.dropwizard.flyway.FlywayBundle
@@ -52,6 +50,8 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
 
         val dsl = configureJooq(configuration, environment, "seasonal-calendars")
 
+        val imagesBaseDir = File(configuration.imagesBaseDir)
+
         val calendarDao = CalendarDao(dsl.configuration())
         val seasonDao = SeasonDao(dsl.configuration())
         val userRoleDao = UserRoleDao(dsl.configuration())
@@ -59,9 +59,10 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
         val featureService = FeatureService(profilesServiceClient)
         val seasonService = SeasonService(seasonDao, dsl, featureService, profilesServiceClient)
         val calendarService = CalendarService(calendarDao, seasonService, profilesServiceClient)
+        val imageService = ImageService(imagesBaseDir)
 
         val calendarResource = CalendarResource(calendarService)
-        val imageResource = ImageResource(File(configuration.imagesBaseDir))
+        val imageResource = ImageResource(imagesBaseDir, imageService)
 
         environment.jersey().apply {
             register(calendarResource)

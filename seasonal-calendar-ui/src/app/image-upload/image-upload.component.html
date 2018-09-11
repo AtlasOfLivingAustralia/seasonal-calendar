@@ -1,2 +1,13 @@
-<button [class]="class" (click)="selectFile()">{{label}}</button>
-<input #file type="file" hidden name="files[]" [accept]="accept" [attr.multiple]="multiple ? '' : null" (change)="select.emit($event)">
+<div #dropZone class="card mb-1" [class.bg-dark]="upload" [class.text-white]="upload" [class.dropzone]="!imageUrl && !upload" [class.dragging]="draggingFile" (dragenter)="onDragEnter($event)" (dragleave)="onDragLeave($event)" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+  <img class="card-img" [src]="cardImageUrl()">
+  <div *ngIf="upload" class="card-img-overlay">
+    <h5 class="card-title">{{upload.filename}}</h5>
+    <p class="card-text">Filesize: {{upload.size}}</p>
+    <ngb-progressbar type="success" [striped]="true" [animated]="true" [value]="upload.uploaded"></ngb-progressbar>
+    <button class="btn btn-sm btn-danger" (click)="cancelUpload()">&times;</button>
+  </div>
+</div>
+
+<button *ngIf="!imageUrl" [disabled]="upload" [class]="class" (click)="selectFile()">{{label}}</button>
+<input #file type="file" hidden name="files[]" [accept]="accept" (change)="imageChanged($event)">
+<button *ngIf="imageUrl" class="btn btn-outline-warning" (click)="setImageUrl('');">Remove image</button>

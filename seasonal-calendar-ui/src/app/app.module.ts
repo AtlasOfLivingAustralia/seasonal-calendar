@@ -2,7 +2,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import { HttpClientModule } from '@angular/common/http';
-import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbProgressbarModule, NgbTabsetModule, NgbModalModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +15,7 @@ import { PageNotFoundComponentComponent } from './page-not-found-component/page-
 import {ReportingErrorHandler} from "./shared/reporting-error-handler";
 import {windowProvider, WindowToken} from "./shared/window";
 import {Logger} from "./shared/logger.service";
+import { ImageUploadModalComponent } from './image-upload-modal/image-upload-modal.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ImageUploadComponent } from './image-upload/image-upload.component';
     AdminComponent,
     CalendarEditComponent,
     PageNotFoundComponentComponent,
-    ImageUploadComponent
+    ImageUploadModalComponent,
+    ImageUploadComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,13 @@ import { ImageUploadComponent } from './image-upload/image-upload.component';
     HttpClientModule,
     AppRoutingModule,
     LeafletModule,
-    NgbTabsetModule
+    NgbTabsetModule,
+    NgbProgressbarModule,
+    NgbModalModule,
+    NgbTypeaheadModule
+  ],
+  entryComponents: [
+    ImageUploadModalComponent
   ],
   providers: [
     { provide: WindowToken, useFactory: windowProvider },

@@ -1,0 +1,12 @@
+.card {
+  transition: height ease-in-out 0.1s, width ease-in-out 0.1s;
+}
+
+.dropzone {
+  transition: transform ease-in-out 0.1s
+}
+
+.dragging {
+  transform: scale(1.1, 1.1);
+  box-shadow: 0 .5rem 1rem rgba(#000, .15);
+}

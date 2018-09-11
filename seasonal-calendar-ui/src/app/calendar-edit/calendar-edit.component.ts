@@ -5,6 +5,8 @@ import {Season} from "../model/season";
 import {Feature} from "../model/feature";
 import {CalendarService} from "../calendar.service";
 import {Logger} from "../shared/logger.service";
+import {NgbActiveModal, NgbModal, NgbModalConfig, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
+import {ImageUploadModalComponent} from "../image-upload-modal/image-upload-modal.component";
 
 @Component({
   selector: 'sc-calendar-edit',
@@ -21,7 +23,8 @@ export class CalendarEditComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private calendarService: CalendarService,
-              private log: Logger) { }
+              private log: Logger,
+              private modalService: NgbModal) { }
 
   ngOnInit() {
 
@@ -71,54 +74,28 @@ export class CalendarEditComponent implements OnInit {
     item.getKey();
   }
 
-  uploadingImages: any[] = [];
-
-  calendarImageChanged($event) {
-    let files: FileList = $event.target.files;
-    for (let i = 0; i < files.length; ++i) {
-      let file = files.item(i);
-      this.startUploadingImage(file);
-      // file.
-    }
-    this.log.log($event);
+  trackByIndex(index, item) {
+    return index;
   }
 
-  private startUploadingImage(file: File) {
-    if (file) {
-      let uploading = {
-        filename: file.name,
-        size: file.size,
-        url: null
-      };
-      this.uploadingImages.push(uploading);
-      this.ensureSize(file, 64, 64, (url) => uploading.url = url);
-      // let reader = new FileReader();
-      // reader.addEventListener("load", () => {
-      //   this.uploadingImages.push(this.ensureSize(reader.result, 64, 64));
-      // }, false);
-      // reader.readAsArrayBuffer(file);
-    }
-  }
+  imageUploadModal(feature: IFeature) {
+    const modalOptions: NgbModalOptions = {
+      size: 'lg'
+    };
+    const modalRef = this.modalService.open(ImageUploadModalComponent, modalOptions);
+    modalRef.componentInstance.title = `Upload images for ${feature.name}`;
+    modalRef.componentInstance.label = "Select feature images";
+    modalRef.componentInstance.imageUrls = feature.imageUrls;
 
-  private ensureSize(file, width: number, height: number, callback) {
-    // create an off-screen canvas
-    const canvas = document.createElement('canvas'),
-      ctx = canvas.getContext('2d');
-
-
-    let img = new Image;
-    let url = URL.createObjectURL(file);
-    img.addEventListener("load", () => {
-      ctx.drawImage(img, 0, 0, width, height);
-
-      callback(canvas.toDataURL());
-      URL.revokeObjectURL(url);
+    modalRef.result.then((result) => {
+      if (result instanceof Array) {
+        feature.imageUrls = result;
+      } else {
+        this.log.log("Got non array close result", result);
+      }
+    }, (reason) => {
     });
-
-    img.src = url;
-    // set its dimension to target size
-    canvas.width = width;
-    canvas.height = height;
+  }
 
   }
 }
