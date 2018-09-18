@@ -1,18 +1,16 @@
 package au.org.ala.sc
 
 import au.org.ala.profiles.service.ProfileServiceClient
-import au.org.ala.profiles.service.moshi.MillisSinceEpochDateJsonAdapter
 import au.org.ala.sc.domain.jooq.tables.daos.CalendarDao
 import au.org.ala.sc.domain.jooq.tables.daos.RoleDao
 import au.org.ala.sc.domain.jooq.tables.daos.SeasonDao
 import au.org.ala.sc.domain.jooq.tables.daos.UserRoleDao
-import au.org.ala.sc.modules.InstrumentedOkHttpClient
 import au.org.ala.sc.resources.CalendarResource
 import au.org.ala.sc.resources.ImageResource
 import au.org.ala.sc.resources.SearchResource
 import au.org.ala.sc.services.*
-import com.codahale.metrics.MetricRegistry
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import io.dropwizard.Application
 import io.dropwizard.db.PooledDataSourceFactory
 import io.dropwizard.flyway.FlywayBundle
@@ -22,7 +20,6 @@ import io.dropwizard.lifecycle.Managed
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import okhttp3.Call
-import okhttp3.OkHttpClient
 import org.jooq.impl.DSL
 import java.io.File
 import org.eclipse.jetty.servlets.CrossOriginFilter
@@ -84,7 +81,7 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
      * Use a custom profile service client builder to use an instrumented client
      */
     private fun profileServiceClient(profileServiceBaseUrl: String, callFactory: Call.Factory): ProfileServiceClient {
-        val moshi = Moshi.Builder().add(Date::class.java, MillisSinceEpochDateJsonAdapter().nullSafe()).build()
+        val moshi = Moshi.Builder().add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe()).build()
         val retrofit = Retrofit.Builder()
             .baseUrl(profileServiceBaseUrl)
             .callFactory(callFactory)
@@ -108,6 +105,7 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
         environment.lifecycle().manage(dataSource)
 
         val dsl = DSL.using(dataSource, configuration.jooq.dialect)
+//        dsl.configuration().set(ThreadLocalTransactionProvider(dsl.configuration().connectionProvider()))
         environment.lifecycle().manage(object: Managed {
             override fun start() {}
 
