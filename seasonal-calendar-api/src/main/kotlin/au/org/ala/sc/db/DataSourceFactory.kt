@@ -12,6 +12,7 @@ import io.dropwizard.db.PooledDataSourceFactory
 import io.dropwizard.util.Duration
 import io.dropwizard.validation.MinDuration
 import io.dropwizard.validation.ValidationMethod
+import org.slf4j.LoggerFactory
 import java.io.PrintWriter
 import java.sql.Connection
 import java.util.*
@@ -23,6 +24,10 @@ import javax.validation.constraints.Min
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class DataSourceFactory : PooledDataSourceFactory {
+
+    companion object {
+        val log = LoggerFactory.getLogger(DataSourceFactory::class.java)
+    }
 
     var _driverClass: String? = null
     @JsonProperty override fun getDriverClass(): String? = _driverClass
@@ -110,7 +115,7 @@ class DataSourceFactory : PooledDataSourceFactory {
         TRANSACTION_NONE, TRANSACTION_READ_UNCOMMITTED, TRANSACTION_READ_COMMITTED, TRANSACTION_REPEATABLE_READ, TRANSACTION_SERIALIZABLE
     }
 
-    @Deprecated("")
+    @Deprecated("Leaving this unset will use Connection.isValid() instead")
     @JsonIgnore
     override fun getHealthCheckValidationQuery(): String? {
         return this.getValidationQuery()
@@ -119,7 +124,7 @@ class DataSourceFactory : PooledDataSourceFactory {
     @Deprecated("")
     @JsonIgnore
     override fun getHealthCheckValidationTimeout(): Optional<Duration> {
-        return this.getValidationQueryTimeout()
+        return this.validationQueryTimeout
     }
 
     @JsonProperty
@@ -171,66 +176,76 @@ class DataSourceFactory : PooledDataSourceFactory {
         config.dataSourceProperties = properties.toProperties()
         config.healthCheckProperties = healthCheckProperties.toProperties()
 
-        dataSourceClass?.let { config.dataSourceClassName = it }
-        url?.let { config.jdbcUrl = it }
+        fun <T> ((T) -> Unit).ifNotNull(value: T?) { value?.let { this@ifNotNull(value) } }
 
-        username?.let { config.username = it }
-        password?. let { config.password = it }
+        config::setDataSourceClassName.ifNotNull(dataSourceClass)
+        config::setJdbcUrl.ifNotNull(url)
 
-        isAutoCommit?.let { config.isAutoCommit = it }
+        config::setUsername.ifNotNull(username)
+        config::setPassword.ifNotNull(password)
 
-        connectionTimeout?.let { config.connectionTimeout = it.toMilliseconds() }
-        idleTimeout?.let { config.idleTimeout = it.toMilliseconds() }
+        config::setAutoCommit.ifNotNull(isAutoCommit)
 
-        maxLifetime?.let { config.maxLifetime = it.toMilliseconds() }
+        config::setConnectionTimeout.ifNotNull(connectionTimeout?.toMilliseconds())
+        config::setIdleTimeout.ifNotNull(idleTimeout?.toMilliseconds())
 
-        validationQuery?.let { config.connectionTestQuery = it }
+        config::setMaxLifetime.ifNotNull(maxLifetime?.toMilliseconds())
 
-        maximumPoolSize?.let { config.maximumPoolSize = it }
-        minimumIdle?.let { config.minimumIdle = it }
+        validationQuery?.let { validationQuery ->
+            log.warn("A validation query has been set, it's generally better to leave the connection validation to the Driver")
+            config.connectionTestQuery = validationQuery
+        }
 
-        healthCheckRegistry?.let { config.healthCheckRegistry = it }
+        config::setMaximumPoolSize.ifNotNull(maximumPoolSize)
+        config::setMinimumIdle.ifNotNull(minimumIdle)
+
+        config::setHealthCheckRegistry.ifNotNull(healthCheckRegistry)
         config.metricRegistry = metricRegistry
 
         config.poolName = name
 
         // infrequently used
-        initializationFailTimeout?.let { config.initializationFailTimeout = it.toMilliseconds() }
-        isolateInternalQueries?.let { config.isIsolateInternalQueries = it }
+        config::setInitializationFailTimeout.ifNotNull(initializationFailTimeout?.toMilliseconds())
+        config::setIsolateInternalQueries.ifNotNull(isolateInternalQueries)
 
         //allowPoolSuspension
 
-        readOnly?.let { config.isReadOnly = it }
+        config::setReadOnly.ifNotNull(readOnly)
 
         //registerMBeans
-        catalog?.let { config.catalog = it }
-        connectionInitSql?.let { config.connectionInitSql = it }
+        config::setCatalog.ifNotNull(catalog)
+        config::setConnectionInitSql.ifNotNull(connectionInitSql)
 
-        driverClass?.let { config.driverClassName = it }
+        config::setDriverClassName.ifNotNull(driverClass)
 
-        transactionIsolation?.let { config.transactionIsolation = it.toString() }
+        config::setTransactionIsolation.ifNotNull(transactionIsolation?.toString())
 
-        validationTimeout?.let { config.validationTimeout = it.toMilliseconds() }
-        leakDetectionThreshold?.let { config.leakDetectionThreshold = it.toMilliseconds() }
+        config::setValidationTimeout.ifNotNull(validationTimeout?.toMilliseconds())
+        config::setLeakDetectionThreshold.ifNotNull(leakDetectionThreshold?.toMilliseconds())
 
         //dataSource
 
-        schema?.let { config.schema = it }
+        config::setSchema.ifNotNull(schema)
 
         //threadFactory
 
-        scheduledExecutor?.let { config.scheduledExecutor = it }
+        config::setScheduledExecutor.ifNotNull(scheduledExecutor)
 
         return HikariManagedDataSource(config)
     }
 }
 
-class HikariManagedDataSource(private val hikariConfig: HikariConfig) : ManagedDataSource, DataSource {
+class HikariManagedDataSource(private val hikariConfig: HikariConfig, lazyMode: LazyThreadSafetyMode = LazyThreadSafetyMode.NONE) : ManagedDataSource, DataSource {
 
-    private lateinit var dataSource: HikariDataSource
+    companion object {
+        private val log = LoggerFactory.getLogger(HikariManagedDataSource::class.java)
+    }
+
+    private val dataSource: HikariDataSource by lazy(lazyMode) { HikariDataSource(hikariConfig) }
 
     override fun start() {
-        dataSource = HikariDataSource(hikariConfig)
+        val poolName = dataSource.poolName
+        log.info("Datasource {} is running {}", poolName, dataSource.isRunning)
     }
 
     override fun stop() {
