@@ -21,6 +21,7 @@ import io.dropwizard.forms.MultiPartBundle
 import io.dropwizard.lifecycle.Managed
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
+import okhttp3.Call
 import okhttp3.OkHttpClient
 import org.jooq.impl.DSL
 import java.io.File
@@ -52,9 +53,8 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
         addCors(environment, configuration)
 
         // TODO Daggerise
-        val okHttpClient = OkHttpClient.Builder().build()
-        val profilesServiceClient = profileServiceClient(configuration.profileServiceBaseUrl, configuration.profileServiceApiKey, okHttpClient, environment.metrics())
-        val searchClient = searchClient(configuration.bieBaseUrl, okHttpClient, environment.metrics())
+        val profilesServiceClient = profileServiceClient(configuration.profileServiceBaseUrl, configuration.httpClientFactory.build(environment.metrics(), "profile-service"))
+        val searchClient = searchClient(configuration.bieBaseUrl, configuration.httpClientFactory.build(environment.metrics(), "bie"))
 
         val dsl = configureJooq(configuration, environment, "seasonal-calendars")
 
@@ -66,7 +66,7 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
         val roleDao = RoleDao(dsl.configuration())
         val featureService = FeatureService(profilesServiceClient)
         val seasonService = SeasonService(seasonDao, dsl, featureService, profilesServiceClient)
-        val calendarService = CalendarService(calendarDao, seasonService, profilesServiceClient)
+        val calendarService = CalendarService(calendarDao, dsl, seasonService, profilesServiceClient, configuration.dataResourceUid)
         val imageService = ImageService(imagesBaseDir)
 
         val calendarResource = CalendarResource(calendarService)
@@ -83,27 +83,21 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
     /**
      * Use a custom profile service client builder to use an instrumented client
      */
-    private fun profileServiceClient(profileServiceBaseUrl: String, apiKey: String?, okHttpClient: OkHttpClient, metricRegistry: MetricRegistry): ProfileServiceClient {
-        val client = if (apiKey != null) {
-            okHttpClient.newBuilder().addInterceptor { it.proceed(it.request().newBuilder().addHeader(ProfileServiceClient.DEFAULT_API_KEY_HEADER, apiKey).build()) }.build()
-        } else {
-            okHttpClient
-        }
+    private fun profileServiceClient(profileServiceBaseUrl: String, callFactory: Call.Factory): ProfileServiceClient {
         val moshi = Moshi.Builder().add(Date::class.java, MillisSinceEpochDateJsonAdapter().nullSafe()).build()
         val retrofit = Retrofit.Builder()
             .baseUrl(profileServiceBaseUrl)
-            .callFactory(InstrumentedOkHttpClient(okHttpClient, metricRegistry, "profileServiceClient"))
+            .callFactory(callFactory)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
         return retrofit.create(ProfileServiceClient::class.java)
     }
 
-    private fun searchClient(bieBaseUrl: String, okHttpClient: OkHttpClient, registry: MetricRegistry): BieSearchClient {
-        val client = InstrumentedOkHttpClient(okHttpClient, registry, "bieSearchClient")
+    private fun searchClient(bieBaseUrl: String, callFactory: Call.Factory): BieSearchClient {
         val retrofit = Retrofit.Builder()
             .baseUrl(bieBaseUrl)
-            .callFactory(client)
+            .callFactory(callFactory)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
         return retrofit.create(BieSearchClient::class.java)

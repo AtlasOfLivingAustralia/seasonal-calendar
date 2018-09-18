@@ -11,3 +11,12 @@ database:
 flyway:
   outOfOrder: false
 profileServiceBaseUrl: https://devt.ala.org.au/profile-service/
+dataResourceUid: dr382
+httpClients:
+  named:
+    profile-service:
+      readTimeout: PT30s
+      headers:
+        apiKey: 1234567890
+logging:
+  level: INFO

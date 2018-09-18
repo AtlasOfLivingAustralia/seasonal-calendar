@@ -3,11 +3,10 @@ package au.org.ala.sc.services
 import au.org.ala.jooq.postgres.Range
 import au.org.ala.profiles.service.ProfileServiceClient
 import au.org.ala.sc.api.SeasonDto
-import au.org.ala.sc.domain.jooq.Tables
 import au.org.ala.sc.domain.jooq.tables.Season.SEASON
 import au.org.ala.sc.domain.jooq.tables.daos.SeasonDao
 import au.org.ala.sc.domain.jooq.tables.pojos.Season
-import au.org.ala.sc.domain.jooq.tables.records.SeasonRecord
+import org.jooq.Configuration
 import org.jooq.DSLContext
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -22,8 +21,14 @@ class SeasonService(
         val log = LoggerFactory.getLogger(SeasonService::class.java)
     }
 
-    fun getSeasonsForCalendarId(collectionUuid: UUID) =
-        seasonDao.fetchByCollectionUuid(collectionUuid).map(this::convertSeasonToDto)
+    fun getSeasonsForCalendarId(collectionUuid: UUID): List<SeasonDto> {
+        val seasons = seasonDao.fetchByCollectionUuid(collectionUuid)
+        return seasons.map { season ->
+            val dto = convertSeasonToDto(season)
+            val features = season.profileUuids.map { profileUuid -> featureService.getFeature(collectionUuid, profileUuid) }
+            dto.copy(features = features)
+        }
+    }
 
     fun getSeason(collectionUuid: UUID, name: String) =
         ctx.selectFrom(SEASON).where(SEASON.COLLECTION_UUID.eq(collectionUuid)).and(SEASON.LOCAL_NAME.eq(name)).fetchOne().into(Season::class.java)
@@ -33,11 +38,22 @@ class SeasonService(
 
     fun getSeasonWithFeatures(collectionUuid: UUID, name: String) {
         val season = getSeason(collectionUuid, name)
-        val profiles = season.profileUuids.map{ featureService.getFeature(collectionUuid, it) }
-        convertSeasonToDto(season).copy(features = profiles)
+        val features = season.profileUuids.map{ featureService.getFeature(collectionUuid, it) }
+        convertSeasonToDto(season).copy(features = features)
     }
 
-    fun convertSeasonToDto(season: Season) =
+    fun saveSeason(collectionUuid: UUID, dto: SeasonDto, txConfig: Configuration? = null) {
+
+        if (txConfig != null) {
+            internalSaveSeason(collectionUuid, dto, txConfig)
+        } else {
+            ctx.transaction { config ->
+                internalSaveSeason(collectionUuid, dto, config)
+            }
+        }
+    }
+
+    private fun convertSeasonToDto(season: Season) =
         SeasonDto(
             id = season.id,
             localName = season.localName,
@@ -49,7 +65,7 @@ class SeasonService(
             features = emptyList()
         )
 
-    fun convertDtoToSeason(collectionUuid: UUID, dto: SeasonDto) =
+    private fun convertDtoToSeason(collectionUuid: UUID, dto: SeasonDto, featureIds: List<UUID>) =
             Season(
                 dto.id,
                 collectionUuid,
@@ -58,23 +74,28 @@ class SeasonService(
                 Range(dto.startMonth, dto.endMonth),
                 dto.weatherIcons,
                 dto.description,
-                dto.features.map { it.profileUuid }.filterNotNull().toTypedArray()
+                featureIds.toTypedArray()
             )
 
-    fun saveSeason(collectionUuid: UUID, dto: SeasonDto) {
-        ctx.transaction { ->
-
-//            val season = if (dto.id != null) seasonDao.findById(dto.id) else null
-            if (seasonDao.existsById(dto.id)) {
-                val season = convertDtoToSeason(collectionUuid, dto)
-                seasonDao.update(season)
+    private fun internalSaveSeason(collectionUuid: UUID, dto: SeasonDto, txConfig: Configuration) {
+        val features = dto.features.map { feature ->
+            // would need to pass txConfig here if feature service required it
+            return@map if (feature.profileUuid == null) {
+                featureService.createFeature(collectionUuid, feature)
             } else {
-                val season = convertDtoToSeason(collectionUuid, dto)
-                seasonDao.insert(season)
+                featureService.updateFeature(collectionUuid, feature)
+                feature.profileUuid
             }
-            dto.features.forEach { feature ->
-                featureService.saveFeature(collectionUuid, feature)
-            }
+        }
+
+        val txSeasonDao = SeasonDao(txConfig)
+
+        if (dto.id != null && txSeasonDao.existsById(dto.id)) {
+            val season = convertDtoToSeason(collectionUuid, dto, features)
+            txSeasonDao.update(season)
+        } else {
+            val season = convertDtoToSeason(collectionUuid, dto, features)
+            txSeasonDao.insert(season)
         }
     }
 

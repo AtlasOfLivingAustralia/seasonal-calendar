@@ -13,36 +13,39 @@ class ImageService(private val baseDir: File) {
         val baseName = original.nameWithoutExtension
         val ext = original.extension
 
-        if ((width != null) and (height != null)) {
-            val newFile = File(baseDir, "$baseName-w$width-h$height.$ext")
-            if (!newFile.exists()) {
-                val img = ImageIO.read(original)
-                val ratio = width!!.toDouble() / height!!.toDouble()
-                val cropped = centerCrop(img, ratio)
-                val scaled = Scalr.resize(cropped, width, height)
-                ImageIO.write(scaled, ext, newFile)
+        when {
+            (width != null) and (height != null) -> {
+                val newFile = File(baseDir, "$baseName-w$width-h$height.$ext")
+                if (!newFile.exists()) {
+                    val img = ImageIO.read(original)
+                    val ratio = width!!.toDouble() / height!!.toDouble()
+                    val cropped = centerCrop(img, ratio)
+                    val scaled = Scalr.resize(cropped, width, height)
+                    ImageIO.write(scaled, ext, newFile)
+                }
+                return newFile
             }
-            return newFile
-        } else if (width != null) {
-            val newFile = File(baseDir, "$baseName-w$width.$ext")
-            if (!newFile.exists()) {
-                val img = ImageIO.read(original)
-                val scaledHeight = (width.toDouble() * (img.height.toDouble() / img.width.toDouble())).roundToInt()
-                val scaled = Scalr.resize(img, width, scaledHeight)
-                ImageIO.write(scaled, ext, newFile)
+            width != null -> {
+                val newFile = File(baseDir, "$baseName-w$width.$ext")
+                if (!newFile.exists()) {
+                    val img = ImageIO.read(original)
+                    val scaledHeight = (width.toDouble() * (img.height.toDouble() / img.width.toDouble())).roundToInt()
+                    val scaled = Scalr.resize(img, width, scaledHeight)
+                    ImageIO.write(scaled, ext, newFile)
+                }
+                return newFile
             }
-            return newFile
-        } else if (height != null) {
-            val newFile = File(baseDir, "$baseName-h$height.$ext")
-            if (!newFile.exists()) {
-                val img = ImageIO.read(original)
-                val scaledWidth = (height.toDouble() * (img.width.toDouble() / img.height.toDouble())).roundToInt()
-                val scaled = Scalr.resize(img, scaledWidth, height)
-                ImageIO.write(scaled, ext, newFile)
+            height != null -> {
+                val newFile = File(baseDir, "$baseName-h$height.$ext")
+                if (!newFile.exists()) {
+                    val img = ImageIO.read(original)
+                    val scaledWidth = (height.toDouble() * (img.width.toDouble() / img.height.toDouble())).roundToInt()
+                    val scaled = Scalr.resize(img, scaledWidth, height)
+                    ImageIO.write(scaled, ext, newFile)
+                }
+                return newFile
             }
-            return newFile
-        } else {
-            return original
+            else -> return original
         }
 
 

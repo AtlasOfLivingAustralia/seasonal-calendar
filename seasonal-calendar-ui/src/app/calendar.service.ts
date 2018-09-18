@@ -3,7 +3,6 @@ import {HttpClient, HttpEvent} from "@angular/common/http";
 import { Observable } from 'rxjs';
 import {Calendar, ICalendar} from "./model/calendar";
 import { environment } from "../environments/environment";
-import {map} from "rxjs/operators";
 import {BieSearchResponse} from "./model/bie-search-response";
 
 @Injectable({

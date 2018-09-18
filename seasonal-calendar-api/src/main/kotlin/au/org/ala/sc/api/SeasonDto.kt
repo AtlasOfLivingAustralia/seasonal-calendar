@@ -1,5 +1,7 @@
 package au.org.ala.sc.api
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 /*
 Season field    |   Is required?    |   Collection/Profile field    |  Comments
 Language or Local name  |   Mandatory   |   Local name  |
@@ -8,6 +10,7 @@ English months  |   Mandatory   |   Months  |
 Weather icons   |   Optional    |   Icon    |
 Season description  |   Mandatory   |   Season description
 */
+@JsonIgnoreProperties("tempKey")
 data class SeasonDto(
     val id: Int?,
     val localName: String,

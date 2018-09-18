@@ -23,7 +23,7 @@ export interface ICalendar {
   developmentReason: string;
   limitations: string;
   licenceTerms: string;
-  latitiude: number;
+  latitude: number;
   longitude: number;
   zoom: number;
   languageGroup: string;

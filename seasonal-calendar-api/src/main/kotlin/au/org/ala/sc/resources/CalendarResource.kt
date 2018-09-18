@@ -1,5 +1,6 @@
 package au.org.ala.sc.resources
 
+import au.org.ala.sc.api.CalendarSavedDto
 import au.org.ala.sc.api.SeasonalCalendarDto
 import au.org.ala.sc.services.CalendarService
 import javax.ws.rs.*
@@ -31,9 +32,9 @@ class CalendarResource(
         }
 
     @POST
-    fun insertCalendar(seasonalCalendarDto: SeasonalCalendarDto) : Response {
-        calendarService.saveCalendar(seasonalCalendarDto)
-        return Response.noContent().build()
+    fun insertCalendar(seasonalCalendarDto: SeasonalCalendarDto) : CalendarSavedDto {
+        val uuid = calendarService.insertCalendar(seasonalCalendarDto)
+        return CalendarSavedDto(uuid.toString())
     }
 
     @POST

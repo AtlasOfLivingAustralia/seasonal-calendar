@@ -1,5 +1,8 @@
 package au.org.ala.sc.api
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
+@JsonIgnoreProperties("tempKey")
 data class SeasonalCalendarDto(
     val collectionUuid: String,
     val shortName: String,
@@ -22,10 +25,14 @@ data class SeasonalCalendarDto(
     val developmentReason: String,
     val limitations: String,
     val licenceTerms: String,
-    val latitude: Double,
-    val longitude: Double,
-    val zoom: Int,
+    val latitude: Double?,
+    val longitude: Double?,
+    val zoom: Int?,
     val languageGroup: String,
     val published: Boolean,
     val seasons: List<SeasonDto> = emptyList()
+)
+
+data class CalendarSavedDto(
+    val collectionUuid: String
 )

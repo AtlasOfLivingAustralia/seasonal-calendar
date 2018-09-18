@@ -4,7 +4,9 @@ import au.org.ala.sc.services.BieSearchClient
 import au.org.ala.sc.services.BieSearchResponse
 import org.slf4j.LoggerFactory
 import javax.ws.rs.*
+import javax.ws.rs.core.MediaType
 
+@Produces(MediaType.APPLICATION_JSON)
 @Path("search")
 class SearchResource(private val searchClient: BieSearchClient) {
 
