@@ -179,9 +179,6 @@
                 </div>
               </div>
             </div>
-            <!--Longtitude: {{calendar.longitude}}
-            Latitude: {{calendar.latitude}}-->
-            <sc-calendar-map [calendar]="calendar" [mapReadonly]="false"></sc-calendar-map>
           </ng-template>
         </ngb-tab>
         <ngb-tab title="Language Group">
@@ -196,15 +193,7 @@
               <input class="form-control" id="youtubeId" name="youtubeId" [(ngModel)]="calendar.youtubeId">
             </div>
 
-            <div class="form-group">
-              <label for="longitude">Longitude</label>
-              <input class="form-control" id="longitude" name="longitude" [(ngModel)]="calendar.longitude">
-            </div>
-
-            <div class="form-group">
-              <label for="latitude">Latitude</label>
-              <input class="form-control" id="latitude" name="latitude" [(ngModel)]="calendar.latitude">
-            </div>
+            <sc-calendar-map [(latitude)]="calendar.latitude" [(longitude)]="calendar.longitude" [(zoom)]="calendar.zoom" [mapReadonly]="false"></sc-calendar-map>
           </ng-template>
         </ngb-tab>
         <ngb-tab title="Seasons">
@@ -292,7 +281,6 @@
                         <option value="starry">Starry</option>
                         <option value="stormy">Stormy</option>
                       </select>
-                      <!--<input class="form-control" name="season-weather-icons-{{seasonIndex}}" [(ngModel)]="season.weatherIcons">-->
                     </div>
                   </div>
                 </div>
@@ -308,57 +296,54 @@
 
 
                 <div class="card-columns">
-                  <div class="card bg-dark text-white" *ngFor="let feature of season.features; trackBy: trackByKey; index as featureIndex">
+                  <sc-feature-edit *ngFor="let feature of season.features; trackBy: trackByKey; index as featureIndex" [feature]="feature"></sc-feature-edit>
+                  <!--<div class="card bg-dark text-white" >-->
 
-
-                    <!--<div class="">-->
-
-                      <div class="card-header">
-                        <button class="btn btn-danger btn-sm float-right" (click)="deleteFeature(season, featureIndex)" aria-label="Delete feature">&times;</button>
-                        Feature: {{feature.name || "New feature"}}
-                      </div>
-
-                      <div class="card-body">
-
-                        <div class="form-group">
-                          <label>Feature name (Language)</label>
-                          <input class="form-control" name="feature-name-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.name">
-                        </div>
-
-                        <div class="form-group">
-                          <label>Feature name (English)</label>
-                          <input class="form-control" name="feature-alternateName-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.commonName">
-                        </div>
-
-                        <div class="form-group">
-                          <label>Feature species</label>
-                          <input class="form-control" name="feature-species-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.scientificName" [class.is-invalid]="searchFailed" [ngbTypeahead]="search">
-                          <span *ngIf="searching">searching...</span>
-                          <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
-                        </div>
-
-                        <div class="form-group">
-                          <label>Feature images</label>
-                          <div class="form-row">
-                            <div *ngFor="let imageUrl of feature.imageUrls; trackBy: trackByIndex" class="col-xl-3 col-lg-4 col-md-6 mb-1">
-                              <img class="img-fluid" [src]="imageUrl">
-                            </div>
-                          </div>
-                          <button class="btn btn-secondary" (click)="imageUploadModal(feature)">Add images</button>
-                        </div>
-
-                        <div class="form-group">
-                          <label>Feature description</label>
-                          <textarea class="form-control" name="feature-description-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.description"></textarea>
-                        </div>
-                      </div>
-
-                    <div class="card-footer">
-                      <button class="btn btn-danger btn-sm" (click)="deleteFeature(season, featureIndex)">Delete {{ feature.name || 'feature' }}</button>
-                    </div>
-
+                    <!--<div class="card-header">-->
+                      <!--<button class="btn btn-danger btn-sm float-right" (click)="deleteFeature(season, featureIndex)" aria-label="Delete feature">&times;</button>-->
+                      <!--Feature: {{feature.name || "New feature"}}-->
                     <!--</div>-->
-                  </div>
+
+                    <!--<div class="card-body">-->
+
+                      <!--<div class="form-group">-->
+                        <!--<label>Feature name (Language)</label>-->
+                        <!--<input class="form-control" name="feature-name-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.name">-->
+                      <!--</div>-->
+
+                      <!--<div class="form-group">-->
+                        <!--<label>Feature name (English)</label>-->
+                        <!--<input class="form-control" name="feature-alternateName-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.commonName">-->
+                      <!--</div>-->
+
+                      <!--<div class="form-group">-->
+                        <!--<label>Feature species</label>-->
+                        <!--<input class="form-control" name="feature-species-{{seasonIndex}}-{{featureIndex}}" [(ngModel)]="feature.scientificNameGuid" [class.is-invalid]="searchFailed" [ngbTypeahead]="search">-->
+                        <!--<span *ngIf="searching">searching...</span>-->
+                        <!--<div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>-->
+                      <!--</div>-->
+
+                      <!--<div class="form-group">-->
+                        <!--<label>Feature images</label>-->
+                        <!--<div class="form-row">-->
+                          <!--<div *ngFor="let imageUrl of feature.imageUrls; trackBy: trackByIndex" class="col-xl-3 col-lg-4 col-md-6 mb-1">-->
+                            <!--<img class="img-fluid" [src]="imageUrl">-->
+                          <!--</div>-->
+                        <!--</div>-->
+                        <!--<button class="btn btn-secondary" (click)="imageUploadModal(feature)">Add images</button>-->
+                      <!--</div>-->
+
+                      <!--<div class="form-group">-->
+                        <!--<label>Feature description</label>-->
+                        <!--<textarea class="form-control" name="feature-description-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.description"></textarea>-->
+                      <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="card-footer">-->
+                      <!--<button class="btn btn-danger btn-sm" (click)="deleteFeature(season, featureIndex)">Delete {{ feature.name || 'feature' }}</button>-->
+                    <!--</div>-->
+
+                  <!--</div>-->
 
                 </div>
 

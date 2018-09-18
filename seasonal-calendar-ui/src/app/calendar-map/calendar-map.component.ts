@@ -1,9 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, Input, Output, EventEmitter, NgZone} from '@angular/core';
 import * as L from 'leaflet';
-import { Calendar } from '../model/calendar';
-import zoom = L.control.zoom;
-import {control, latLng, LeafletMouseEvent, marker} from "leaflet";
-import layers = control.layers;
+import {LeafletEvent} from "leaflet";
+
 
 @Component({
   selector: 'sc-calendar-map',
@@ -12,11 +10,17 @@ import layers = control.layers;
 })
 export class CalendarMapComponent {
 
-  @Input() calendar: Calendar;
+  @Input() latitude: number;
+  @Output() latitudeChange = new EventEmitter<number>();
+  @Input() longitude: number;
+  @Output() longitudeChange = new EventEmitter<number>();
+  @Input() zoom: number;
+  @Output() zoomChange = new EventEmitter<number>();
+
   @Input() mapReadonly: boolean;
 
-  mapLat = this.calendar && this.calendar.latitude ? this.calendar.latitude : -28;
-  mapLng = this.calendar && this.calendar.longitude ? this.calendar.longitude : 134;
+  mapLat = this.latitude ? this.latitude : -28;
+  mapLng = this.longitude ? this.longitude : 134;
 
   //baseMap = 'https://toolserver.org/tiles/hikebike/${z}/${x}/${y}.png';
  // baseMap = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -72,23 +76,29 @@ export class CalendarMapComponent {
     },
   };
 
+  private map: L.Map;
+
   constructor(
+    private zone: NgZone
   ) { }
 
   onMapReady(map: L.Map) {
+    this.map = map;
     console.log('onMapReady');
     map.invalidateSize(false);
    // map.scrollWheelZoom.disable();
-    map.fitBounds(
-         [[-43.6345972634, 113.338953078], [-10.6681857235, 153.569469029]], {minZoom: 4, maxZoom: 15}
-    map.setMaxBounds([[-43.6345972634, 113.338953078], [-10.6681857235, 153.569469029]]);
+
+    let bounds: L.LatLngBoundsExpression = [[-43.6345972634, 113.338953078], [-10.6681857235, 153.569469029]];
+    let options = {minZoom: 4, maxZoom: 15};
+    map.fitBounds(bounds, options);
+    map.setMaxBounds(bounds);
 
     // Add listener when on Draw Create
     map.on( L.Draw.Event.CREATED, <LeafletDrawEvent> (e) => {
       map.eachLayer(layer =>  {
         if (layer instanceof L.Marker) {
           if (layer != e.layer) {
-            console.log("Delete": + layer.getLatLng());
+            console.log("Delete:" + layer.getLatLng());
             map.removeLayer(layer);
           }
         }
@@ -99,8 +109,8 @@ export class CalendarMapComponent {
       map.eachLayer(layer =>  {
         if (layer instanceof L.Marker) {
           console.log(layer.getLatLng());
-          this.calendar.latitude = layer.getLatLng().lat;
-          this.calendar.longitude = layer.getLatLng().lng;
+          this.updateLatitude(layer.getLatLng().lat);
+          this.updateLongitude(layer.getLatLng().lng);
         }
 
       });
@@ -108,5 +118,29 @@ export class CalendarMapComponent {
 
   };
 
+  mapZoomChange($event: LeafletEvent) {
+    console.log("mapZoomChange");
+    let zoom = this.map.getZoom();
+    console.log(`zoom is ${zoom}`);
+    // don't need to run this in an angular zone because
+    // the ngx-leaflet emitter it's bound to already does it.
+    this.zoom = zoom;
+    this.zoomChange.emit(zoom);
+  }
 
+  private updateLatitude(latitude: number) {
+    this.latitude = latitude;
+    this.handleUpdate(latitude, this.latitudeChange);
+  }
+
+  private updateLongitude(longitude: number) {
+    this.longitude = longitude;
+    this.handleUpdate(longitude, this.longitudeChange);
+  }
+
+  private handleUpdate<T>(value: T, change: EventEmitter<T>) {
+    if (change.observers.length > 0) {
+      this.zone.run(() => change.emit(value));
+    }
+  }
 }

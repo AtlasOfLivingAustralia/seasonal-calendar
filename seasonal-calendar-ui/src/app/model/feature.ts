@@ -5,6 +5,7 @@ export interface IFeature {
   name: string;
   commonName: string | null | undefined;
   scientificName: string | null | undefined;
+  scientificNameGuid: string | null | undefined;
   description: string;
   imageUrls: string[];
 }
@@ -18,6 +19,7 @@ export class Feature implements IFeature {
     public name: string = '',
     public commonName: string | null | undefined = '',
     public scientificName: string | null | undefined = '',
+    public scientificNameGuid: string | null | undefined = '',
     public description: string = '',
     public imageUrls: string[] = []
   ) { }
@@ -28,6 +30,7 @@ export class Feature implements IFeature {
       feature.name,
       feature.commonName,
       feature.scientificName,
+      feature.scientificNameGuid,
       feature.description,
       feature.imageUrls.map((value) => value)
     );

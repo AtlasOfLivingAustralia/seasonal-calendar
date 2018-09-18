@@ -34,7 +34,7 @@ export class CalendarService {
 
   save(calendar: Calendar) {
     let endpoint = `${this.calendarsEndpoint}${calendar.collectionUuid ? `/${calendar.collectionUuid}` : ''}`;
-    return this.httpClient.post(endpoint, calendar);
+    return this.httpClient.post(endpoint, this.sanitizeCalendarForUpload(calendar));
   }
 
   uploadImages(files/*: FileList*/): Observable<HttpEvent<Object>> {
@@ -50,5 +50,9 @@ export class CalendarService {
       responseType: 'json',
       withCredentials: true
     });
+  }
+
+  private sanitizeCalendarForUpload(calendar: ICalendar): ICalendar {
+    return Calendar.fromJson(calendar)
   }
 }

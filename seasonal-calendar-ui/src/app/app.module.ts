@@ -11,14 +11,15 @@ import { CalendarsGalleryComponent } from './calendars-gallery/calendars-gallery
 import { CalendarLandingComponent } from './calendar-landing/calendar-landing.component';
 import { AdminComponent } from './admin/admin.component';
 import { CalendarEditComponent } from './calendar-edit/calendar-edit.component';
-import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component';
-import {ReportingErrorHandler} from "./shared/reporting-error-handler";
-import {windowProvider, WindowToken} from "./shared/window";
-import {Logger} from "./shared/logger.service";
+import { FeatureEditComponent } from './feature-edit/feature-edit.component';
 import { ImageUploadModalComponent } from './image-upload-modal/image-upload-modal.component';
 import { ImageUploadComponent } from './image-upload/image-upload.component';
 import { ListInputComponent } from './list-input/list-input.component';
 import { CalendarMapComponent } from './calendar-map/calendar-map.component';
+import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component';
+import {ReportingErrorHandler} from "./shared/reporting-error-handler";
+import {windowProvider, WindowToken} from "./shared/window";
+import {Logger} from "./shared/logger.service";
 
 @NgModule({
   declarations: [
@@ -30,8 +31,9 @@ import { CalendarMapComponent } from './calendar-map/calendar-map.component';
     PageNotFoundComponentComponent,
     ImageUploadModalComponent,
     ImageUploadComponent,
-    ListInputComponent
-    CalendarMapComponent
+    ListInputComponent,
+    CalendarMapComponent,
+    FeatureEditComponent
   ],
   imports: [
     BrowserModule,

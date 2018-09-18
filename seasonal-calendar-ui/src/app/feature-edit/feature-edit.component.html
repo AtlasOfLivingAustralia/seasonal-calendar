@@ -1,3 +1,60 @@
-<p>
-  feature works!
-</p>
+<div class="card bg-dark text-white">
+
+  <div class="card-header">
+    <button class="btn btn-danger btn-sm float-right" (click)="deleteFeature()" aria-label="Delete feature">&times;</button>
+    Feature: {{feature.name || "New feature"}}
+  </div>
+
+  <div class="card-body">
+
+    <div class="form-group">
+      <label>Feature name (Language)</label>
+      <input class="form-control" name="feature-name" required [(ngModel)]="feature.name">
+    </div>
+
+    <div class="form-group">
+      <label>Feature species search</label>
+      <input class="form-control" name="feature-species" [(ngModel)]="selectedResponse" [class.is-invalid]="searchFailed"
+             [ngbTypeahead]="search" [editable]="false" [inputFormatter]="searchInputFormatter" [resultFormatter]="searchInputFormatter"
+             [showHint]="true" [focusFirst]="true">
+      <span *ngIf="searching">searching...</span>
+      <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
+    </div>
+
+
+    <div class="form-group">
+      <label>Feature scientific name</label>
+      <input readonly class="form-control" name="feature-sci-name" [value]="feature.scientificName">
+    </div>
+
+    <div class="form-group">
+      <label>Feature scientific name guid</label>
+      <input readonly class="form-control" name="feature-sci-guid" [value]="feature.scientificNameGuid">
+    </div>
+
+    <div class="form-group">
+      <label>Feature name (English)</label>
+      <input class="form-control" name="feature-alternateName" required [(ngModel)]="feature.commonName">
+    </div>
+
+    <div class="form-group">
+      <label>Feature images</label>
+      <div class="form-row">
+        <div *ngFor="let imageUrl of feature.imageUrls; trackBy: trackByIndex" class="col-xl-3 col-lg-4 col-md-6 mb-1">
+          <img class="img-fluid" [src]="imageUrl">
+        </div>
+      </div>
+      <button class="btn btn-secondary" (click)="imageUploadModal(feature)">Add images</button>
+    </div>
+
+    <div class="form-group">
+      <label>Feature description</label>
+      <textarea class="form-control" name="feature-description-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.description"></textarea>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <button class="btn btn-danger btn-sm" (click)="deleteFeature(season, featureIndex)">Delete {{ feature.name || 'feature' }}</button>
+  </div>
+
+</div>

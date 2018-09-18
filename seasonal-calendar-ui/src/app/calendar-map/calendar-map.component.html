@@ -1,33 +1,15 @@
-<!--Calendar Map
-<div *ngIf="calendar">
-  <h2>{{calendar.name | uppercase}} Details</h2>
-  Map ReadOnly {{ mapReadonly }}
-</div>-->
+<div class="map"
+ leaflet style="height: 450px;"
+ [leafletOptions]="options"
+ (leafletMapReady)="onMapReady($event)"
+ [leafletLayers]="layers"
+ (leafletMapZoomEnd)="mapZoomChange($event)">
 
-
-<!--Longtitude: {{calendar.longitude}}
-Latitude: {{calendar.latitude}}-->
-<div class="container"  style="margin-top: 30px; margin-bottom: 30px">
-  <div class="row">
-
-    <!-- Map -->
-    <div class="col-sm-12">
-
-      <div class="map"
-       leaflet style="height: 450px;"
-       [leafletOptions]="options"
-       (leafletMapReady)="onMapReady($event)"
-       [leafletLayers]="layers">
-
-        <div *ngIf="!mapReadonly"
-          leafletDraw
-          [leafletDrawOptions]="drawOptions">
-        </div>
-
-      </div>
-    </div>
+  <div *ngIf="!mapReadonly"
+    leafletDraw
+    [leafletDrawOptions]="drawOptions">
   </div>
-</div>
 
+</div>
 
 
