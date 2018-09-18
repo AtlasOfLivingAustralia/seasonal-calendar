@@ -170,8 +170,8 @@ class FeatureService(
             profileUuid = UUID.fromString(profile.uuid),
             name = profile.scientificName,
             commonName = profile.attributes.textValue("commonName"),
-            scientificName = profile.matchedName.scientificName,
-            scientificNameGuid = profile.matchedName.guid,
+            scientificName = profile.matchedName?.scientificName ?: "",
+            scientificNameGuid = profile.matchedName?.guid ?: "",
             description = profile.attributes.textValue("description"),
             imageUrls = profile.privateImages.map { it.imageId }
         )
