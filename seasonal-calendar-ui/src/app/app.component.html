@@ -1,10 +1,5 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<nav class="site-header sticky-top py-1">
-  <div class="container d-flex flex-column flex-md-row justify-content-between">
-    <a class="py-2" routerLink="" routerLinkActive="active">SC</a>
-    <a class="py-2" *ngFor="let calendar of calendars$ | async as calendars" routerLink="/{{calendar.name}}" routerLinkActive="active">{{calendar.name}}</a>
-  </div>
-</nav>
+<ngx-loading-bar [includeSpinner]="false"></ngx-loading-bar>
+<sc-navbar></sc-navbar>
 
 <div class="container">
   <router-outlet></router-outlet>

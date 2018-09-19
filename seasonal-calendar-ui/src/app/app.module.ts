@@ -20,6 +20,9 @@ import { PageNotFoundComponentComponent } from './page-not-found-component/page-
 import {ReportingErrorHandler} from "./shared/reporting-error-handler";
 import {windowProvider, WindowToken} from "./shared/window";
 import {Logger} from "./shared/logger.service";
+import { NavbarComponent } from './navbar/navbar.component';
+import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
+import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
 
 @NgModule({
   declarations: [
@@ -33,7 +36,8 @@ import {Logger} from "./shared/logger.service";
     ImageUploadComponent,
     ListInputComponent,
     CalendarMapComponent,
-    FeatureEditComponent
+    FeatureEditComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +49,9 @@ import {Logger} from "./shared/logger.service";
     NgbTabsetModule,
     NgbProgressbarModule,
     NgbModalModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    LoadingBarHttpClientModule,
+    LoadingBarRouterModule
   ],
   entryComponents: [
     ImageUploadModalComponent
