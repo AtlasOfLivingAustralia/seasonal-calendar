@@ -18,7 +18,7 @@
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <label for="shortName">Short Name</label>
+                      <label for="shortName">Short Name <fa-icon icon="question-circle" ngbTooltip="A short version of the name to use in the calendar URL, should be lower case"></fa-icon></label>
                       <input class="form-control" id="shortName" name="shortName" [(ngModel)]="calendar.shortName">
                     </div>
                   </div>
@@ -26,7 +26,7 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label for="description">Description</label>
+                      <label for="description">Description <fa-icon icon="question-circle" ngbTooltip="A few words or a sentence describing the calendar"></fa-icon></label>
                       <textarea class="form-control" id="description" name="description" [(ngModel)]="calendar.description"></textarea>
                     </div>
                   </div>
@@ -35,13 +35,13 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label for="website">Calendar Website</label>
+                      <label for="website">Calendar Website <fa-icon icon="question-circle" ngbTooltip="Provide the URL address for the calendar project especially if there is additional associated information about the calendar and its development"></fa-icon></label>
                       <input type="url" class="form-control" id="website" name="website" [(ngModel)]="calendar.websiteUrl">
                     </div>
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <label for="calendar-image">Calendar image</label>
+                      <label for="calendar-image">Calendar image <fa-icon icon="question-circle" ngbTooltip="An image to be used as the thumbnail image for the calendar"></fa-icon></label>
                       <sc-image-upload id="calendar-image" label="Select image" accept="image/*" [(imageUrl)]="calendar.imageUrl"></sc-image-upload>
                     </div>
                   </div>
@@ -62,7 +62,7 @@
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <label for="contributors">Contributors</label>
+                      <label for="contributors">Contributors <fa-icon icon="question-circle" ngbTooltip="List the individuals who contributed to the development of the calendar"></fa-icon></label>
                       <sc-list-input intput-id="contributors" name="contributors" placeholder="Add contributor" [(inputs)]="calendar.contributors"></sc-list-input>
                     </div>
                   </div>
@@ -70,7 +70,7 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label for="contactName">Contact Name</label>
+                      <label for="contactName">Contact Name <fa-icon icon="question-circle" ngbTooltip="Contact name for person who can be contacted in relation to the calendar"></fa-icon></label>
                       <input class="form-control" id="contactName" name="contactName" [(ngModel)]="calendar.contactName">
                     </div>
                   </div>
@@ -84,13 +84,13 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label for="keywords">Keywords</label>
+                      <label for="keywords">Keywords <fa-icon icon="question-circle" ngbTooltip="Include any additional keywords which may assist in searching for this calendar, including names, geographic locations, language group, IPA etc"></fa-icon></label>
                       <sc-list-input intput-id="keywords" name="keywords" placeholder="Add keyword" [(inputs)]="calendar.keywords"></sc-list-input>
                     </div>
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <label for="about">About</label>
+                      <label for="about">About <fa-icon icon="question-circle" ngbTooltip="Provide a short introduction to the project or general description of who developed the calendar"></fa-icon></label>
                       <textarea class="form-control" id="about" name="about" [(ngModel)]="calendar.about"></textarea>
                     </div>
                   </div>
@@ -118,20 +118,20 @@
               <div class="card-body">
                 <div class="form-row">
                   <div class="col">
-                    <label for="development">How the calendar was developed</label>
+                    <label for="development">How the calendar was developed <fa-icon icon="question-circle" ngbTooltip="Provide a short general description on how the calendar was developed e.g. workshops, interviews, protocols, research project etc"></fa-icon></label>
                     <textarea class="form-control" id="development" name="development" [(ngModel)]="calendar.development"></textarea>
                   </div>
                 </div>
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label for="references">References</label>
+                      <label for="references">References <fa-icon icon="question-circle" ngbTooltip="List any papers, publications or references relevant to the calendar"></fa-icon></label>
                       <sc-list-input intput-id="references" name="references" placeholder="Add reference" [(inputs)]="calendar.references"></sc-list-input>
                     </div>
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <label for="referenceLinks">Reference Links</label>
+                      <label for="referenceLinks">Reference Links <fa-icon icon="question-circle" ngbTooltip="Provide the URL address for references (if available)"></fa-icon></label>
                       <sc-list-input intput-id="referenceLinks" name="referenceLinks" placeholder="Add reference link" [(inputs)]="calendar.referenceLinks"></sc-list-input>
                     </div>
                   </div>
@@ -145,7 +145,7 @@
               <div class="card-body">
                 <div class="form-row">
                   <div class="col">
-                    <label for="developmentReason">Why the calendar was developed</label>
+                    <label for="developmentReason">Why the calendar was developed <fa-icon icon="question-circle" ngbTooltip="Provide a short general description as to why the calendar was created, for what purpose, the intended audience e.g. education, awareness raising, application to a management practice"></fa-icon></label>
                     <textarea class="form-control" id="developmentReason" name="developmentReason" [(ngModel)]="calendar.developmentReason"></textarea>
                   </div>
                 </div>
@@ -159,7 +159,7 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label for="limitations">Limitations</label>
+                      <label for="limitations">Limitations <fa-icon icon="question-circle" ngbTooltip="Any qualifications or limitations regarding how the calendar was created, any intellectual property references/licenses (e.g. covered by copyright and how can be used - see creative commons as one option - https://creativecommons.org/choose/ ), any attributions required, any traditional knowledge/image notices, or acknowlegement of country."></fa-icon></label>
                       <textarea class="form-control" id="limitations" name="limitations" [(ngModel)]="calendar.limitations"></textarea>
                     </div>
                   </div>
@@ -211,14 +211,14 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label>Language or local name</label>
+                      <label>Language or local name <fa-icon icon="question-circle" ngbTooltip="This title will form the main “tab” or “section” of the calendar – Indigenous language name used where possible"></fa-icon></label>
                       <input class="form-control" name="season-localName-{{seasonIndex}}" required [(ngModel)]="season.localName">
                     </div>
                   </div>
 
                   <div class="col">
                     <div class="form-group">
-                      <label>Alternate name</label>
+                      <label>Alternate name <fa-icon icon="question-circle" ngbTooltip="This title provides a short description of the season – max 4-5 words"></fa-icon></label>
                       <input class="form-control" name="season-alternateName-{{seasonIndex}}" required [(ngModel)]="season.alternateName">
                     </div>
                   </div>
@@ -227,7 +227,7 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label>English Months Start</label>
+                      <label>English Months Start <fa-icon icon="question-circle" ngbTooltip="Provide the English calendar month(s) that correspond to the relevant season"></fa-icon></label>
                       <!--<input class="form-control" type="number" name="season-months-start-{{seasonIndex}}" [(ngModel)]="season.startMonth">-->
                       <select name="season-months-start-{{seasonIndex}}" required [(ngModel)]="season.startMonth" class="custom-select">
                         <option value="">Please select</option>
@@ -249,7 +249,7 @@
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <label>English Months End</label>
+                      <label>English Months End <fa-icon icon="question-circle" ngbTooltip="Provide the English calendar month(s) that correspond to the relevant season"></fa-icon></label>
                       <!--<input class="form-control" type="number" name="season-months-end-{{seasonIndex}}" [(ngModel)]="season.endMonth">-->
                       <select name="season-months-end-{{seasonIndex}}" required [(ngModel)]="season.endMonth" class="custom-select">
                         <option value="">Please select</option>
@@ -288,7 +288,7 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label>Season description</label>
+                      <label>Season description <fa-icon icon="question-circle" ngbTooltip="This is a short paragraph providing additional information about the season. Note more detail about a feature of the season can be created by adding separate Feature (see + new Feature)."></fa-icon></label>
                       <textarea class="form-control" name="season-description-{{seasonIndex}}" required [(ngModel)]="season.description"></textarea>
                     </div>
                   </div>
@@ -310,16 +310,19 @@
             </div>
 
 
-            <button class="btn btn-primary" (click)="addSeason()">Add Season</button>
+            <div class="my-3">
+              <button class="btn btn-primary" (click)="addSeason()">Add Season</button>
+            </div>
 
           </ng-template>
         </ngb-tab>
       </ngb-tabset>
 
-      <button class="btn btn-primary" [disabled]="calendarForm.invalid" (click)="save()">Save Calendar</button>&ngsp;
-      <button class="btn btn-outline-secondary" (click)="next()">Next</button>&ngsp;
-      <button class="btn btn-success" [disabled]="calendarForm.invalid" (click)="publish()">Publish Calendar</button>&ngsp;
-
+      <div class="my-3">
+        <button class="btn btn-primary" [disabled]="calendarForm.invalid" (click)="save()">Save Calendar</button>&ngsp;
+        <button class="btn btn-outline-secondary" (click)="next()">Next</button>&ngsp;
+        <button class="btn btn-success" [disabled]="calendarForm.invalid" (click)="publish()">Publish Calendar</button>&ngsp;
+      </div>
     </form>
   </div>
 </div>

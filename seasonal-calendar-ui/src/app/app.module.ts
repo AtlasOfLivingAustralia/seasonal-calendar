@@ -2,7 +2,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import { HttpClientModule } from '@angular/common/http';
-import { NgbProgressbarModule, NgbTabsetModule, NgbModalModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbProgressbarModule, NgbTabsetModule, NgbModalModule, NgbTypeaheadModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,6 +23,12 @@ import {Logger} from "./shared/logger.service";
 import { NavbarComponent } from './navbar/navbar.component';
 import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
 import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+
+// Add an icon to the library for convenient access in other components
+library.add(faQuestionCircle);
 
 @NgModule({
   declarations: [
@@ -49,9 +55,11 @@ import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
     NgbTabsetModule,
     NgbProgressbarModule,
     NgbModalModule,
+    NgbTooltipModule,
     NgbTypeaheadModule,
     LoadingBarHttpClientModule,
-    LoadingBarRouterModule
+    LoadingBarRouterModule,
+    FontAwesomeModule
   ],
   entryComponents: [
     ImageUploadModalComponent
