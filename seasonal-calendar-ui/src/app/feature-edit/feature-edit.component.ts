@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IFeature} from "../model/feature";
 import {NgbModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
 import {ImageUploadModalComponent} from "../image-upload-modal/image-upload-modal.component";
@@ -16,6 +16,7 @@ import {BieSearchResponse, BieSearchResult} from "../model/bie-search-response";
 export class FeatureEditComponent implements OnInit {
 
   @Input() feature : IFeature;
+  @Output() delete = new EventEmitter();
   // @Output() featureChange = new EventEmitter<Feature>();
 
   searching = false;
@@ -48,6 +49,10 @@ export class FeatureEditComponent implements OnInit {
 
   trackByIndex(index, item) {
     return index;
+  }
+
+  deleteFeature() {
+    this.delete.emit();
   }
 
   imageUploadModal(feature: IFeature) {

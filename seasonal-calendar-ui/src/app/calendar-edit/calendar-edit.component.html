@@ -295,8 +295,8 @@
                 </div>
 
 
-                <div class="card-columns">
-                  <sc-feature-edit *ngFor="let feature of season.features; trackBy: trackByKey; index as featureIndex" [feature]="feature"></sc-feature-edit>
+                <div class="card-columns features">
+                  <sc-feature-edit *ngFor="let feature of season.features; trackBy: trackByKey; index as featureIndex" [feature]="feature" (delete)="deleteFeature(season, featureIndex)"></sc-feature-edit>
 
                 </div>
 

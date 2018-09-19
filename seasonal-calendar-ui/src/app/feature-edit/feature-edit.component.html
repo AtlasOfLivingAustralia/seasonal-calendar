@@ -49,12 +49,12 @@
 
     <div class="form-group">
       <label>Feature description</label>
-      <textarea class="form-control" name="feature-description-{{seasonIndex}}-{{featureIndex}}" required [(ngModel)]="feature.description"></textarea>
+      <textarea class="form-control" name="feature-description" required [(ngModel)]="feature.description"></textarea>
     </div>
   </div>
 
   <div class="card-footer">
-    <button class="btn btn-danger btn-sm" (click)="deleteFeature(season, featureIndex)">Delete {{ feature.name || 'feature' }}</button>
+    <button class="btn btn-danger btn-sm" (click)="deleteFeature()">Delete {{ feature.name || 'feature' }}</button>
   </div>
 
 </div>
