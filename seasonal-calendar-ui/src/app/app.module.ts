@@ -26,6 +26,9 @@ import {LoadingBarRouterModule} from "@ngx-loading-bar/router";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { MessageService } from "./messages/message.service";
+import { MessageBarComponent } from "./messages/message-bar.component";
+import { MessageComponent } from "./messages/message.component";
 
 // Add an icon to the library for convenient access in other components
 library.add(faQuestionCircle);
@@ -43,7 +46,9 @@ library.add(faQuestionCircle);
     ListInputComponent,
     CalendarMapComponent,
     FeatureEditComponent,
-    NavbarComponent
+    NavbarComponent,
+    MessageBarComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
@@ -69,6 +74,7 @@ library.add(faQuestionCircle);
     { provide: ErrorHandler, useClass: ReportingErrorHandler },
     Logger,
     Title,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

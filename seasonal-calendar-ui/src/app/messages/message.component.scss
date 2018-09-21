@@ -1,0 +1,23 @@
+.message {
+  background: var(--gray-900);
+  color: var(--white);
+  position: relative;
+  min-width: 18rem;
+  max-width: 36rem;
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .message-text {
+    word-wrap: break-word;
+    overflow: hidden;
+  }
+
+  .dismiss-action {
+    text-transform: uppercase;
+    margin-left: auto;
+    cursor: pointer;
+    color: var(--primary);
+  }
+}

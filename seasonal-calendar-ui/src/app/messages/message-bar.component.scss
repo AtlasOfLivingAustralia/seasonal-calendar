@@ -1,0 +1,55 @@
+.messagebar {
+  position: fixed;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+
+  %left {
+    left: 2rem;
+    align-items: flex-start;
+  }
+
+  %center {
+    left: 50%;
+    transform: translate(-50%, 0);
+    align-items: center;
+  }
+
+  %right {
+    right: 2rem;
+    align-items: flex-end;
+  }
+
+  %top {
+    top: 2rem;
+  }
+
+  %bottom {
+    bottom: 1.5rem;
+  }
+
+  .bottom-left {
+    @extend %bottom;
+    @extend %left;
+  }
+  .bottom-center {
+    @extend %bottom;
+    @extend %center;
+  }
+  .bottom-right {
+    @extend %bottom;
+    @extend %right;
+  }
+  .top-left {
+    @extend %top;
+    @extend %left;
+  }
+  .top-center {
+    @extend %top;
+    @extend %center;
+  }
+  .top-right {
+    @extend %top;
+    @extend %right;
+  }
+}

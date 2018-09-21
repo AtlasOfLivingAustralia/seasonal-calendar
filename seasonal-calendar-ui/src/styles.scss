@@ -4,6 +4,12 @@
 @import "~leaflet/dist/leaflet.css";
 @import "~leaflet-draw/dist/leaflet.draw.css";
 
+// expose grays as css variables like colours in `~bootstrap-scss/_root.scss`
+:root {
+  @each $color, $value in $grays {
+    --#{'gray-'+$color}: #{$value};
+  }
+}
 .card-columns.features {
   @include media-breakpoint-only(sm) {
     column-count: 1;
