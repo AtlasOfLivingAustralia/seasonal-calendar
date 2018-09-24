@@ -6,7 +6,7 @@
 <!--</div>-->
 <!--</nav>-->
 
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-secondary mb-1">
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-secondary mb-1">
   <div class="container">
     <a routerLink="/" class="navbar-brand">{{title}}</a>
     <button class="navbar-toggler" [class.collapsed]="navbarClosing || navbarClosed" (click)="toggleNavbar()"  type="button" aria-controls="theNavbar" [attr.aria-expanded]="navbarOpening || navbarOpen" aria-label="Toggle navigation">

@@ -66,7 +66,7 @@ export class NavbarComponent implements OnInit {
     // this.isNavbarCollapsed = !this.isNavbarCollapsed;
     let el = this.navCollapse.nativeElement;
     if (this.navbarOpen) {
-      let height = el.getBoundingClientRect().height;
+      let height = el ? el.getBoundingClientRect().height : 0;
       this.renderer2.setStyle(el, 'height', `${height}px`);
       this.navbarOpen = this.navbarClosed = this.navbarOpening = false;
       this.navbarClosing = true;
@@ -83,7 +83,7 @@ export class NavbarComponent implements OnInit {
       // need to wait a tick for classes based on booleans to update
       this.ngZone.runOutsideAngular(() =>
         setTimeout(() => {
-          let scrollHeight = el.scrollHeight;
+          let scrollHeight = el ? el.scrollHeight : 0;
           this.renderer2.setStyle(el, 'height', `${scrollHeight}px`);
         }, 0)
       );
