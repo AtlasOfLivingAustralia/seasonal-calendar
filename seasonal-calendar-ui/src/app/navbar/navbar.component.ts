@@ -46,7 +46,7 @@ export class NavbarComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.calendars$ = this.calendarService.calendars;
+    this.calendars$ = this.calendarService.getCalendars(true);
   }
 
   // This is a hack to add the bootstrap collapse animation to the navbar as it's not

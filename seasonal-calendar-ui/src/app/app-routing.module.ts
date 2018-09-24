@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'admin', component: AdminComponent, resolve: { calendars: CalendarsResolverService } },
   { path: 'admin/calendar/create', component: CalendarEditComponent, resolve: { calendar: NewCalendarResolverService } },
   { path: 'admin/calendar/:id', component: CalendarEditComponent, resolve: { calendar: CalendarResolverService } },
-  { path: ':name', component: CalendarLandingComponent },
+  { path: ':name', component: CalendarLandingComponent, resolve: { calendar: CalendarResolverService } },
   { path: '**', component: PageNotFoundComponentComponent }
 ];
 

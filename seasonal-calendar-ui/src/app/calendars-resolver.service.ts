@@ -10,7 +10,14 @@ export class CalendarsResolverService implements Resolve<ICalendar[]> {
   constructor(private calendarService: CalendarService, private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ICalendar[]> {
-    return this.calendarService.calendars;
+    let parts = route.url;
+    let isAdmin = false;
+    if (parts.length > 0) {
+      let first = parts[0];
+      isAdmin = first.path.startsWith("admin")
+    }
+
+    return this.calendarService.getCalendars(!isAdmin);
   }
 
 }

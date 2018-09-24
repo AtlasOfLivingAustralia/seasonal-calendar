@@ -15,7 +15,9 @@
           <td>{{ calendar.name }}</td>
           <td>
             <a class="btn btn-primary" routerLink="/admin/calendar/{{calendar.collectionUuid}}">Edit</a>&ngsp;
-            <a class="btn btn-danger" disabled role="button">Delete</a>
+            <button *ngIf="!calendar.published" class="btn btn-secondary" disabled (click)="publish(calendar)">Publish</button>&ngsp;
+            <button *ngIf="calendar.published" class="btn btn-secondary" disabled (click)="unpublish(calendar)">Unpublish</button>&ngsp;
+            <button class="btn btn-danger" disabled (click)="delete(calendar)">Delete</button>
           </td>
         </tr>
       </tbody>

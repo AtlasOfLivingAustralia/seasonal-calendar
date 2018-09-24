@@ -16,8 +16,8 @@ export class CalendarService {
 
   constructor(private httpClient: HttpClient) { }
 
-  get calendars() : Observable<ICalendar[]> {
-    return this.httpClient.get<Calendar[]>(this.calendarsEndpoint);
+  getCalendars(publishedOnly: boolean = true) : Observable<ICalendar[]> {
+    return this.httpClient.get<Calendar[]>(this.calendarsEndpoint, { params: { publishedOnly: `${publishedOnly}`}});
   }
 
   findCalendar(id: string) : Observable<ICalendar> {
@@ -35,6 +35,21 @@ export class CalendarService {
   save(calendar: Calendar) {
     let endpoint = `${this.calendarsEndpoint}${calendar.collectionUuid ? `/${calendar.collectionUuid}` : ''}`;
     return this.httpClient.post(endpoint, this.sanitizeCalendarForUpload(calendar));
+  }
+
+  delete(calendar: ICalendar) {
+    let endpoint = `${this.calendarsEndpoint}/${calendar.collectionUuid}`;
+    return this.httpClient.delete(endpoint);
+  }
+
+  publish(calendar: ICalendar) {
+    let endpoint = `${this.calendarsEndpoint}/${calendar.collectionUuid}/publish`;
+    return this.httpClient.put(endpoint, {});
+  }
+
+  unpublish(calendar: ICalendar) {
+    let endpoint = `${this.calendarsEndpoint}/${calendar.collectionUuid}/unpublish`;
+    return this.httpClient.put(endpoint, {});
   }
 
   uploadImages(files/*: FileList*/): Observable<HttpEvent<Object>> {
