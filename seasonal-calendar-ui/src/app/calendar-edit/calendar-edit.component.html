@@ -21,8 +21,11 @@
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <label for="shortName">Short Name <fa-icon icon="question-circle" ngbTooltip="A short version of the name to use in the calendar URL, should be lower case"></fa-icon></label>
-                      <input class="form-control" id="shortName" name="shortName" [(ngModel)]="calendar.shortName">
+                      <label for="shortName" class="required">Short Name <fa-icon icon="question-circle" ngbTooltip="A short version of the name to use in the calendar URL, should be lower case"></fa-icon></label>
+                      <input class="form-control" id="shortName" name="shortName" required [(ngModel)]="calendar.shortName">
+                      <div class="invalid-feedback">
+                        A short name is required
+                      </div>
                     </div>
                   </div>
                 </div>

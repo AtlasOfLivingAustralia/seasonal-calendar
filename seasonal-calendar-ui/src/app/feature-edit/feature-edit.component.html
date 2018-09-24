@@ -16,7 +16,7 @@
     </div>
 
     <div class="form-group">
-      <label class="required">Feature species search <fa-icon icon="question-circle" ngbTooltip="Select a species name from this typeahead to select it for this feature"></fa-icon></label>
+      <label>Feature species search <fa-icon icon="question-circle" ngbTooltip="Select a species name from this typeahead to select it for this feature"></fa-icon></label>
       <input class="form-control" name="feature-species" placeholder="Type here to search" [(ngModel)]="selectedResponse" [class.is-invalid]="searchFailed"
              [ngbTypeahead]="search" [editable]="false" [inputFormatter]="searchInputFormatter" [resultFormatter]="searchInputFormatter"
              [showHint]="true" [focusFirst]="true">
