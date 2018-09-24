@@ -1,25 +1,19 @@
 package au.org.ala.sc.services
 
 import au.org.ala.jooq.postgres.Range
-import au.org.ala.profiles.service.ProfileServiceClient
 import au.org.ala.sc.api.SeasonDto
 import au.org.ala.sc.domain.jooq.tables.Season.SEASON
 import au.org.ala.sc.domain.jooq.tables.daos.SeasonDao
 import au.org.ala.sc.domain.jooq.tables.pojos.Season
 import org.jooq.Configuration
 import org.jooq.DSLContext
-import org.slf4j.LoggerFactory
 import java.util.*
 
 class SeasonService(
-    val seasonDao: SeasonDao,
-    val ctx: DSLContext,
-    val featureService: FeatureService,
-    val profileServiceClient: ProfileServiceClient
+    private val seasonDao: SeasonDao,
+    private val ctx: DSLContext,
+    private val featureService: FeatureService
 ) {
-    companion object {
-        val log = LoggerFactory.getLogger(SeasonService::class.java)
-    }
 
     fun getSeasonsForCalendarId(collectionUuid: UUID): List<SeasonDto> {
         val seasons = seasonDao.fetchByCollectionUuid(collectionUuid)
@@ -32,9 +26,6 @@ class SeasonService(
 
     fun getSeason(collectionUuid: UUID, name: String) =
         ctx.selectFrom(SEASON).where(SEASON.COLLECTION_UUID.eq(collectionUuid)).and(SEASON.LOCAL_NAME.eq(name)).fetchOne().into(Season::class.java)
-
-//    private fun getId(collectionUuid: UUID, name: String) =
-//        ctx.newRecord(SEASON.COLLECTION_UUID, SEASON.LOCAL_NAME).values(collectionUuid, name)
 
     fun getSeasonWithFeatures(collectionUuid: UUID, name: String) {
         val season = getSeason(collectionUuid, name)

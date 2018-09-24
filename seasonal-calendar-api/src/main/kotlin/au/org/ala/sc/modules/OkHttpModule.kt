@@ -1,14 +1,14 @@
 package au.org.ala.sc.modules
 
+import au.org.ala.sc.util.logger
 import com.codahale.metrics.*
 import com.codahale.metrics.MetricRegistry.name
 import okhttp3.*
-import org.slf4j.LoggerFactory
 import java.io.IOException
 
 class InstrumentedOkHttpClient(var rawClient: OkHttpClient, private val registry: MetricRegistry, val name: String) : Cloneable, Call.Factory by rawClient, WebSocket.Factory by rawClient {
     companion object {
-        val LOG = LoggerFactory.getLogger(InstrumentedOkHttpClient::class.java)
+        val LOG = logger()
     }
 
     init {

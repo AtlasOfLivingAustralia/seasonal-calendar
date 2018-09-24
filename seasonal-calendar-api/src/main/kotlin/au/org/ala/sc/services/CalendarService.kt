@@ -5,11 +5,10 @@ import au.org.ala.sc.api.SeasonalCalendarDto
 import au.org.ala.sc.domain.jooq.tables.daos.CalendarDao
 import au.org.ala.sc.domain.jooq.tables.pojos.Calendar
 import au.org.ala.sc.domain.jooq.tables.Calendar.CALENDAR
+import au.org.ala.sc.util.HTTP_NOT_FOUND
+import au.org.ala.sc.util.logger
 import org.jooq.DSLContext
-import org.slf4j.LoggerFactory
 import java.util.*
-
-private const val HTTP_NOT_FOUND = 404
 
 class CalendarService(
     private val calendarDao: CalendarDao,
@@ -19,7 +18,7 @@ class CalendarService(
     private val defaultDataResourceUid: String) {
 
     companion object {
-        private val log = LoggerFactory.getLogger(CalendarService::class.java)
+        private val log = logger()
 
         const val userId = "8373"
 

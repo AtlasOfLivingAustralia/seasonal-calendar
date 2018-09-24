@@ -2,7 +2,7 @@ package au.org.ala.sc.resources
 
 import au.org.ala.sc.services.BieSearchClient
 import au.org.ala.sc.services.BieSearchResponse
-import org.slf4j.LoggerFactory
+import au.org.ala.sc.util.logger
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 
@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType
 class SearchResource(private val searchClient: BieSearchClient) {
 
     companion object {
-        val log = LoggerFactory.getLogger(SearchResource::class.java)
+        val log = logger()
     }
 
     @GET

@@ -1,6 +1,7 @@
 package au.org.ala.sc.resources
 
 import au.org.ala.sc.services.ImageService
+import au.org.ala.sc.util.logger
 import com.google.common.hash.Hashing
 import com.google.common.hash.HashingInputStream
 import io.dropwizard.jersey.caching.CacheControl
@@ -8,8 +9,6 @@ import org.apache.tika.Tika
 import org.glassfish.jersey.media.multipart.BodyPartEntity
 import org.glassfish.jersey.media.multipart.FormDataBodyPart
 import org.glassfish.jersey.media.multipart.FormDataMultiPart
-import org.imgscalr.Scalr
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -21,10 +20,10 @@ import javax.ws.rs.core.Request
 import javax.ws.rs.core.Response
 
 @Path("images")
-class ImageResource(val baseDir: File, val imageService: ImageService) {
+class ImageResource(private val baseDir: File, private val imageService: ImageService) {
 
     companion object {
-        val log = LoggerFactory.getLogger(ImageResource::class.java)
+        val log = logger()
         private val mediaTypeToExtension = mapOf(
             "image/jpeg" to "jpg",
             "image/png" to "png",
@@ -43,7 +42,11 @@ class ImageResource(val baseDir: File, val imageService: ImageService) {
     @Produces(MediaType.APPLICATION_JSON)
     fun upload(multiPart: FormDataMultiPart) : List<String> {
         val fields = multiPart.getFields("images")
-        return fields.map { it to it.entity as? BodyPartEntity }.filter { it.second != null }.map{ (part, entity) -> saveFile(part, entity!!) }
+        return fields.asSequence()
+            .map { it to it.entity as? BodyPartEntity }
+            .filter { it.second != null }
+            .map{ (part, entity) -> saveFile(part, entity!!) }
+            .toList()
     }
 
     @GET

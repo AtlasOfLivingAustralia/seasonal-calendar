@@ -5,7 +5,9 @@ import au.org.ala.sc.api.SeasonalCalendarDto
 import au.org.ala.sc.services.CalendarException
 import au.org.ala.sc.services.CalendarNotFoundException
 import au.org.ala.sc.services.CalendarService
-import org.slf4j.LoggerFactory
+import au.org.ala.sc.util.HTTP_NOT_FOUND
+import au.org.ala.sc.util.HTTP_SERVER_ERROR
+import au.org.ala.sc.util.logger
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
@@ -14,11 +16,11 @@ import javax.ws.rs.core.Response
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 class CalendarResource(
-    val calendarService: CalendarService
+    private val calendarService: CalendarService
 ) {
 
     companion object {
-        val log = LoggerFactory.getLogger(CalendarResource::class.java)
+        val log = logger()
     }
 
     @GET
@@ -77,13 +79,13 @@ class CalendarResource(
     private fun <T> translateCalendarException(errorMessage: String, f: () -> T): T? = try {
             f()
         } catch (e: CalendarNotFoundException) {
-            throw WebApplicationException("Calendar not found", e, 404)
+            throw WebApplicationException("Calendar not found", e, HTTP_NOT_FOUND)
         } catch (e: CalendarException) {
-            throw WebApplicationException(errorMessage, e, 500)
+            throw WebApplicationException(errorMessage, e, HTTP_SERVER_ERROR)
         } catch (e: Exception) {
             // TODO should we log this exception because we're not expecting it?
             log.error(errorMessage, e)
-            throw WebApplicationException(errorMessage, e, 500)
+            throw WebApplicationException(errorMessage, e, HTTP_SERVER_ERROR)
         }
 
 }

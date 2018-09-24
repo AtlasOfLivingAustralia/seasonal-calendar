@@ -2,7 +2,7 @@ package au.org.ala.sc.services
 
 import au.org.ala.profiles.service.*
 import au.org.ala.sc.api.FeatureDto
-import org.slf4j.LoggerFactory
+import au.org.ala.sc.util.logger
 import java.util.*
 
 class FeatureService(
@@ -10,7 +10,7 @@ class FeatureService(
 ) {
 
     companion object {
-        val log = LoggerFactory.getLogger(FeatureService::class.java)
+        val log = logger()
         const val userId = "8373"
     }
 
