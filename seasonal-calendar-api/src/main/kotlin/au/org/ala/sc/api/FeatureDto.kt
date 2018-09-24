@@ -1,6 +1,7 @@
 package au.org.ala.sc.api
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import org.hibernate.validator.constraints.NotEmpty
 import java.util.*
 
 /*
@@ -15,10 +16,10 @@ Feature images | (selected images) | * can include uploaded private images (alth
 @JsonIgnoreProperties("tempKey")
 data class FeatureDto(
     val profileUuid: UUID?,
-    val name: String,
-    val commonName: String?,
+    @field:NotEmpty val name: String,
+    @field:NotEmpty val commonName: String,
     val scientificName: String?,
     val scientificNameGuid: String?,
-    val description: String,
+    @field:NotEmpty val description: String,
     val imageUrls: List<String>
 )

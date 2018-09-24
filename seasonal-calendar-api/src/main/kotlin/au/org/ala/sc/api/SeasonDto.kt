@@ -1,6 +1,10 @@
 package au.org.ala.sc.api
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import org.hibernate.validator.constraints.NotEmpty
+import javax.validation.constraints.Max
+import javax.validation.constraints.Min
+import javax.validation.constraints.NotNull
 
 /*
 Season field    |   Is required?    |   Collection/Profile field    |  Comments
@@ -13,11 +17,11 @@ Season description  |   Mandatory   |   Season description
 @JsonIgnoreProperties("tempKey")
 data class SeasonDto(
     val id: Int?,
-    val localName: String,
-    val alternateName: String?,
-    val startMonth: Int,
-    val endMonth: Int,
+    @field:NotEmpty val localName: String,
+    @field:NotEmpty val alternateName: String,
+    @field:NotNull @field:Min(1) @field:Max(12) val startMonth: Int,
+    @field:NotNull @field:Min(1) @field:Max(12) val endMonth: Int,
     val weatherIcons: String?,
-    val description: String,
+    @field:NotEmpty val description: String,
     val features: List<FeatureDto> = emptyList()
 )

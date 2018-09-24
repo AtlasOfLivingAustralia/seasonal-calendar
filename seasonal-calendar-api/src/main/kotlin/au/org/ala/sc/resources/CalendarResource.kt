@@ -8,6 +8,8 @@ import au.org.ala.sc.services.CalendarService
 import au.org.ala.sc.util.HTTP_NOT_FOUND
 import au.org.ala.sc.util.HTTP_SERVER_ERROR
 import au.org.ala.sc.util.logger
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
@@ -55,14 +57,14 @@ class CalendarResource(
         }
 
     @POST
-    fun insertCalendar(seasonalCalendarDto: SeasonalCalendarDto) : CalendarSavedDto {
+    fun insertCalendar(@NotNull @Valid seasonalCalendarDto: SeasonalCalendarDto) : CalendarSavedDto {
         val uuid = calendarService.insertCalendar(seasonalCalendarDto)
         return CalendarSavedDto(uuid.toString())
     }
 
     @POST
     @Path("{calendarName}")
-    fun updateCalendar(@PathParam("calendarName") calendarName: String, seasonalCalendarDto: SeasonalCalendarDto) =
+    fun updateCalendar(@PathParam("calendarName") calendarName: String, @NotNull @Valid seasonalCalendarDto: SeasonalCalendarDto) =
         translateCalendarException("Couldn't update calendar $calendarName") {
             calendarService.saveCalendar(seasonalCalendarDto)
             Response.noContent().build()

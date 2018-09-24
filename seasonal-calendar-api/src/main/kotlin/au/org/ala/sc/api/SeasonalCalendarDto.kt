@@ -1,12 +1,13 @@
 package au.org.ala.sc.api
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import org.hibernate.validator.constraints.NotEmpty
 
 @JsonIgnoreProperties("tempKey")
 data class SeasonalCalendarDto(
     val collectionUuid: String,
-    val shortName: String,
-    val name: String,
+    @field:NotEmpty val name: String,
+    @field:NotEmpty val shortName: String,
     val description: String,
     val imageUrl: String,
     val websiteUrl: String,
