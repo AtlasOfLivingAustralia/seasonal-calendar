@@ -30,7 +30,7 @@ class CalendarResource(
         try {
             calendarService.getSeasonalCalendars(publishedOnly)
         } catch (e: Exception) {
-            throw WebApplicationException("Unable to get calendars", e, 500)
+            throw WebApplicationException("Unable to get calendars", e, HTTP_SERVER_ERROR)
         }
 
     @GET
