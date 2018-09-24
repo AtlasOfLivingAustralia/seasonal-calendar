@@ -4,10 +4,12 @@ import au.org.ala.profiles.service.*
 import au.org.ala.sc.api.SeasonalCalendarDto
 import au.org.ala.sc.domain.jooq.tables.daos.CalendarDao
 import au.org.ala.sc.domain.jooq.tables.pojos.Calendar
+import au.org.ala.sc.domain.jooq.tables.Calendar.CALENDAR
 import org.jooq.DSLContext
-import org.jooq.exception.DataAccessException
 import org.slf4j.LoggerFactory
 import java.util.*
+
+private const val HTTP_NOT_FOUND = 404
 
 class CalendarService(
     private val calendarDao: CalendarDao,
@@ -36,24 +38,18 @@ class CalendarService(
         ctx.transaction { txConfig ->
             val opusId = calendar.collectionUuid
             val opusUuid = UUID.fromString(opusId)
-            val getOpusResponse = profilesServiceClient.getOpus(opusId, userId).execute()
-            if (getOpusResponse.isSuccessful) {
-                val opus = getOpusResponse.body()!!
-                opus.populateOpusFromSeasonalCalendar(calendar)
-                val updateOpusResponse = profilesServiceClient.updateOpus(opusId, userId, opus).execute()
-                if (updateOpusResponse.isSuccessful && updateOpusResponse.body()!!.isSuccess) {
-                    val txCalendarDao = CalendarDao(txConfig)
-                    txCalendarDao.update(mapCalendarDtoToRecord(calendar))
-                    calendar.seasons.onEach { season ->
-                        seasonService.saveSeason(opusUuid, season, txConfig)
-                    }
-                } else {
-                    log.error("Couldn't update Opus for id {} with response {}", opusId, getOpusResponse.code())
-                    throw CalendarException("Couldn't update Opus for id $opusId with response ${getOpusResponse.code()}")
+            val opus = getOpus(opusId)
+            opus.populateOpusFromSeasonalCalendar(calendar)
+            val updateOpusResponse = profilesServiceClient.updateOpus(opusId, userId, opus).execute()
+            if (updateOpusResponse.isSuccessful && updateOpusResponse.body()!!.isSuccess) {
+                val txCalendarDao = CalendarDao(txConfig)
+                txCalendarDao.update(mapCalendarDtoToRecord(calendar))
+                calendar.seasons.onEach { season ->
+                    seasonService.saveSeason(opusUuid, season, txConfig)
                 }
             } else {
-                log.error("Couldn't get Opus for id {} with response {}", opusId, getOpusResponse.code())
-                throw CalendarException("Couldn't get Opus for id $opusId with response ${getOpusResponse.code()}")
+                log.error("Couldn't update Opus for id {} with response {}", opusId, updateOpusResponse.code())
+                throw CalendarException("Couldn't update Opus for id $opusId with response ${updateOpusResponse.code()}")
             }
         }
     }
@@ -88,21 +84,30 @@ class CalendarService(
         }
     }
 
-    fun getSeasonalCalendar(name: String) : SeasonalCalendarDto {
+    private fun getOpus(name: String): Opus {
         val getOpusResponse = profilesServiceClient.getOpus(name, userId).execute()
         if (getOpusResponse.isSuccessful) {
-            val opus = getOpusResponse.body()!!
-            val opusUuid = UUID.fromString(opus.uuid)
-
-            val calendar = calendarDao.findById(opusUuid)
-            return constructCalendarDto(opus, calendar).copy(seasons = seasonService.getSeasonsForCalendarId(opusUuid))
+            return getOpusResponse.body()!!
         } else {
-            log.error("Couldn't find calendar with name $name")
-            throw CalendarException("Couldn't find calendar with name $name")
+            if (getOpusResponse.code() == HTTP_NOT_FOUND) {
+                log.error("Couldn't find opus with name $name")
+                throw CalendarNotFoundException(name)
+            } else {
+                log.error("Couldn't find opus with name $name and error body ${getOpusResponse.errorBody()?.string()}")
+                throw CalendarException("Error getting opus with name $name")
+            }
         }
     }
 
-    fun getSeasonalCalendars() : List<SeasonalCalendarDto> {
+    fun getSeasonalCalendar(name: String) : SeasonalCalendarDto {
+        val opus = getOpus(name)
+        val opusUuid = UUID.fromString(opus.uuid)
+
+        val calendar = calendarDao.findById(opusUuid)
+        return constructCalendarDto(opus, calendar).copy(seasons = seasonService.getSeasonsForCalendarId(opusUuid))
+    }
+
+    fun getSeasonalCalendars(publishedOnly: Boolean = true) : List<SeasonalCalendarDto> {
         val getOperaResponse = profilesServiceClient.getOperaByTag(CALENDAR_TAG, userId, emptyMap()).execute()
         if (getOperaResponse.isSuccessful) {
             val opera = getOperaResponse.body()!!
@@ -110,10 +115,15 @@ class CalendarService(
             val calendars = calendarDao.fetchByCollectionUuid(*operaMap.keys.toTypedArray())
             val calendarsMap = calendars.associateBy { it.collectionUuid }
             val comboMap = operaMap.mapValues { it.value to calendarsMap[it.key] }
-            return comboMap.map { constructCalendarDto(it.value.first, it.value.second) }
+            val filteredComboMap = if (publishedOnly) {
+                comboMap.filter { (_, pair) -> pair.second?.published ?: false }
+            } else {
+                comboMap
+            }
+            return filteredComboMap.map { (_, pair) -> constructCalendarDto(pair.first, pair.second) }
         } else {
-            log.error("getOperaByTag failed with code {}", getOperaResponse.code())
-            throw DataAccessException("getOperaByTag failed with code ${getOperaResponse.code()}")
+            log.error("getOperaByTag failed with code {}, body: {}", getOperaResponse.code(), getOperaResponse.errorBody()?.string())
+            throw CalendarException("getOperaByTag failed with code ${getOperaResponse.code()}")
         }
     }
 
@@ -241,6 +251,52 @@ Unpublished or Published status |   Collection private or public |   When a seas
             published = calendar?.published ?: false
         )
     }
+
+    fun publishSeasonalCalendar(calendarName: String, publish: Boolean = true) {
+        val uuid = if (calendarName.isUuid()) {
+            UUID.fromString(calendarName)
+        } else {
+            UUID.fromString(getOpus(calendarName).uuid)
+        }
+        val updates = ctx.update(CALENDAR).set(CALENDAR.PUBLISHED, publish).where(CALENDAR.COLLECTION_UUID.eq(uuid)).execute()
+        if (updates == 0) {
+            log.error("Attempted to publish Calendar $calendarName but 0 updates occured")
+            throw CalendarNotFoundException(calendarName)
+        } else if (updates > 1) {
+            log.error("Too many updates ($updates) attempting to publish Calendar $calendarName")
+        }
+    }
+
+    fun deleteCalendar(calendarName: String) {
+        val uuid = if (calendarName.isUuid()) {
+            UUID.fromString(calendarName)
+        } else {
+            UUID.fromString(getOpus(calendarName).uuid)
+        }
+
+        val deletes= ctx.delete(CALENDAR).where(CALENDAR.COLLECTION_UUID.eq(uuid)).execute()
+
+        val deleteResponse = profilesServiceClient.deleteOpus(calendarName, userId).execute()
+        if (!deleteResponse.isSuccessful) {
+            val code = deleteResponse.code()
+            if (code == HTTP_NOT_FOUND) {
+                throw CalendarNotFoundException(calendarName)
+            } else {
+                log.error("Error deleting opus with name $calendarName, error text: ${deleteResponse.errorBody()?.string()}")
+                throw CalendarException("Error deleting opus with name $calendarName")
+            }
+        }
+    }
 }
 
-class CalendarException(message: String) : RuntimeException(message)
+open class CalendarException(message: String) : RuntimeException(message)
+class CalendarNotFoundException(val name: String) : CalendarException("Couldn't find a calendar for $name")
+
+private val uuidv1 = Regex("^[0-9A-F]{8}-[0-9A-F]{4}-[1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\$", RegexOption.IGNORE_CASE)
+private val uuidv2 = Regex("^[0-9A-F]{8}-[0-9A-F]{4}-[2][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\$", RegexOption.IGNORE_CASE)
+private val uuidv3 = Regex("^[0-9A-F]{8}-[0-9A-F]{4}-[3][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\$", RegexOption.IGNORE_CASE)
+private val uuidv4 = Regex("^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\$", RegexOption.IGNORE_CASE)
+private val uuidv5 = Regex("^[0-9A-F]{8}-[0-9A-F]{4}-[5][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\$", RegexOption.IGNORE_CASE)
+private val uuids = listOf(uuidv4, uuidv1, uuidv2, uuidv3, uuidv5)
+
+fun String?.isUuid() = this?.trim()?.let { v -> uuids.any { uuid -> uuid.matches(v) } } ?: false
