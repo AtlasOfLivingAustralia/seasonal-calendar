@@ -2,13 +2,10 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Calendar} from "../model/calendar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Season} from "../model/season";
-import {Feature, IFeature} from "../model/feature";
+import {Feature} from "../model/feature";
 import {CalendarService} from "../calendar.service";
 import {Logger} from "../shared/logger.service";
-import {NgbActiveModal, NgbModal, NgbModalConfig, NgbModalOptions, NgbTabset} from '@ng-bootstrap/ng-bootstrap';
-import {ImageUploadModalComponent} from "../image-upload-modal/image-upload-modal.component";
-import {Observable, of} from "rxjs";
-import {catchError, debounceTime, distinctUntilChanged, map, switchMap, tap} from "rxjs/operators";
+import {NgbTabset} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'sc-calendar-edit',
@@ -23,6 +20,7 @@ export class CalendarEditComponent implements OnInit {
   saving: boolean = false;
 
   @ViewChild(NgbTabset) tabset: NgbTabset;
+  @ViewChild('calendarForm') form;
 
   constructor(private route: ActivatedRoute,
               private router: Router,

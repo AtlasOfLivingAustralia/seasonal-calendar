@@ -28,3 +28,27 @@
 .card-header .btn-sm.float-right {
   line-height: 1.0;
 }
+
+.ng-touched.ng-valid {
+  @extend .is-valid
+}
+.ng-dirty.ng-valid {
+  @extend .is-valid
+}
+
+.ng-touched.ng-invalid {
+  @extend .is-invalid
+}
+
+.ng-dirty.ng-invalid {
+  @extend .is-invalid
+}
+
+label.required::after {
+  color: #e7040f;
+  content: ' *';
+
+  .bg-dark & {
+    color: #ff725c;
+  }
+}

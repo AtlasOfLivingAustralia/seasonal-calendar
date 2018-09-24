@@ -2,7 +2,7 @@
   <div class="col">
     <h2>Calendar: {{originalCalendar?.name || 'New'}}</h2>
 
-    <form #calendarForm="ngForm">
+    <form #calendarForm="ngForm" class="needs-validation" [class.was-validated]="calendarForm.invalid && (calendarForm.dirty || calendarForm.touched  )">
       <ngb-tabset justify="justified" #tabs>
         <ngb-tab title="Calendar" id="calendar-tab">
           <ng-template ngbTabContent>
@@ -12,8 +12,11 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label for="calendarName">Name</label>
+                      <label for="calendarName" class="required">Name</label>
                       <input class="form-control" id="calendarName" name="calendarName" required [(ngModel)]="calendar.name">
+                      <div class="invalid-feedback">
+                        A calendar name is required
+                      </div>
                     </div>
                   </div>
                   <div class="col">
@@ -211,15 +214,21 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label>Language or local name <fa-icon icon="question-circle" ngbTooltip="This title will form the main “tab” or “section” of the calendar – Indigenous language name used where possible"></fa-icon></label>
+                      <label class="required">Language or local name <fa-icon icon="question-circle" ngbTooltip="This title will form the main “tab” or “section” of the calendar – Indigenous language name used where possible"></fa-icon></label>
                       <input class="form-control" name="season-localName-{{seasonIndex}}" required [(ngModel)]="season.localName">
+                      <div class="invalid-feedback">
+                        The season language name is required
+                      </div>
                     </div>
                   </div>
 
                   <div class="col">
                     <div class="form-group">
-                      <label>Alternate name <fa-icon icon="question-circle" ngbTooltip="This title provides a short description of the season – max 4-5 words"></fa-icon></label>
+                      <label class="required">Alternate name <fa-icon icon="question-circle" ngbTooltip="This title provides a short description of the season – max 4-5 words"></fa-icon></label>
                       <input class="form-control" name="season-alternateName-{{seasonIndex}}" required [(ngModel)]="season.alternateName">
+                    </div>
+                    <div class="invalid-feedback">
+                      The alternate name is required
                     </div>
                   </div>
                 </div>
@@ -227,7 +236,7 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label>English Months Start <fa-icon icon="question-circle" ngbTooltip="Provide the English calendar month(s) that correspond to the relevant season"></fa-icon></label>
+                      <label class="required">English Months Start <fa-icon icon="question-circle" ngbTooltip="Provide the English calendar month(s) that correspond to the relevant season"></fa-icon></label>
                       <!--<input class="form-control" type="number" name="season-months-start-{{seasonIndex}}" [(ngModel)]="season.startMonth">-->
                       <select name="season-months-start-{{seasonIndex}}" required [(ngModel)]="season.startMonth" class="custom-select">
                         <option value="">Please select</option>
@@ -244,12 +253,15 @@
                         <option [value]="11">November</option>
                         <option [value]="12">December</option>
                       </select>
+                      <div class="invalid-feedback">
+                        The first English month is required
+                      </div>
                     </div>
 
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <label>English Months End <fa-icon icon="question-circle" ngbTooltip="Provide the English calendar month(s) that correspond to the relevant season"></fa-icon></label>
+                      <label class="required">English Months End <fa-icon icon="question-circle" ngbTooltip="Provide the English calendar month(s) that correspond to the relevant season"></fa-icon></label>
                       <!--<input class="form-control" type="number" name="season-months-end-{{seasonIndex}}" [(ngModel)]="season.endMonth">-->
                       <select name="season-months-end-{{seasonIndex}}" required [(ngModel)]="season.endMonth" class="custom-select">
                         <option value="">Please select</option>
@@ -266,6 +278,9 @@
                         <option [value]="11">November</option>
                         <option [value]="12">December</option>
                       </select>
+                      <div class="invalid-feedback">
+                        The final English month is required
+                      </div>
                     </div>
                   </div>
                   <div class="col">
@@ -288,8 +303,11 @@
                 <div class="form-row">
                   <div class="col">
                     <div class="form-group">
-                      <label>Season description <fa-icon icon="question-circle" ngbTooltip="This is a short paragraph providing additional information about the season. Note more detail about a feature of the season can be created by adding separate Feature (see + new Feature)."></fa-icon></label>
+                      <label class="required">Season description <fa-icon icon="question-circle" ngbTooltip="This is a short paragraph providing additional information about the season. Note more detail about a feature of the season can be created by adding separate Feature (see + new Feature)."></fa-icon></label>
                       <textarea class="form-control" name="season-description-{{seasonIndex}}" required [(ngModel)]="season.description"></textarea>
+                      <div class="invalid-feedback">
+                        The season description is required
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -321,7 +339,7 @@
       <div class="my-3">
         <button class="btn btn-primary" [disabled]="calendarForm.invalid" (click)="save()">Save Calendar</button>&ngsp;
         <button class="btn btn-outline-secondary" (click)="next()">Next</button>&ngsp;
-        <button class="btn btn-success" [disabled]="calendarForm.invalid" (click)="publish()">Publish Calendar</button>&ngsp;
+        <!--<button class="btn btn-success" [disabled]="calendarForm.invalid" (click)="publish()">Publish Calendar</button>&ngsp;-->
       </div>
     </form>
   </div>

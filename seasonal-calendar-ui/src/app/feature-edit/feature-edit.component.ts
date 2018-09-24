@@ -6,7 +6,7 @@ import {Observable, of} from "rxjs";
 import {catchError, debounceTime, distinctUntilChanged, map, switchMap, tap} from "rxjs/operators";
 import {Logger} from "../shared/logger.service";
 import {CalendarService} from "../calendar.service";
-import {BieSearchResponse, BieSearchResult} from "../model/bie-search-response";
+import {BieSearchResult} from "../model/bie-search-response";
 
 @Component({
   selector: 'sc-feature-edit',
@@ -41,10 +41,6 @@ export class FeatureEditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  }
-
-  trackByKey(index, item) {
-    item.getKey();
   }
 
   trackByIndex(index, item) {
