@@ -5,6 +5,7 @@ import au.org.ala.sc.domain.jooq.tables.daos.CalendarDao
 import au.org.ala.sc.domain.jooq.tables.daos.RoleDao
 import au.org.ala.sc.domain.jooq.tables.daos.SeasonDao
 import au.org.ala.sc.domain.jooq.tables.daos.UserRoleDao
+import au.org.ala.sc.resources.CalendarExceptionMapper
 import au.org.ala.sc.resources.CalendarResource
 import au.org.ala.sc.resources.ImageResource
 import au.org.ala.sc.resources.SearchResource
@@ -62,8 +63,8 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
         val userRoleDao = UserRoleDao(dsl.configuration())
         val roleDao = RoleDao(dsl.configuration())
         val featureService = FeatureService(profilesServiceClient)
-        val seasonService = SeasonService(seasonDao, dsl, featureService, profilesServiceClient)
-        val calendarService = CalendarService(calendarDao, dsl, seasonService, profilesServiceClient, configuration.dataResourceUid)
+        val seasonService = SeasonService(seasonDao, dsl, featureService)
+        val calendarService = CalendarService(calendarDao, dsl, seasonService, profilesServiceClient, configuration.dataResourceUid, configuration.calendarTag)
         val imageService = ImageService(imagesBaseDir)
 
         val calendarResource = CalendarResource(calendarService)
@@ -71,6 +72,7 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
         val searchResource = SearchResource(searchClient)
 
         environment.jersey().apply {
+            register(CalendarExceptionMapper::class.java)
             register(calendarResource)
             register(imageResource)
             register(searchResource)

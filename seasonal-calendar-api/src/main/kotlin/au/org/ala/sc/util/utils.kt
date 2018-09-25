@@ -10,4 +10,3 @@ inline fun <reified T> T.logger(): Logger {
 }
 
 const val HTTP_NOT_FOUND = 404
-const val HTTP_SERVER_ERROR = 500

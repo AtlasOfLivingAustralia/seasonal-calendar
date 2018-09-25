@@ -15,29 +15,24 @@ class CalendarService(
     private val ctx: DSLContext,
     private val seasonService: SeasonService,
     private val profilesServiceClient: ProfileServiceClient,
-    private val defaultDataResourceUid: String) {
+    private val defaultDataResourceUid: String,
+    private val calendarTag: String) {
 
     companion object {
         private val log = logger()
 
         const val userId = "8373"
-
-        const val CALENDAR_TAG = "IEK"
     }
 
-    fun saveCalendar(calendar: SeasonalCalendarDto) {
-        if (calendar.collectionUuid.isBlank()) {
-            insertCalendar(calendar)
-        } else {
-            updateCalendar(calendar)
-        }
-    }
-
-    fun updateCalendar(calendar: SeasonalCalendarDto) {
+    fun updateCalendar(calendarName: String, calendar: SeasonalCalendarDto) {
         ctx.transaction { txConfig ->
-            val opusId = calendar.collectionUuid
+            val opus = getOpus(calendarName)
+            val opusId = opus.uuid
+            if (calendar.collectionUuid != opusId) {
+                log.error("Provided calendar name $calendarName, opus UUID ($opusId) doesn't match DTO UUID (${calendar.collectionUuid})")
+                throw CalendarException("Provided calendar name $calendarName, opus UUID ($opusId) doesn't match DTO UUID (${calendar.collectionUuid})")
+            }
             val opusUuid = UUID.fromString(opusId)
-            val opus = getOpus(opusId)
             opus.populateOpusFromSeasonalCalendar(calendar)
             val updateOpusResponse = profilesServiceClient.updateOpus(opusId, userId, opus).execute()
             if (updateOpusResponse.isSuccessful && updateOpusResponse.body()!!.isSuccess) {
@@ -48,7 +43,7 @@ class CalendarService(
                 }
             } else {
                 log.error("Couldn't update Opus for id {} with response {}", opusId, updateOpusResponse.code())
-                throw CalendarException("Couldn't update Opus for id $opusId with response ${updateOpusResponse.code()}")
+                throw CalendarUpdateException(opusId)
             }
         }
     }
@@ -78,7 +73,7 @@ class CalendarService(
                 }
             } else {
                 log.error("Couldn't create opus with code {}: ", createOpusResponse.code(), createOpusResponse.errorBody()?.string())
-                throw CalendarException("Couldn't create opus")
+                throw ProfileServiceException(createOpusResponse.code(), "Couldn't create collection")
             }
         }
     }
@@ -93,7 +88,7 @@ class CalendarService(
                 throw CalendarNotFoundException(name)
             } else {
                 log.error("Couldn't find opus with name $name and error body ${getOpusResponse.errorBody()?.string()}")
-                throw CalendarException("Error getting opus with name $name")
+                throw OpusRetrieveException(getOpusResponse.code(), "Error getting collection")
             }
         }
     }
@@ -107,7 +102,7 @@ class CalendarService(
     }
 
     fun getSeasonalCalendars(publishedOnly: Boolean = true) : List<SeasonalCalendarDto> {
-        val getOperaResponse = profilesServiceClient.getOperaByTag(CALENDAR_TAG, userId, emptyMap()).execute()
+        val getOperaResponse = profilesServiceClient.getOperaByTag(calendarTag, userId, emptyMap()).execute()
         if (getOperaResponse.isSuccessful) {
             val opera = getOperaResponse.body()!!
             val operaMap = opera.associateBy { UUID.fromString(it.uuid) }
@@ -121,23 +116,23 @@ class CalendarService(
             }
             return filteredComboMap.map { (_, pair) -> constructCalendarDto(pair.first, pair.second) }
         } else {
-            log.error("getOperaByTag failed with code {}, body: {}", getOperaResponse.code(), getOperaResponse.errorBody()?.string())
-            throw CalendarException("getOperaByTag failed with code ${getOperaResponse.code()}")
+            log.error("getOperaByTag failed for tag {}, publishedOnly: {} with code {}, body: {}", calendarTag, publishedOnly, getOperaResponse.code(), getOperaResponse.errorBody()?.string())
+            throw ProfileServiceException(getOperaResponse.code(), "Couldn't get collections (published only: $publishedOnly)")
         }
     }
 
     fun getTag(): Tag? {
         val response = profilesServiceClient.getTags(userId).execute()
         return if (response.isSuccessful) {
-            response.body()!!.tags.find { it.abbrev == CALENDAR_TAG || it.name == CALENDAR_TAG || it.uuid == CALENDAR_TAG }
+            response.body()!!.tags.find { it.abbrev == calendarTag || it.name == calendarTag || it.uuid == calendarTag }
         } else {
-            throw CalendarException("Couldn't get tags")
+            log.error("Couldn't get tags from profiles service because ${response.code()}: ${response.errorBody()?.string()}")
+            throw ProfileServiceException(response.code(), "Couldn't get tags")
         }
     }
 
     private fun opusFromSeasonalCalendar(calendar: SeasonalCalendarDto) : Opus {
-        val tag = getTag()
-        if (tag == null) log.warn("No tag found matching $CALENDAR_TAG")
+        val tag = getTag() ?: throw CalendarException("Tag $calendarTag not found!")
         return Opus().apply {
             dataResourceUid = defaultDataResourceUid
             isAutoApproveShareRequests = false
@@ -145,9 +140,7 @@ class CalendarService(
             isKeepImagesPrivate = true
             isPrivateCollection = true
             isUsePrivateRecordData = false
-            if (tag != null) {
-                tags.add(tag)
-            }
+            tags.add(tag)
             populateOpusFromSeasonalCalendar(calendar)
         }
     }
@@ -282,14 +275,22 @@ Unpublished or Published status |   Collection private or public |   When a seas
                 throw CalendarNotFoundException(calendarName)
             } else {
                 log.error("Error deleting opus with name $calendarName, error text: ${deleteResponse.errorBody()?.string()}")
-                throw CalendarException("Error deleting opus with name $calendarName")
+                throw CalendarDeleteException(calendarName)
             }
         }
     }
 }
 
-open class CalendarException(message: String) : RuntimeException(message)
-class CalendarNotFoundException(val name: String) : CalendarException("Couldn't find a calendar for $name")
+open class CalendarException(message: String) : RuntimeException(message) {
+    override fun fillInStackTrace() = this
+}
+open class NamedCalendarException(val name: String, message: String) : CalendarException(message)
+open class ProfileServiceException(val code: Int, message: String) : CalendarException(message)
+class CalendarNotFoundException(name: String) : NamedCalendarException(name, "Couldn't find a calendar for $name")
+class OpusRetrieveException(code: Int, val name: String) : ProfileServiceException(code, "Couldn't get collection for $name")
+class CalendarUpdateException(name: String) : NamedCalendarException(name, "Couldn't update calendar $name")
+class CalendarDeleteException(name: String) : NamedCalendarException(name, "Couldn't delete calendar $name")
+
 
 private val uuidv1 = Regex("^[0-9A-F]{8}-[0-9A-F]{4}-[1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\$", RegexOption.IGNORE_CASE)
 private val uuidv2 = Regex("^[0-9A-F]{8}-[0-9A-F]{4}-[2][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\$", RegexOption.IGNORE_CASE)

@@ -40,6 +40,9 @@ class SeasonalCalendarConfiguration : Configuration() {
     @JsonProperty("dataResourceUid")
     var dataResourceUid = "dr382"
 
+    @JsonProperty("calendarTag")
+    var calendarTag = "IEK"
+
     @JsonProperty("imagesBaseDir")
     var imagesBaseDir: String = "/data/seasonal-calendar/images"
 
