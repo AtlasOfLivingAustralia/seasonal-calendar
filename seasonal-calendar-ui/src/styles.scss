@@ -25,6 +25,18 @@
   }
 }
 
+body {
+  padding-top: 60px;
+}
+
+*[id]:before {
+  display: block;
+  content: " ";
+  margin-top: -60px; // Set the Appropriate Height
+  height: 60px; // Set the Appropriate Height
+  visibility: hidden;
+}
+
 .card-header .btn-sm.float-right {
   line-height: 1.0;
 }
