@@ -35,70 +35,73 @@ export class Calendar implements ICalendar {
 
   private tempKey: string = null;
 
-  constructor(
-    public collectionUuid: string = '',
-    public shortName: string = '',
-    public name: string = '',
-    public description: string = '',
-    public imageUrl: string = '',
-    public websiteUrl: string = '',
-    public youtubeId: string = '',
-    public organisationName: string = '',
-    public contributors: string[] = [],
-    public contactName: string = '',
-    public contactEmail: string = '',
-    public keywords: string[] = [],
-    public about: string = '',
-    public organisationUrl: string = '',
-    public organisationLogoUrl: string = '',
-    public development: string = '',
-    public references: string[] = [],
-    public referenceLinks: string[] = [],
-    public developmentReason: string = '',
-    public limitations: string = '',
-    public licenceTerms: string = '',
-    public latitude: number = 0,
-    public longitude: number = 0,
-    public zoom: number = 0,
-    public languageGroup: string = '',
-    public published: boolean = false,
-    public seasons: ISeason[] = []
-  ) { }
+  public collectionUuid: string = '';
+  public shortName: string = '';
+  public name: string = '';
+  public description: string = '';
+  public imageUrl: string = '';
+  public websiteUrl: string = '';
+  public youtubeId: string = '';
+  public organisationName: string = '';
+  public contributors: string[] = [];
+  public contactName: string = '';
+  public contactEmail: string = '';
+  public keywords: string[] = [];
+  public about: string = '';
+  public organisationUrl: string = '';
+  public organisationLogoUrl: string = '';
+  public development: string = '';
+  public references: string[] = [];
+  public referenceLinks: string[] = [];
+  public developmentReason: string = '';
+  public limitations: string = '';
+  public licenceTerms: string = '';
+  public latitude: number = 0;
+  public longitude: number = 0;
+  public zoom: number = 0;
+  public languageGroup: string = '';
+  public published: boolean = false;
+  public seasons: ISeason[] = [];
+
+  constructor(other?: ICalendar) {
+    if (other) {
+      this.collectionUuid = other.collectionUuid;
+      this.shortName = other.shortName;
+      this.name = other.name;
+      this.description = other.description;
+      this.imageUrl = other.imageUrl;
+      this.websiteUrl = other.websiteUrl;
+      this.youtubeId = other.youtubeId;
+      this.organisationName = other.organisationName;
+      this.contributors = other.contributors.slice(0);
+      this.contactName = other.contactName;
+      this.contactEmail = other.contactEmail;
+      this.keywords = other.keywords.slice(0);
+      this.about = other.about;
+      this.organisationUrl = other.organisationUrl;
+      this.organisationLogoUrl = other.organisationLogoUrl;
+      this.development = other.development;
+      this.references = other.references.slice(0);
+      this.referenceLinks = other.referenceLinks.slice(0);
+      this.developmentReason = other.developmentReason;
+      this.limitations = other.limitations;
+      this.licenceTerms = other.licenceTerms;
+      this.latitude = other.latitude;
+      this.longitude = other.longitude;
+      this.zoom = other.zoom;
+      this.languageGroup = other.languageGroup;
+      this.published = other.published;
+      this.seasons = other.seasons.map((value) => Season.fromJson(value));
+
+    }
+  }
 
   public static fromJson(calendar: ICalendar): Calendar {
-    return new Calendar(
-      calendar.collectionUuid,
-      calendar.shortName,
-      calendar.name,
-      calendar.description,
-      calendar.imageUrl,
-      calendar.websiteUrl,
-      calendar.youtubeId,
-      calendar.organisationName,
-      calendar.contributors.map((value) => value),
-      calendar.contactName,
-      calendar.contactEmail,
-      calendar.keywords.map((value) => value),
-      calendar.about,
-      calendar.organisationUrl,
-      calendar.organisationLogoUrl,
-      calendar.development,
-      calendar.references.map((value) => value),
-      calendar.referenceLinks.map((value) => value),
-      calendar.developmentReason,
-      calendar.limitations,
-      calendar.licenceTerms,
-      calendar.latitude,
-      calendar.longitude,
-      calendar.zoom,
-      calendar.languageGroup,
-      calendar.published,
-      calendar.seasons.map((value) => Season.fromJson(value))
-    )
+    return new Calendar(calendar);
   }
 
   clone(): Calendar {
-    return Calendar.fromJson(this);
+    return new Calendar(this);
   }
 
   getKey() {
@@ -111,4 +114,8 @@ export class Calendar implements ICalendar {
       return this.tempKey;
     }
   }
+}
+
+export interface CalendarSaved {
+  collectionUuid: string;
 }

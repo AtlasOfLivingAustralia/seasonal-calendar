@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpEvent} from "@angular/common/http";
 import { Observable } from 'rxjs';
-import {Calendar, ICalendar} from "./model/calendar";
+import {Calendar, CalendarSaved, ICalendar} from "./model/calendar";
 import { environment } from "../environments/environment";
 import {BieSearchResponse} from "./model/bie-search-response";
 
@@ -34,7 +34,7 @@ export class CalendarService {
 
   save(calendar: Calendar) {
     let endpoint = `${this.calendarsEndpoint}${calendar.collectionUuid ? `/${calendar.collectionUuid}` : ''}`;
-    return this.httpClient.post(endpoint, this.sanitizeCalendarForUpload(calendar));
+    return this.httpClient.post<CalendarSaved>(endpoint, this.sanitizeCalendarForUpload(calendar));
   }
 
   delete(calendar: ICalendar) {

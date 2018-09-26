@@ -17,6 +17,7 @@ import { LoadingBarRouterModule } from "@ngx-loading-bar/router";
 import { MessageService } from "./messages/message.service";
 import { MessageBarComponent } from "./messages/message-bar.component";
 import { MessageComponent } from "./messages/message.component";
+import {CalendarMapComponent} from "./calendar-map/calendar-map.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MessageComponent } from "./messages/message.component";
     PageNotFoundComponentComponent,
     NavbarComponent,
     MessageBarComponent,
-    MessageComponent
+    MessageComponent,
+    CalendarMapComponent
   ],
   imports: [
     BrowserModule,

@@ -199,7 +199,7 @@
               <input class="form-control" id="youtubeId" name="youtubeId" [(ngModel)]="calendar.youtubeId">
             </div>
 
-            <sc-calendar-map [(latitude)]="calendar.latitude" [(longitude)]="calendar.longitude" [(zoom)]="calendar.zoom" [mapReadonly]="false"></sc-calendar-map>
+            <sc-calendar-draw-map [(latitude)]="calendar.latitude" [(longitude)]="calendar.longitude" [(zoom)]="calendar.zoom" [mapReadonly]="false"></sc-calendar-draw-map>
           </ng-template>
         </ngb-tab>
         <ngb-tab title="Seasons" id="seasons-tab">
