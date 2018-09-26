@@ -1,0 +1,15 @@
+<div class="map"
+ leaflet style="height: 450px;"
+ [leafletOptions]="options"
+ (leafletMapReady)="onMapReady($event)"
+ [leafletLayers]="layers"
+ (leafletMapZoomEnd)="mapZoomChange($event)">
+
+  <div *ngIf="!mapReadonly"
+    leafletDraw
+    [leafletDrawOptions]="drawOptions">
+  </div>
+
+</div>
+
+

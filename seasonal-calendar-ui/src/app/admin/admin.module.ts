@@ -4,7 +4,7 @@ import {CalendarEditComponent} from "../calendar-edit/calendar-edit.component";
 import {ImageUploadModalComponent} from "../image-upload-modal/image-upload-modal.component";
 import {ImageUploadComponent} from "../image-upload/image-upload.component";
 import {ListInputComponent} from "../list-input/list-input.component";
-import {CalendarMapComponent} from "../calendar-map/calendar-map.component";
+import {CalendarDrawMapComponent} from "../calendar-map/calendar-draw-map.component";
 import {FeatureEditComponent} from "../feature-edit/feature-edit.component";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
@@ -33,7 +33,7 @@ library.add(faQuestionCircle);
     ImageUploadModalComponent,
     ImageUploadComponent,
     ListInputComponent,
-    CalendarMapComponent,
+    CalendarDrawMapComponent,
     FeatureEditComponent
   ],
   imports: [

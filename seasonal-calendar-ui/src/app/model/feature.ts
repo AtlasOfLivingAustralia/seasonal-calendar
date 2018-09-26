@@ -14,30 +14,32 @@ export class Feature implements IFeature {
 
   private tempKey: string = null;
 
-  constructor(
-    public profileUuid: string | null | undefined = '',
-    public name: string = '',
-    public commonName: string | null | undefined = '',
-    public scientificName: string | null | undefined = '',
-    public scientificNameGuid: string | null | undefined = '',
-    public description: string = '',
-    public imageUrls: string[] = []
-  ) { }
+  public profileUuid: string | null | undefined = '';
+  public name: string = '';
+  public commonName: string | null | undefined = '';
+  public scientificName: string | null | undefined = '';
+  public scientificNameGuid: string | null | undefined = '';
+  public description: string = '';
+  public imageUrls: string[] = [];
+
+  constructor(other?: IFeature) {
+    if (other) {
+      this.profileUuid = other.profileUuid;
+      this.name = other.name;
+      this.commonName = other.commonName;
+      this.scientificName = other.scientificName;
+      this.scientificNameGuid = other.scientificNameGuid;
+      this.description = other.description;
+      this.imageUrls = other.imageUrls.slice(0);
+    }
+  }
 
   public static fromJson(feature: IFeature) {
-    return new Feature(
-      feature.profileUuid,
-      feature.name,
-      feature.commonName,
-      feature.scientificName,
-      feature.scientificNameGuid,
-      feature.description,
-      feature.imageUrls.map((value) => value)
-    );
+    return new Feature(feature);
   }
 
   clone() {
-    return Feature.fromJson(this);
+    return new Feature(this);
   }
 
   getKey() {

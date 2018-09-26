@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CalendarMapComponent } from './calendar-map.component';
+import { CalendarDrawMapComponent } from './calendar-draw-map.component';
 
-describe('CalendarMapComponent', () => {
-  let component: CalendarMapComponent;
-  let fixture: ComponentFixture<CalendarMapComponent>;
+describe('CalendarDrawMapComponent', () => {
+  let component: CalendarDrawMapComponent;
+  let fixture: ComponentFixture<CalendarDrawMapComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CalendarMapComponent ]
+      declarations: [ CalendarDrawMapComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CalendarMapComponent);
+    fixture = TestBed.createComponent(CalendarDrawMapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

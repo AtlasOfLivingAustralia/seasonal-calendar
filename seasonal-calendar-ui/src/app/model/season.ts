@@ -16,32 +16,34 @@ export class Season implements ISeason {
 
   private tempKey: string = null;
 
-  constructor(
-    public id: number | null | undefined = null,
-    public localName: string = '',
-    public alternateName: string | null | undefined = '',
-    public startMonth: number = 1,
-    public endMonth: number = 12,
-    public weatherIcons: string | null | undefined = '',
-    public description: string = '',
-    public features: IFeature[] = []
-  ) { }
+  public id: number | null | undefined = null;
+  public localName: string = '';
+  public alternateName: string | null | undefined = '';
+  public startMonth: number = 1;
+  public endMonth: number = 12;
+  public weatherIcons: string | null | undefined = '';
+  public description: string = '';
+  public features: IFeature[] = [];
+
+  constructor(other?: ISeason) {
+    if (other) {
+      this.id = other.id;
+      this.localName = other.localName;
+      this.alternateName = other.alternateName;
+      this.startMonth = other.startMonth;
+      this.endMonth = other.endMonth;
+      this.weatherIcons = other.weatherIcons;
+      this.description = other.description;
+      this.features = other.features.map((value) => Feature.fromJson(value));
+    }
+  }
 
   static fromJson(season: ISeason) {
-    return new Season(
-      season.id,
-      season.localName,
-      season.alternateName,
-      season.startMonth,
-      season.endMonth,
-      season.weatherIcons,
-      season.description,
-      season.features.map((value => Feature.fromJson(value)))
-    );
+    return new Season(season);
   }
 
   clone() {
-    return Season.fromJson(this);
+    return new Season(this);
   }
 
   getKey() {
