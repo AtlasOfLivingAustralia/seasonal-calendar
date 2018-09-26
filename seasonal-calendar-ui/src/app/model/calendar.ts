@@ -91,7 +91,7 @@ export class Calendar implements ICalendar {
       this.zoom = other.zoom;
       this.languageGroup = other.languageGroup;
       this.published = other.published;
-      this.seasons.map((value) => Season.fromJson(value));
+      this.seasons = other.seasons.map((value) => Season.fromJson(value));
 
     }
   }
