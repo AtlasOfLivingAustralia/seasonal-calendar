@@ -6,6 +6,7 @@ import {Feature} from "../model/feature";
 import {CalendarService} from "../calendar.service";
 import {Logger} from "../shared/logger.service";
 import {NgbTabset} from '@ng-bootstrap/ng-bootstrap';
+import {MessageService} from "../messages/message.service";
 
 @Component({
   selector: 'sc-calendar-edit',
@@ -25,7 +26,8 @@ export class CalendarEditComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private calendarService: CalendarService,
-              private log: Logger) { }
+              private log: Logger,
+              private messageService: MessageService) { }
 
   ngOnInit() {
 
@@ -68,19 +70,25 @@ export class CalendarEditComponent implements OnInit {
 
   save() {
     this.saving = true;
+    let uuid = this.calendar.collectionUuid;
     this.calendarService.save(this.calendar).subscribe(
-      (value) => { },
+      (value) => {
+        if (!uuid) {
+          let newUuid = value.collectionUuid;
+          this.messageService.add({text: `${this.calendar.name} created`, timeout: 5000});
+          this.router.navigate(['admin','calendar',newUuid]);
+        } else {
+          this.messageService.add({text: `${this.calendar.name} saved`, timeout: 5000});
+        }
+      },
       (error) => {
+        this.messageService.add({text: "An error occured saving the calendar", action: {text:"Dismiss"}});
         this.log.error(error);
 
       }, () => {
         this.saving  = false;
       }
     );
-  }
-
-  publish() {
-
   }
 
   trackByKey(index, item) {
