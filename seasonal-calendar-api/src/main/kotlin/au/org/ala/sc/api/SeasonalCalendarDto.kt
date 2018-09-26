@@ -31,7 +31,15 @@ data class SeasonalCalendarDto(
     val zoom: Int?,
     val languageGroup: String,
     val published: Boolean,
-    val seasons: List<SeasonDto> = emptyList()
+    val seasons: List<SeasonDto> = emptyList(),
+    val welcomeCountry: String,
+    val welcomeCountryMedia: String,
+    val whoWeAreDescription: String,
+    val ourCountry: String,
+    val ourHistory: String,
+    val logos: List<String>,
+    val mediaLinks: List<String>,
+    val externalLinks: List<String>
 )
 
 data class CalendarSavedDto(

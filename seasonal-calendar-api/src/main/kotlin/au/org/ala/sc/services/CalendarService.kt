@@ -209,7 +209,15 @@ Unpublished or Published status |   Collection private or public |   When a seas
             calendar.references.toTypedArray(),
             calendar.referenceLinks.toTypedArray(),
             calendar.languageGroup,
-            calendar.published
+            calendar.published,
+            calendar.welcomeCountry,
+            calendar.welcomeCountryMedia,
+            calendar.whoWeAreDescription,
+            calendar.ourCountry,
+            calendar.ourHistory,
+            calendar.logos.toTypedArray(),
+            calendar.mediaLinks.toTypedArray(),
+            calendar.externalLinks.toTypedArray()
         )
     }
 
@@ -239,8 +247,16 @@ Unpublished or Published status |   Collection private or public |   When a seas
             latitude =  opus.mapConfig?.mapDefaultLatitude?.toDouble(),
             longitude = opus.mapConfig?.mapDefaultLongitude?.toDouble(),
             zoom = opus.mapConfig?.mapZoom,
+            published = calendar?.published ?: false,
             languageGroup = calendar?.language ?: "",
-            published = calendar?.published ?: false
+            welcomeCountry = calendar?.welcomeCountry ?: "",
+            welcomeCountryMedia = calendar?.welcomeCountryMedia ?: "",
+            whoWeAreDescription = calendar?.whoWeAre ?: "",
+            ourCountry = calendar?.ourCountry ?: "",
+            ourHistory = calendar?.ourHistory ?: "",
+            logos = calendar?.lgLogos?.toList() ?: mutableListOf(),
+            mediaLinks = calendar?.mediaLinks?.toList() ?: mutableListOf(),
+            externalLinks = calendar?.externalLinks?.toList() ?: mutableListOf()
         )
     }
 
