@@ -189,17 +189,80 @@
         </ngb-tab>
         <ngb-tab title="Language Group" id="language-group-tab">
           <ng-template ngbTabContent>
-            <div class="form-group">
-              <label for="logos">Logos</label>
-              <input type="url" class="form-control" id="logos" name="logos" [(ngModel)]="calendar.organisationLogoUrl">
-            </div>
 
-            <div class="form-group">
-              <label for="youtubeId">Youtube ID</label>
-              <input class="form-control" id="youtubeId" name="youtubeId" [(ngModel)]="calendar.youtubeId">
+            <div class="card bg-light my-3">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="title">Title</label>
+                      <input class="form-control" id="title" name="title" [(ngModel)]="calendar.languageGroup">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="welcomeCountry">Welcome Country <fa-icon icon="question-circle" ngbTooltip="Any qualifications or limitations regarding how the calendar was created, any intellectual property references/licenses (e.g. covered by copyright and how can be used - see creative commons as one option - https://creativecommons.org/choose/ ), any attributions required, any traditional knowledge/image notices, or acknowlegement of country."></fa-icon></label>
+                      <textarea class="form-control" id="welcomeCountry" name="welcomeCountry" [(ngModel)]="calendar.welcomeCountry"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="whoWeAre">Who We Are</label>
+                      <textarea class="form-control" id="whoWeAre" name="whoWeAre" [(ngModel)]="calendar.whoWeAreDescription" rows="3"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="ourCountry">Our Country</label>
+                      <textarea class="form-control" id="ourCountry" name="ourCountry" [(ngModel)]="calendar.ourCountry" rows="3"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="ourHistory">Our History</label>
+                      <textarea class="form-control" id="ourHistory" name="ourHistory" [(ngModel)]="calendar.ourHistory" rows="3"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="logos">Logos <fa-icon icon="question-circle" ngbTooltip="Provide the URL address for logos (if available)"></fa-icon></label>
+                      <sc-list-input intput-id="logos" name="logos" placeholder="Add logo url link" [(inputs)]="calendar.logos"></sc-list-input>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="welcomeMedia">Welcome Country Video</label>
+                      <input class="form-control" id="welcomeMedia" name="welcomeMedia" [(ngModel)]="calendar.welcomeCountryMedia">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="mediaLinks">Media Links <fa-icon icon="question-circle" ngbTooltip="Provide the URL address for medias (if available)"></fa-icon></label>
+                      <sc-list-input intput-id="mediaLinks" name="mediaLinks" placeholder="Add Media url link" [(inputs)]="calendar.mediaLinks"></sc-list-input>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="externalLinks">External Links <fa-icon icon="question-circle" ngbTooltip="Provide the URL address for external websites (if available)"></fa-icon></label>
+                      <sc-list-input intput-id="externalLinks" name="externalLinks" placeholder="Add External url link" [(inputs)]="calendar.externalLinks"></sc-list-input>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-img">
+                  <sc-calendar-draw-map [(latitude)]="calendar.latitude" [(longitude)]="calendar.longitude" [(zoom)]="calendar.zoom" [mapReadonly]="false"></sc-calendar-draw-map>
+                </div>
+              </div>
             </div>
-
-            <sc-calendar-draw-map [(latitude)]="calendar.latitude" [(longitude)]="calendar.longitude" [(zoom)]="calendar.zoom" [mapReadonly]="false"></sc-calendar-draw-map>
           </ng-template>
         </ngb-tab>
         <ngb-tab title="Seasons" id="seasons-tab">
