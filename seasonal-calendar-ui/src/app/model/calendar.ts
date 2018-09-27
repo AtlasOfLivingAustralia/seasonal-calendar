@@ -8,7 +8,6 @@ export interface ICalendar {
   description: string;
   imageUrl: string;
   websiteUrl: string;
-  youtubeId: string;
   organisationName: string;
   contributors: string[];
   contactName: string;
@@ -29,6 +28,14 @@ export interface ICalendar {
   languageGroup: string;
   published: boolean;
   seasons: ISeason[];
+  welcomeCountry: string;
+  welcomeCountryMedia: string;
+  whoWeAreDescription: string;
+  ourCountry: string;
+  ourHistory: string;
+  logos: string[];
+  mediaLinks: string[];
+  externalLinks: string[];
 }
 
 export class Calendar implements ICalendar {
@@ -41,7 +48,6 @@ export class Calendar implements ICalendar {
   public description: string = '';
   public imageUrl: string = '';
   public websiteUrl: string = '';
-  public youtubeId: string = '';
   public organisationName: string = '';
   public contributors: string[] = [];
   public contactName: string = '';
@@ -62,6 +68,14 @@ export class Calendar implements ICalendar {
   public languageGroup: string = '';
   public published: boolean = false;
   public seasons: ISeason[] = [];
+  public welcomeCountry: string = '';
+  public welcomeCountryMedia: string = '';
+  public whoWeAreDescription: string = '';
+  public ourCountry: string = '';
+  public ourHistory: string = '';
+  public logos: string[] = [];
+  public mediaLinks: string[] = [];
+  public externalLinks: string[] = [];
 
   constructor(other?: ICalendar) {
     if (other) {
@@ -71,7 +85,6 @@ export class Calendar implements ICalendar {
       this.description = other.description;
       this.imageUrl = other.imageUrl;
       this.websiteUrl = other.websiteUrl;
-      this.youtubeId = other.youtubeId;
       this.organisationName = other.organisationName;
       this.contributors = other.contributors.slice(0);
       this.contactName = other.contactName;
@@ -92,7 +105,14 @@ export class Calendar implements ICalendar {
       this.languageGroup = other.languageGroup;
       this.published = other.published;
       this.seasons = other.seasons.map((value) => Season.fromJson(value));
-
+      this.welcomeCountry = other.welcomeCountry;
+      this.welcomeCountryMedia = other.welcomeCountryMedia;
+      this.whoWeAreDescription = other.whoWeAreDescription;
+      this.ourCountry = other.ourCountry;
+      this.ourHistory = other.ourHistory;
+      this.logos = other.logos.slice(0);
+      this.mediaLinks = other.mediaLinks.slice(0);
+      this.externalLinks = other.externalLinks.slice(0);
     }
   }
 

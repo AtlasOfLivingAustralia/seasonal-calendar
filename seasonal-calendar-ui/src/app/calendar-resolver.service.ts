@@ -18,26 +18,52 @@ export class CalendarResolverService implements Resolve<Calendar> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Calendar> {
     let id = route.paramMap.get("id") || route.paramMap.get("name");
-    return this.calendarService.findCalendar(id!!)
-      .pipe(
-        catchError(e => {
-          this.logger.log("Caught error", e);
-          this.messageService.add({text: `${id} not found`, action: { text: 'Dismiss' } });
-          return observableOf(null);
-        }),
-        take(1),
-        map(calendar => {
-          if (calendar) {
-            return Calendar.fromJson(calendar);
-          } else {
-            // Would like to present the 404 page here but requires a fix for
-            // https://github.com/angular/angular/issues/17004
-            this.router.navigate(['']);
-            return null;
-          }
-        }
-      )
-    );
+
+    if (id) {
+      return this.calendarService.findCalendar(id!!)
+        .pipe(
+          catchError(e => {
+            this.logger.log("Caught error", e);
+            this.messageService.add({text: `${id} not found`, action: { text: 'Dismiss' } });
+            return observableOf(null);
+          }),
+          take(1),
+          map(calendar => {
+              if (calendar) {
+                return Calendar.fromJson(calendar);
+              } else {
+                // Would like to present the 404 page here but requires a fix for
+                // https://github.com/angular/angular/issues/17004
+                this.router.navigate(['']);
+                return null;
+              }
+            }
+          )
+        );
+    } else {
+      let language = route.paramMap.get("language");
+      return this.calendarService.findCalendarByLanguage(language!!)
+        .pipe(
+          catchError(e => {
+            this.logger.log("Caught error", e);
+            this.messageService.add({text: `${id} not found`, action: { text: 'Dismiss' } });
+            return observableOf(null);
+          }),
+          take(1),
+          map(calendar => {
+              if (calendar) {
+                return Calendar.fromJson(calendar);
+              } else {
+                // Would like to present the 404 page here but requires a fix for
+                // https://github.com/angular/angular/issues/17004
+                this.router.navigate(['']);
+                return null;
+              }
+            }
+          )
+        );
+    }
+
   }
 
 }

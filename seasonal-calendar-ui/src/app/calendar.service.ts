@@ -13,6 +13,7 @@ export class CalendarService {
   private readonly calendarsEndpoint : string = `${environment.api}calendars`;
   private readonly searchEndpoint : string = `${environment.api}search/bie`;
   private readonly imageEndpoint: string = `${environment.api}images/upload`;
+  private readonly languageGroupEndpoint: string = `${environment.api}language`;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -22,6 +23,10 @@ export class CalendarService {
 
   findCalendar(id: string) : Observable<ICalendar> {
     return this.httpClient.get<ICalendar>(`${this.calendarsEndpoint}/${id}`);
+  }
+
+  findCalendarByLanguage(language: string) : Observable<ICalendar> {
+    return this.httpClient.get<ICalendar>(`${this.languageGroupEndpoint}/${language}`);
   }
 
   speciesSearch(query: string) : Observable<BieSearchResponse> {

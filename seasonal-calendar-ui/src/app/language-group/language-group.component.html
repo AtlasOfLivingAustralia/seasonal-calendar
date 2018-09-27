@@ -1,0 +1,91 @@
+<div class="container">
+
+  <div class="card-deck">
+
+      <div class="card" *ngFor="let logo of calendar.logos">
+        <div class="card-body p-0">
+          <img class="card-img img-fluid" [src]="logo" />
+        </div>
+      </div>
+
+
+      <div class="card">
+        <div class="card-body">
+          Welcome to {{ calendar.welcomeCountry }} country
+        </div>
+      </div>
+
+
+  </div>
+
+  <div class="card-columns">
+
+    <div class="card">
+      <div class="card-body p-2">
+        <div class="card-img">
+          <iframe [class.thumbnail]="thumbnail" frameborder="0" [src]="welcomeMedia" webkitallowfullscreen mozallowfullscreen
+                  allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="card-img">
+          <sc-calendar-map [latitude]="calendar.latitude" [longitude]="calendar.longitude" [zoom]="calendar.zoom"></sc-calendar-map>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text">
+          Who we are: {{calendar.whoWeAreDescription}}
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text">
+          Our Country: {{calendar.ourCountry}}
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text">
+          Our History: {{calendar.ourHistory}}
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card-columns ext-links">
+
+    <div class="card" *ngFor="let media of calendar.mediaLinks">
+      <div class="card-body p-0">
+        <img class="card-img" src="media" />
+      </div>
+    </div>
+
+    <div class="card">
+
+      <a class="card-link" routerLink="/calendar/landing">Launch Seasonal Calendar</a>
+      <br>
+      <a class="card-link" [href]="profileLink">Launch Profiles</a>
+    </div>
+
+
+    <div class="card" *ngFor="let media of calendar.mediaLinks">
+      <div class="card-body p-0">
+        <img class="card-img" src="media" />
+      </div>
+    </div>
+
+  </div>
+
+</div>
+

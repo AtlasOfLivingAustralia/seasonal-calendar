@@ -1,0 +1,47 @@
+@import "~bootstrap-scss/bootstrap";
+
+
+.card {
+  border: none;
+ // display: inline-block;
+}
+.card-img{
+  // width: 100%!important;
+  // height: 100px!important;
+  object-fit: cover;
+}
+
+
+.card-columns {
+
+  @include media-breakpoint-only(xl) {
+    column-count: 2;
+  }
+  @include media-breakpoint-only(lg) {
+    column-count: 2;
+  }
+  @include media-breakpoint-only(md) {
+    column-count: 2;
+  }
+  @include media-breakpoint-only(sm) {
+    column-count: 1;
+  }
+
+}
+
+.card-columns.ext-links {
+
+  @include media-breakpoint-only(xl) {
+    column-count: 3;
+  }
+  @include media-breakpoint-only(lg) {
+    column-count: 3;
+  }
+  @include media-breakpoint-only(md) {
+    column-count: 2;
+  }
+  @include media-breakpoint-only(sm) {
+    column-count: 1;
+  }
+
+}
