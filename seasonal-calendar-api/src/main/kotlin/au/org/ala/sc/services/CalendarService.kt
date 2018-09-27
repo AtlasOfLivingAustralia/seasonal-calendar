@@ -101,6 +101,15 @@ class CalendarService(
         return constructCalendarDto(opus, calendar).copy(seasons = seasonService.getSeasonsForCalendarId(opusUuid))
     }
 
+    fun findSeasonalCalendar(language: String) : SeasonalCalendarDto {
+        val calendarList = calendarDao.fetchByLanguage(language)
+        if (calendarList.isEmpty()) throw CalendarNotFoundException(language)
+        val calendar = calendarList?.firstOrNull()
+        val opus = getOpus(calendar?.collectionUuid.toString());
+        val opusUuid = UUID.fromString(opus?.uuid)
+        return constructCalendarDto(opus, calendar).copy(seasons = seasonService.getSeasonsForCalendarId(opusUuid))
+    }
+
     fun getSeasonalCalendars(publishedOnly: Boolean = true) : List<SeasonalCalendarDto> {
         val getOperaResponse = profilesServiceClient.getOperaByTag(calendarTag, userId, emptyMap()).execute()
         if (getOperaResponse.isSuccessful) {
@@ -199,7 +208,6 @@ Unpublished or Published status |   Collection private or public |   When a seas
         return Calendar(
             UUID.fromString(calendar.collectionUuid),
             calendar.websiteUrl,
-            calendar.youtubeId,
             calendar.organisationName,
             calendar.contributors.toTypedArray(),
             calendar.contactName,
@@ -229,7 +237,6 @@ Unpublished or Published status |   Collection private or public |   When a seas
             description = opus.description ?: "",
             imageUrl = opus.opusLayoutConfig.images?.firstOrNull()?.imageUrl ?: "",
             websiteUrl = calendar?.website ?: "",
-            youtubeId = calendar?.youtubeId ?: "",
             organisationName =  calendar?.organisationName ?: "",
             contributors = calendar?.contributors?.toList() ?: mutableListOf(),
             contactName = calendar?.contactName ?: "",

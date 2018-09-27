@@ -11,7 +11,6 @@ data class SeasonalCalendarDto(
     val description: String,
     val imageUrl: String,
     val websiteUrl: String,
-    val youtubeId: String,
     val organisationName: String,
     val contributors: List<String>,
     val contactName: String,

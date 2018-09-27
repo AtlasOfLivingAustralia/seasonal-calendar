@@ -9,6 +9,7 @@ import au.org.ala.sc.resources.CalendarExceptionMapper
 import au.org.ala.sc.resources.CalendarResource
 import au.org.ala.sc.resources.ImageResource
 import au.org.ala.sc.resources.SearchResource
+import au.org.ala.sc.resources.LanguageResource
 import au.org.ala.sc.services.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
@@ -70,12 +71,14 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
         val calendarResource = CalendarResource(calendarService)
         val imageResource = ImageResource(imagesBaseDir, imageService)
         val searchResource = SearchResource(searchClient)
+        val languageResource = LanguageResource(calendarService)
 
         environment.jersey().apply {
             register(CalendarExceptionMapper::class.java)
             register(calendarResource)
             register(imageResource)
             register(searchResource)
+            register(languageResource)
         }
     }
 
