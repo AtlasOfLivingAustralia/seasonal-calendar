@@ -11,10 +11,13 @@ import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 })
 export class LanguageGroupComponent implements OnInit {
 
+  public static readonly youTubeUrl = 'http://www.youtube.com/embed/';
+
   calendar: ICalendar;
   profileLink: String;
 
   welcomeMedia: SafeResourceUrl;
+  mediaLinks: SafeResourceUrl[] = [];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -24,12 +27,22 @@ export class LanguageGroupComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe((data: { calendar: ICalendar }) => {
       this.calendar = data.calendar;
-      this.welcomeMedia = this.sanitizer.bypassSecurityTrustResourceUrl(data.calendar.welcomeCountryMedia);
-      this.profileLink = `${environment.profiles}opus/${this.calendar.collectionUuid}`;
+      let welcomeMediaUrl = this.formatUrl(data.calendar.welcomeCountryMedia);
+      this.welcomeMedia = this.sanitizer.bypassSecurityTrustResourceUrl(welcomeMediaUrl);
+      for (let i of this.calendar.mediaLinks){
+        this.mediaLinks.push(this.sanitizer.bypassSecurityTrustResourceUrl(this.formatUrl(i)));
+      }
+     this.profileLink = `${environment.profiles}opus/${this.calendar.collectionUuid}`;
     });
   }
-  getSanitizedUrl(url: string): SafeResourceUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(url);
+
+  private formatUrl(url: string): string {
+    let parts = url.match(/v=(.*)(?:&)?/);
+    if (parts && parts.length > 1) {
+      return `${LanguageGroupComponent.youTubeUrl}${parts[1]}`;
+    } else {
+      return url;
+    }
   }
 
 }
