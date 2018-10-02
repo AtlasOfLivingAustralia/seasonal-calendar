@@ -15,6 +15,21 @@
 
   <div class="card-columns p-2">
 
+    <div class="card" *ngIf="calendar.welcomeCountry">
+      <div class="card-body">
+        {{ calendar.welcomeCountry }}
+      </div>
+    </div>
+
+    <div class="card" *ngIf="calendar.welcomeCountryMedia">
+      <div class="card-body p-0">
+        <div class="card-img">
+          <iframe frameborder="0" [src]="welcomeMedia" webkitallowfullscreen mozallowfullscreen
+                  allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-body p-0">
         <div class="card-img">
@@ -23,22 +38,7 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-body">
-        {{ calendar.welcomeCountry }}
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-body p-0">
-        <div class="card-img">
-          <iframe [class.thumbnail]="thumbnail" frameborder="0" [src]="welcomeMedia" webkitallowfullscreen mozallowfullscreen
-                  allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
+    <div class="card" *ngIf="calendar.whoWeAreDescription">
       <div class="card-body">
         <p class="card-text">
           {{calendar.whoWeAreDescription}}
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" *ngIf="calendar.ourCountry">
       <div class="card-body">
         <p class="card-text">
           {{calendar.ourCountry}}
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" *ngIf="calendar.ourHistory">
       <div class="card-body">
         <p class="card-text">
           {{calendar.ourHistory}}
@@ -63,7 +63,7 @@
     </div>
   </div>
 
-  <div class="card-deck p-0">
+  <div class="card-deck p-0" *ngIf="calendar.mediaLinks">
     <div class="card" *ngFor="let media of mediaLinks">
       <div class="card-body">
         <div class="card-img">
