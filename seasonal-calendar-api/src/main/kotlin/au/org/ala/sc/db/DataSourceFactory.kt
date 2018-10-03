@@ -13,6 +13,7 @@ import io.dropwizard.util.Duration
 import io.dropwizard.validation.MinDuration
 import io.dropwizard.validation.ValidationMethod
 import org.slf4j.LoggerFactory
+import java.io.Closeable
 import java.io.PrintWriter
 import java.sql.Connection
 import java.util.*
@@ -168,15 +169,34 @@ class DataSourceFactory : PooledDataSourceFactory {
     var scheduledExecutor: ScheduledExecutorService? = null
     var healthCheckRegistry: HealthCheckRegistry? = null
 
-    override fun build(metricRegistry: MetricRegistry, name: String): ManagedDataSource {
+    var flywayUsername: String? = null
+    var flywayPassword: String? = null
 
+    val flyway: FlywayDataSourceFactory = FlywayDataSourceFactory(this)
+
+    override fun build(metricRegistry: MetricRegistry, name: String): HikariManagedDataSource {
+
+        val config = hikariConfig(metricRegistry, name, username, password)
+
+        return HikariManagedDataSource(config)
+    }
+
+    internal fun hikariConfig(
+        metricRegistry: MetricRegistry,
+        name: String,
+        username: String?,
+        password: String?
+    ): HikariConfig {
         val config = HikariConfig()
 
-        fun Map<String, String>.toProperties(): Properties = Properties().also { props -> this.onEach{ (k,v) -> props.setProperty(k,v) } }
+        fun Map<String, String>.toProperties(): Properties =
+            Properties().also { props -> this.onEach { (k, v) -> props.setProperty(k, v) } }
         config.dataSourceProperties = properties.toProperties()
         config.healthCheckProperties = healthCheckProperties.toProperties()
 
-        fun <T> ((T) -> Unit).ifNotNull(value: T?) { value?.let { this@ifNotNull(value) } }
+        fun <T> ((T) -> Unit).ifNotNull(value: T?) {
+            value?.let { this@ifNotNull(value) }
+        }
 
         config::setDataSourceClassName.ifNotNull(dataSourceClass)
         config::setJdbcUrl.ifNotNull(url)
@@ -200,7 +220,7 @@ class DataSourceFactory : PooledDataSourceFactory {
         config::setMinimumIdle.ifNotNull(minimumIdle)
 
         config::setHealthCheckRegistry.ifNotNull(healthCheckRegistry)
-        config.metricRegistry = metricRegistry
+        config::setMetricRegistry.ifNotNull(metricRegistry)
 
         config.poolName = name
 
@@ -230,12 +250,20 @@ class DataSourceFactory : PooledDataSourceFactory {
         //threadFactory
 
         config::setScheduledExecutor.ifNotNull(scheduledExecutor)
-
-        return HikariManagedDataSource(config)
+        return config
     }
 }
 
-class HikariManagedDataSource(private val hikariConfig: HikariConfig, lazyMode: LazyThreadSafetyMode = LazyThreadSafetyMode.NONE) : ManagedDataSource, DataSource {
+class FlywayDataSourceFactory(private val factory: DataSourceFactory): PooledDataSourceFactory by factory {
+    override fun build(metricRegistry: MetricRegistry, name: String): HikariManagedDataSource {
+        return HikariManagedDataSource(factory.hikariConfig(metricRegistry, name, factory.flywayUsername ?: factory.username, factory.flywayPassword ?: factory.password))
+    }
+}
+
+class HikariManagedDataSource(
+    private val hikariConfig: HikariConfig,
+    lazyMode: LazyThreadSafetyMode = LazyThreadSafetyMode.NONE
+) : ManagedDataSource, DataSource, AutoCloseable, Closeable {
 
     companion object {
         private val log = LoggerFactory.getLogger(HikariManagedDataSource::class.java)
@@ -245,7 +273,8 @@ class HikariManagedDataSource(private val hikariConfig: HikariConfig, lazyMode: 
 
     override fun start() {
         val poolName = dataSource.poolName
-        log.info("Datasource {} is running {}", poolName, dataSource.isRunning)
+        if (dataSource.isRunning) log.info("Datasource {} is running", poolName)
+        else log.warn("Datasource {} is not running!", poolName)
     }
 
     override fun stop() {
@@ -267,5 +296,9 @@ class HikariManagedDataSource(private val hikariConfig: HikariConfig, lazyMode: 
     override fun getParentLogger(): Logger = dataSource.parentLogger
     override fun getLogWriter(): PrintWriter = dataSource.logWriter
     override fun getLoginTimeout(): Int = dataSource.loginTimeout
+
+    override fun close() {
+        dataSource.close()
+    }
 
 }

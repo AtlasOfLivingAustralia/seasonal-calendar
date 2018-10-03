@@ -11,6 +11,7 @@ import au.org.ala.sc.resources.ImageResource
 import au.org.ala.sc.resources.SearchResource
 import au.org.ala.sc.resources.LanguageResource
 import au.org.ala.sc.services.*
+import au.org.ala.sc.util.logger
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import io.dropwizard.Application
@@ -33,12 +34,16 @@ import javax.servlet.DispatcherType
 
 class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>() {
 
+    companion object {
+        val log = logger()
+    }
+
     override fun initialize(bootstrap: Bootstrap<SeasonalCalendarConfiguration>) {
         bootstrap.objectMapper.findAndRegisterModules()
         bootstrap.addBundle(MultiPartBundle())
         bootstrap.addBundle(object : FlywayBundle<SeasonalCalendarConfiguration>() {
             override fun getDataSourceFactory(configuration: SeasonalCalendarConfiguration): PooledDataSourceFactory {
-                return configuration.database
+                return configuration.database.flyway
             }
 
             override fun getFlywayFactory(configuration: SeasonalCalendarConfiguration): FlywayFactory {
@@ -48,6 +53,9 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
     }
 
     override fun run(configuration: SeasonalCalendarConfiguration, environment: Environment) {
+
+        val migrations = configuration.database.flyway.build(environment.metrics(), "flyway").use { dataSource -> configuration.flyway.build(dataSource).migrate() }
+        log.info("Applied {} Flyway migrations", migrations)
 
         addCors(environment, configuration)
 
