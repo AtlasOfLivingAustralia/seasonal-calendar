@@ -13,12 +13,10 @@ cache:
   - "$HOME/.m2"
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-before_install:
-- chmod +x gradlew
 install:
 - "./install.sh"
 after_success:
-- '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./gradlew publish'
+- "[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./deploy.sh"
 env:
   global:
   - secure: D9WPmEVpXRdZY1N+B2EOQ8KbydL/f9HLv3cokJZRQcMP9cBnTRdbmYIOfymV8kPTefPr76ktEtj9HfBt4379fLNN3n2ynuwUG26JBl4OTRs82Xfwin7I+Usu05SDkRRoRrrRU7axlg0D7zyUcLaBh966pwCRUhkep7j1tDi8fPmllbY9CJe30ZI800VogVFJmKP6RaNblkdFNqopPDAcTtIOSUlAAw54svBb2nzZLNYcxszR4WHijklKln6yWUWBvNX/J/V5cqvcqV2A7drOA77kmkLHIPn//1/Els+OS3awFcYzFX7MwX//kMjTpdKeZ/+qdXZbqN+8y1zs/CtO5Wl2ggkhR9eEU+l3ZQMq6WEEwsBpkiecgrRdJ+vM4581nNeRFHZb7Oj+hOW/X/12Er3OlvUtsoOGIv4ft1030LqVgfdXuo0hKK2lkkHGt46/WFQfjkSFfpLrOG4is2jBs1OOwtD6RKWCwxXrctCv+Alt+lS4QALOJv0ib5eEWXAHdjeKTd2ha4BchHmxYHS0wrTmi/2mCsqXMeL4E0bAdLLxIwfmdvAAH0MqiV6Cdw/dhF9ooav9C2csKj/2cmY6MUAKN48+8zrEmEpfkKy3UEG+Cq+4y2u4jeXGHyY8VBeLS2nenumomRZ38+Q+c4PBwSGDqyQekcqhHU1aGSxir3c=
