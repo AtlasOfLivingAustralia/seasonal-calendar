@@ -23,9 +23,7 @@ before_install:
   - chmod +x gradlew
 
 install:
-  - pushd seasonal-calendar-api
   - ./install.sh
-  - popd
 
 after_success:
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./gradlew publish'
