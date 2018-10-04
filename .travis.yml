@@ -14,9 +14,9 @@ cache:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
 before_install:
-- cp seasonal-calendar-api\local.ci seasonal-calendar-api\local.properties
-- psql -c 'create database seasonal-calendars;' -U postgres
-- chmod +x seasonal-calendar-api\gradlew  
+- 'cp seasonal-calendar-api\local.ci seasonal-calendar-api\local.properties'
+- 'psql -c 'create database seasonal-calendars;' -U postgres'
+- 'chmod +x seasonal-calendar-api\gradlew'
 - chmod +x install.sh
 - chmod +x deploy.sh
 install:
