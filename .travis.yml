@@ -13,6 +13,9 @@ cache:
   - "$HOME/.m2"
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
+before_install:
+- chmod +x install.sh
+- chmod +x deploy.sh  
 install:
 - "./install.sh"
 after_success:
