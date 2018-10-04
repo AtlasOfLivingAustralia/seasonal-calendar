@@ -1,3 +1,5 @@
+dist: trusty
+sudo: false
 language: java
 sudo: false
 jdk:
@@ -23,7 +25,7 @@ cache:
   - "$HOME/.gradle/wrapper/"
 before_install:
 - cp seasonal-calendar-api/local.ci seasonal-calendar-api/local.properties
-- createdb -h localhost -p $PGPORT -U postgres seasonal-calendars;
+- createdb -h localhost -p $PGPORT -U postgres seasonal-calendars
 - chmod +x seasonal-calendar-api/gradlew
 - chmod +x install.sh
 - chmod +x deploy.sh
