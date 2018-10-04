@@ -30,6 +30,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
 import javax.servlet.DispatcherType
+import au.org.ala.sc.util.logger
 
 class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>() {
 
