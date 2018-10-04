@@ -6,6 +6,10 @@ services:
   - postgresql
 addons:
   postgresql: "10"
+  apt:
+    packages:
+    - postgresql-10
+    - postgresql-contrib-10
 branches:
   only:
   - travis
