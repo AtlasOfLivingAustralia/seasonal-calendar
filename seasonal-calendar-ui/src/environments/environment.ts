@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api: 'https://devt.ala.org.au/seasonal-calendar/api/',
+  api: 'http://devt.ala.org.au:8080/',
   profiles: 'https://profiles-dev.ala.org.au/'
 };
 

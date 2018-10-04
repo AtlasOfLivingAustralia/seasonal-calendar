@@ -19,6 +19,7 @@ plugins {
     id 'nu.studer.jooq' version '3.0.1'
     id 'pl.codelabs.flywayJooq' version '1.3.1'
     id 'application'
+    id 'maven-publish'
 }
 
 group 'au.org.ala'
@@ -105,6 +106,11 @@ compileKotlin.dependsOn generateSeasonalCalendarJooqSchemaSource
 
 mainClassName = "au.org.ala.sc.SeasonalCalendarApplicationKt"
 
+run {
+    args = ['server', 'dev-config.yml']
+}
+
+
 repositories {
     mavenLocal()
     maven { url 'https://nexus.ala.org.au/content/groups/public/' }
@@ -144,4 +150,59 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+//def zipfile = file("$project.projectDir/build/distributions/seasonal-calendar-api-1.0-SNAPSHOT.zip")
+
+//artifacts {
+//    archives zipfile//
+//}
+/*distributions {
+    main {
+        contents {
+            from { 'src/main/resources' }
+            into { 'lib'}
+        }
+    }
+}
+*/
+
+/*copyResources(type: Copy) {
+    into "$buildDir/lib"
+    from "src/main/resources"
+}
+
+distributions {
+    main {
+        contents (copyResources) {
+            into 'lib'
+        }
+    }
+}*/
+
+/*startScripts{
+    classpath += files('db')
+}*/
+
+/*applicationDistribution.from("src/main/resources/db") {
+    into "lib/"
+}*/
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact distZip
+        }
+
+    }
+    repositories {
+        maven {
+            name 'Nexus'
+            url "https://nexus.ala.org.au/content/repositories/${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'}"
+            credentials {
+                username = System.getenv('TRAVIS_DEPLOY_USERNAME')
+                password = System.getenv('TRAVIS_DEPLOY_PASSWORD')
+            }
+        }
+    }
 }

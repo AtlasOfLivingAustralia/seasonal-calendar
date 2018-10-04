@@ -11,7 +11,6 @@ import au.org.ala.sc.resources.ImageResource
 import au.org.ala.sc.resources.SearchResource
 import au.org.ala.sc.resources.LanguageResource
 import au.org.ala.sc.services.*
-import au.org.ala.sc.util.logger
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import io.dropwizard.Application
@@ -53,6 +52,9 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
     }
 
     override fun run(configuration: SeasonalCalendarConfiguration, environment: Environment) {
+
+        // Run Flyway DB migration script
+       // configuration.flyway.build(configuration.database.build(environment.metrics(), "flyway-db")).migrate();
 
         val migrations = configuration.database.flyway.build(environment.metrics(), "flyway").use { dataSource -> configuration.flyway.build(dataSource).migrate() }
         log.info("Applied {} Flyway migrations", migrations)

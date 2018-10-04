@@ -65,7 +65,7 @@
                   "type": "bundle",
                   "name": "main",
                   "baseline": "500kb",
-                  "maximumError": "20%", // triggers error if size is 20% more than baseline
+                  "maximumError": "40%", // triggers error if size is 20% more than baseline
                   "maximumWarning": "10%", // triggers warning if size is 10% more than baseline
                   "minimumError": "20%", // triggers error if size is 20% less than baseline
                   "minimumWarning": "10%", // triggers warning if size is 10% less than baseline
@@ -73,7 +73,7 @@
                 {
                   "type": "all",
                   "baseline": "1024kb",
-                  "maximumError": "20%", // triggers error if size is 20% more than baseline
+                  "maximumError": "25%", // triggers error if size is 20% more than baseline
                   "maximumWarning": "10%", // triggers warning if size is 10% more than baseline
                 }
               ]
