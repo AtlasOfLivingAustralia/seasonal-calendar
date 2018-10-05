@@ -2,5 +2,4 @@
 pushd seasonal-calendar-api
 ./gradlew test
 ./gradlew build
-./gradlew assemble --refresh-dependencies
 popd

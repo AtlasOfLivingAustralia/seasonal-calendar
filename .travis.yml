@@ -29,9 +29,12 @@ before_install:
 - psql -c 'create database "seasonal-calendars";' -U postgres
 - chmod +x seasonal-calendar-api/gradlew
 - chmod +x install.sh
+- chmod +x build.sh
 - chmod +x deploy.sh
 install:
 - "./install.sh"
+script:
+- "./build.sh"
 after_success:
 - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./deploy.sh'
 env:
