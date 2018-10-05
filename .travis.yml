@@ -45,7 +45,6 @@ matrix:
         - npm install -g @angular/cli
       script:
         - ng build --prod --aot
-        - ng test
         - seasonal-calendar-ui/gradlew build
         - seasonal-calendar-ui/gradlew publish
 
