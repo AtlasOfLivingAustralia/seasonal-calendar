@@ -14,8 +14,7 @@ cache:
 matrix:
   include:
     - language: java
-      jdk:
-        - openjdk8
+      jdk: openjdk8
       services:
         - postgresql
       addons:
