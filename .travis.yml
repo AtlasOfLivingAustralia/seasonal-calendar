@@ -35,7 +35,7 @@ matrix:
       script:
         - ./gradlew assemble --refresh-dependencies
       after_success:
-        - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./gradlew publish'
+        - '[ "${TRAVIS_PULL_REQUEST}" == "false" ] && travis_retry ./gradlew publish'
       after_script:
         - popd
 
@@ -52,7 +52,7 @@ matrix:
         - ng build --prod --aot --build-optimizer
       after_success:
         - ./gradlew build
-        - ./gradlew publish
+        - '[ "${TRAVIS_PULL_REQUEST}" == "false" ] && travis_retry ./gradlew publish'
       after_script:
         - popd
 
