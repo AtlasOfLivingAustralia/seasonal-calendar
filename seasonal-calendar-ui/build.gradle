@@ -1,0 +1,71 @@
+apply plugin: "base"
+apply plugin: "maven"
+apply plugin: "maven-publish"
+
+repositories {
+  maven { url 'https://nexus.ala.org.au/content/groups/public/' }
+ // mavenCentral()
+}
+
+group 'au.org.ala'
+version '1.0-SNAPSHOT'
+
+/*
+def webappDir = "$projectDir/src/main/webapp"
+
+task buildAngular(type:Exec) {
+  // installAngular should be run prior to this task
+  dependsOn "installAngular"
+  workingDir "$webappDir"
+  inputs.dir "$webappDir"
+  // Add task to the standard build group
+  group = BasePlugin.BUILD_GROUP
+  // ng doesn't exist as a file in windows -> ng.cmd
+  if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+    commandLine "ng.cmd", "build"
+  } else {
+    commandLine "ng", "build"
+  }
+}
+
+task installAngular(type:Exec) {
+  workingDir "$webappDir"
+  inputs.dir "$webappDir"
+  group = BasePlugin.BUILD_GROUP
+  if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
+    commandLine "npm.cmd", "install"
+  } else {
+    commandLine "npm", "install"
+  }
+}
+*/
+
+
+task assembleArtifact(type: Zip) {
+  archiveName 'seasonal-calendar-ui.zip'
+  destinationDir file("$buildDir")
+  from "dist/seasonal-calendar-ui"
+  description "Assemble archive $archiveName into ${relativePath(destinationDir)}"
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      artifact source: assembleArtifact, extension: 'zip'
+    }
+  }
+  repositories {
+    maven {
+      name 'Nexus'
+      url "https://nexus.ala.org.au/content/repositories/${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'}"
+      credentials {
+        username = System.getenv('TRAVIS_DEPLOY_USERNAME')
+        password = System.getenv('TRAVIS_DEPLOY_PASSWORD')
+      }
+    }
+  }
+}
+
+assemble.dependsOn assembleArtifact
+build.dependsOn assemble
+publish.dependsOn build

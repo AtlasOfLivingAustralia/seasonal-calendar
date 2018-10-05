@@ -37,7 +37,17 @@ matrix:
         - "./build.sh"
       after_success:
         - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./deploy.sh'
-
+    - language: node_js
+      node_js: "8"
+      addons:
+        chorme: 'stable'
+      before_script:
+        - npm install -g @angular/cli
+      script:
+        - ng build --prod --aot
+        - ng test
+        - seasonal-calendar-ui/gradlew build
+        - seasonal-calendar-ui/gradlew publish
 
 env:
   global:
