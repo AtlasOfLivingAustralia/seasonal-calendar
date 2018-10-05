@@ -10,7 +10,7 @@ database:
     databaseName: seasonal-calendars
 flyway:
   outOfOrder: false
-profileServiceBaseUrl: https://devt.ala.org.au/profile-service/
+profileServiceBaseUrl: http://devt.ala.org.au:8099
 dataResourceUid: dr382
 httpClients:
   named:
@@ -19,4 +19,8 @@ httpClients:
       headers:
         apiKey: 1234567890
 logging:
-  level: INFO
+  level: DEBUG
+#server:
+#  applicationConnectors:
+#    - type: http
+#      port: 8082

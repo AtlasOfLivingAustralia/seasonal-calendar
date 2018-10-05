@@ -1,0 +1,5 @@
+flywayUrl=jdbc:postgresql:seasonal-calendars
+flywayUsername=postgres
+flywayPassword=
+flywayBaselineOnMigrate=false
+flywayOutOfOrder=false
