@@ -45,11 +45,10 @@ matrix:
         - pushd seasonal-calendar-ui
         - npm install -g @angular/cli
       install:
-        - npm install  
+        - npm install
       before_script:
       script:
         - ng build --prod --aot
-        - ng test
       after_success:
         - seasonal-calendar-ui/gradlew build
         - seasonal-calendar-ui/gradlew publish
