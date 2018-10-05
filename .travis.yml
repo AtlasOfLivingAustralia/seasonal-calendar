@@ -41,9 +41,12 @@ matrix:
       node_js: "8"
       addons:
         chorme: 'stable'
-      before_script:
+      before_install:
         - pushd seasonal-calendar-ui
         - npm install -g @angular/cli
+      install:
+        - npm -install  
+      before_script:
       script:
         - ng build --prod --aot
         - ng test
