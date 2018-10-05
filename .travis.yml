@@ -11,7 +11,7 @@ cache:
   - "$HOME/.m2"
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-matrix:
+jobs:
   include:
     - language: java
       jdk: openjdk8
