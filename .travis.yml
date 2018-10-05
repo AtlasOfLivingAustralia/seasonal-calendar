@@ -25,18 +25,20 @@ matrix:
           - postgresql-contrib-9.6
           - postgresql-client-9.6
       before_install:
-        - cp seasonal-calendar-api/local.ci seasonal-calendar-api/local.properties
+        - pushd seasonal-calendar-api
+        - cp local.ci local.properties
         - psql -c 'create database "seasonal-calendars";' -U postgres
-        - chmod +x seasonal-calendar-api/gradlew
-        - chmod +x install.sh
-        - chmod +x build.sh
-        - chmod +x deploy.sh
+        - chmod +x gradlew
       install:
-        - "./install.sh"
+        - ./gradlew test
+        - ./gradlew build
       script:
-        - "./build.sh"
+        - ./gradlew assemble --refresh-dependencies
       after_success:
-        - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./deploy.sh'
+        - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./gradlew publish'
+      after_script:
+        - popd
+
     - language: node_js
       node_js: "8"
       addons:
@@ -46,7 +48,6 @@ matrix:
         - npm install -g @angular/cli
       install:
         - npm install
-      before_script:
       script:
         - ng build --prod --aot --build-optimizer
       after_success:
