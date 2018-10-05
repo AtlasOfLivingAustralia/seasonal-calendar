@@ -1,17 +1,5 @@
 dist: trusty
 sudo: false
-language: java
-jdk:
-- openjdk8
-services:
-- postgresql
-addons:
-  postgresql: '9.6'
-  apt:
-    packages:
-    - postgresql-9.6
-    - postgresql-contrib-9.6
-    - postgresql-client-9.6
 branches:
   only:
   - travis
@@ -23,19 +11,34 @@ cache:
   - "$HOME/.m2"
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-before_install:
-- cp seasonal-calendar-api/local.ci seasonal-calendar-api/local.properties
-- psql -c 'create database "seasonal-calendars";' -U postgres
-- chmod +x seasonal-calendar-api/gradlew
-- chmod +x install.sh
-- chmod +x build.sh
-- chmod +x deploy.sh
-install:
-- "./install.sh"
-script:
-- "./build.sh"
-after_success:
-- '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./deploy.sh'
+matrix:
+  include:
+    - language: java
+      jdk:
+        - openjdk8
+      services:
+        - postgresql
+      addons:
+        postgresql: '9.6'
+        apt:
+          packages:
+          - postgresql-9.6
+          - postgresql-contrib-9.6
+          - postgresql-client-9.6
+        before_install:
+          - cp seasonal-calendar-api/local.ci seasonal-calendar-api/local.properties
+          - psql -c 'create database "seasonal-calendars";' -U postgres
+          - chmod +x seasonal-calendar-api/gradlew
+          - chmod +x install.sh
+          - chmod +x build.sh
+          - chmod +x deploy.sh
+        install:
+          - "./install.sh"
+        script:
+          - "./build.sh"
+        after_success:
+          - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && travis_retry ./deploy.sh'
+
 env:
   global:
   - secure: A4OVxsMbW0Wl3eZ/sL8vw08DDLuO30Tf9vSmiik0ByiKlf62hEczzM/QXWMaMqslinKxviW5s2ktF9KCTURj39aHLYvYku4LPLmGrvIEb2hSTMmF1nS23wGJ55KfFVN9vH7/utbg8Sro4STZygFDAf7idWz4TdHGP4doGVoUrOWIw3+5QLNIq4u5SSguHWkxJWfIKoxvXpM4Nd7bPpTKYb9Jo301zsRt7KbGf70PhGDOOsZju/j8cnps+jpGTXddYF1qF5wTUef1lxOgcG/aYSFkitwwcVMWsI/elQZN8j5cVfF1VO85KZSJQsb0F+wDsT9kwMDFEk1CUxuo2gTMXNfTFJrPWYW/hBw90UWzb7rU6gpGUUTJ7ELyVC3AkLTBHXZiVuhFc/VcLWzL33DZtvq3lZ3es/N1JgQbp5IEp8qMlPwEzAzG/nhPfrEJb9Yu52SfRql+hmxJA2nVITJ2K/XEFvyorANLCOJoBzivHgfSdk/AaCKwzWBj0/EOTWaLwudRb4btFrzUhuYx8gtxtPe7llnr53v5ONCKGy2RQkzeF0+B8SBp73nD/zcCFIC/WyrSxrN7LY7xak6ZqH3kFSupapeXTpDjJWLYl6gFGsJLj+yNjGjM8ISR7ZO5iO4xUJM83aP7AIYwGKq0R+yW01hUGnBnP08/pXKORs+JsLA=
