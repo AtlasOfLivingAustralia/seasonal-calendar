@@ -48,10 +48,10 @@ matrix:
         - npm install
       before_script:
       script:
-        - ng build --prod --aot
+        - ng build --prod --aot --build-optimizer
       after_success:
-        - seasonal-calendar-ui/gradlew build
-        - seasonal-calendar-ui/gradlew publish
+        - ./gradlew build
+        - ./gradlew publish
       after_script:
         - popd
 
