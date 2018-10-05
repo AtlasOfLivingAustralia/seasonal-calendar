@@ -4,42 +4,10 @@ apply plugin: "maven-publish"
 
 repositories {
   maven { url 'https://nexus.ala.org.au/content/groups/public/' }
- // mavenCentral()
 }
 
 group 'au.org.ala'
 version '1.0-SNAPSHOT'
-
-/*
-def webappDir = "$projectDir/src/main/webapp"
-
-task buildAngular(type:Exec) {
-  // installAngular should be run prior to this task
-  dependsOn "installAngular"
-  workingDir "$webappDir"
-  inputs.dir "$webappDir"
-  // Add task to the standard build group
-  group = BasePlugin.BUILD_GROUP
-  // ng doesn't exist as a file in windows -> ng.cmd
-  if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-    commandLine "ng.cmd", "build"
-  } else {
-    commandLine "ng", "build"
-  }
-}
-
-task installAngular(type:Exec) {
-  workingDir "$webappDir"
-  inputs.dir "$webappDir"
-  group = BasePlugin.BUILD_GROUP
-  if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")){
-    commandLine "npm.cmd", "install"
-  } else {
-    commandLine "npm", "install"
-  }
-}
-*/
-
 
 task assembleArtifact(type: Zip) {
   archiveName 'seasonal-calendar-ui.zip'
