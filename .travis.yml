@@ -42,12 +42,12 @@ matrix:
       addons:
         chorme: 'stable'
       before_script:
-        - pushd seaonal-calendar-ui
+        - pushd seasonal-calendar-ui
         - npm install -g @angular/cli
       script:
         - ng build --prod --aot
         - ng test
-      after_success:   
+      after_success:
         - seasonal-calendar-ui/gradlew build
         - seasonal-calendar-ui/gradlew publish
       after_script:
