@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {MessageService} from './message.service';
 import {Uuid} from "../shared/uuid";
+import {MessageService} from "../shared/services/message.service";
 
 @Component({
   selector: 'sc-messagebar',
@@ -10,67 +10,22 @@ import {Uuid} from "../shared/uuid";
                   [text]="message.text"
                   [background]="message.background || background"
                   [extraClass]="message.extraClass || extraMessageClass"
-                  [color]="message.color || color || calcTextColor(message.background || background)"
+                  [color]="message.colour || colour || calcTextColour(message.background || background)"
                   [actionText]="message.action?.text"
-                  (action)="message.action?.onClick()"
+                  [actionColour]="message.action?.colour"
+                  (action)="messageAction(message.action)"
       >
       </sc-message>
     </div>
   `,
   styleUrls: ['message-bar.component.scss'],
-  styles: [`
-    .messagebar {
-      position: fixed;
-      z-index: 99999;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .messagebar.bottom-left {
-      left: 2rem;
-      bottom: 1.5rem;
-      align-items: flex-start;
-    }
-
-    .messagebar.bottom-center {
-      left: 50%;
-      transform: translate(-50%, 0);
-      bottom: 1.5rem;
-      align-items: center;
-    }
-
-    .messagebar.bottom-right {
-      right: 2rem;
-      bottom: 1.5rem;
-      align-items: flex-end;
-    }
-
-    .messagebar.top-left {
-      left: 2rem;
-      top: 2rem;
-      align-items: flex-start;
-    }
-
-    .messagebar.top-center {
-      left: 50%;
-      transform: translate(-50%, 0);
-      top: 2rem;
-      align-items: center;
-    }
-
-    .messagebar.top-right {
-      right: 2rem;
-      top: 2rem;
-      align-items: flex-end;
-    }
-  `]
 })
 export class MessageBarComponent {
   @Input() position: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
   @Input() max: number;
   @Input() background: string;
   @Input() accent: string;
-  @Input() color: string;
+  @Input() colour: string;
   @Input() extraMessageClass: any;
   @Input() timeout: number;
 
@@ -79,8 +34,8 @@ export class MessageBarComponent {
   @Output() public onClear: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   messages: Array<{
-    id: string, text: string, timeout?: number, color?: string, background?: string, extraClass?: any, action?: {
-      text: string, onClick?: Function, color?: string
+    id: string, text: string, timeout?: number, colour?: string, background?: string, extraClass?: any, action?: {
+      text: string, onClick?: Function, colour?: string
     }, onAdd?: Function, onRemove?: Function, timeoutObj?: any
   }> = [];
 
@@ -162,7 +117,13 @@ export class MessageBarComponent {
     }
   }
 
-  calcTextColor(background) {
+  messageAction(action) {
+    if (action && action.onClick) {
+      action.onClick();
+    }
+  }
+
+  calcTextColour(background) {
     if (!background) {
       return null;
     }

@@ -1,5 +1,6 @@
 package au.org.ala.sc.db
 
+import au.org.ala.sc.util.logger
 import com.codahale.metrics.MetricRegistry
 import com.codahale.metrics.health.HealthCheckRegistry
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -12,7 +13,8 @@ import io.dropwizard.db.PooledDataSourceFactory
 import io.dropwizard.util.Duration
 import io.dropwizard.validation.MinDuration
 import io.dropwizard.validation.ValidationMethod
-import org.slf4j.LoggerFactory
+import org.jooq.Configuration
+import org.jooq.impl.ReadOnlyTransactionProvider
 import java.io.Closeable
 import java.io.PrintWriter
 import java.sql.Connection
@@ -27,7 +29,7 @@ import javax.validation.constraints.Min
 class DataSourceFactory : PooledDataSourceFactory {
 
     companion object {
-        val log = LoggerFactory.getLogger(DataSourceFactory::class.java)
+        val log = logger()
     }
 
     var _driverClass: String? = null
@@ -266,7 +268,7 @@ class HikariManagedDataSource(
 ) : ManagedDataSource, DataSource, AutoCloseable, Closeable {
 
     companion object {
-        private val log = LoggerFactory.getLogger(HikariManagedDataSource::class.java)
+        private val log = logger()
     }
 
     private val dataSource: HikariDataSource by lazy(lazyMode) { HikariDataSource(hikariConfig) }
@@ -302,3 +304,5 @@ class HikariManagedDataSource(
     }
 
 }
+
+fun Configuration.forReadOnlyTransaction() = this.derive(ReadOnlyTransactionProvider(this.connectionProvider()))!!

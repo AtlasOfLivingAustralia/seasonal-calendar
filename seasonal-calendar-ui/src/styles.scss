@@ -25,6 +25,37 @@
   }
 }
 
+.card-columns.language-group {
+  @include media-breakpoint-only(xl) {
+    column-count: 2;
+  }
+  @include media-breakpoint-only(lg) {
+    column-count: 2;
+  }
+  @include media-breakpoint-only(md) {
+    column-count: 2;
+  }
+  @include media-breakpoint-only(sm) {
+    column-count: 1;
+  }
+}
+
+.card-columns.ext-links {
+  @include media-breakpoint-only(xl) {
+    column-count: 3;
+  }
+  @include media-breakpoint-only(lg) {
+    column-count: 3;
+  }
+  @include media-breakpoint-only(md) {
+    column-count: 2;
+  }
+  @include media-breakpoint-only(sm) {
+    column-count: 1;
+  }
+
+}
+
 body {
   padding-top: 60px;
 }
@@ -63,4 +94,8 @@ label.required::after {
   .bg-dark & {
     color: #ff725c;
   }
+}
+
+button.btn.btn-link.nav-link {
+  border: 0;
 }

@@ -13,6 +13,8 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Named
 import javax.ws.rs.*
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType
@@ -20,7 +22,10 @@ import javax.ws.rs.core.Request
 import javax.ws.rs.core.Response
 
 @Path("images")
-class ImageResource(private val baseDir: File, private val imageService: ImageService) {
+class ImageResource @Inject constructor(
+    @Named("imagesBaseDir") private val baseDir: File,
+    private val imageService: ImageService
+) {
 
     companion object {
         val log = logger()
@@ -61,14 +66,15 @@ class ImageResource(private val baseDir: File, private val imageService: ImageSe
         val resultFile = imageService.getImageFile(file, width, height)
 
         val lastModified = Date(resultFile.lastModified())
-        val builder = request.evaluatePreconditions()
+        val builder = request.evaluatePreconditions(lastModified)
         return if (builder == null) {
             if (!resultFile.exists()) {
                 throw WebApplicationException(404)
             }
             Response
                 .ok(resultFile)
-                .type(extensionToMediaType[resultFile.extension])
+//                .type(extensionToMediaType[resultFile.extension])
+                .type(tika.detect(file))
                 .lastModified(lastModified)
                 .header("Content-Disposition", "attachment; filename=${resultFile.name}")
                 .build()

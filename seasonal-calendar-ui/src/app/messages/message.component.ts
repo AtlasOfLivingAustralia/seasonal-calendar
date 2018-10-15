@@ -19,5 +19,6 @@ export class MessageComponent {
   @Input() extraClass;
   @Input() text;
   @Input() actionText;
+  @Input() actionColour;
   @Output() action = new EventEmitter();
 }

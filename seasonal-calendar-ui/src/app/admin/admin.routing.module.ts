@@ -1,14 +1,37 @@
-import {AdminComponent} from "./admin.component";
+import {AdminDashboardComponent} from "./admin-dashboard/admin-dashboard.component";
 import {RouterModule, Routes} from "@angular/router";
 import {NgModule} from "@angular/core";
-import {CalendarResolverService, NewCalendarResolverService} from "../calendar-resolver.service";
-import {CalendarsResolverService} from "../calendars-resolver.service";
-import {CalendarEditComponent} from "../calendar-edit/calendar-edit.component";
+import {CalendarResolverService, NewCalendarResolverService} from "../resolvers/calendar-resolver.service";
+import {CalendarsResolverService} from "../resolvers/calendars-resolver.service";
+import {CalendarEditComponent} from "./calendar-edit/calendar-edit.component";
+import {
+  RoleCanActivateService,
+  UserCanActivateAdminService,
+  UserCanEditCalendarService
+} from "./route-guards/role-can-activate.service";
+import {ADMIN_ROLES} from "../shared/roles";
 
 const routes : Routes = [
-  { path: '', component: AdminComponent, resolve: { calendars: CalendarsResolverService } },
-  { path: 'calendar/create', component: CalendarEditComponent, resolve: { calendar: NewCalendarResolverService } },
-  { path: 'calendar/:id', component: CalendarEditComponent, resolve: { calendar: CalendarResolverService } },
+  {
+    path: '',
+    component: AdminDashboardComponent,
+    data: { publishedCalendarsOnly: false },
+    canActivate: [ UserCanActivateAdminService ],
+    resolve: { calendars: CalendarsResolverService }
+  },
+  {
+    path: 'create-calendar',
+    component: CalendarEditComponent,
+    data: { roles: ADMIN_ROLES},
+    canActivate: [ RoleCanActivateService ],
+    resolve: { calendar: NewCalendarResolverService }
+  },
+  {
+    path: 'calendar/:id',
+    component: CalendarEditComponent,
+    canActivate: [ UserCanEditCalendarService ],
+    resolve: { calendar: CalendarResolverService }
+  },
 ];
 
 @NgModule({
@@ -19,7 +42,10 @@ const routes : Routes = [
   exports: [RouterModule],
   providers: [
     NewCalendarResolverService,
-    CalendarsResolverService
+    CalendarsResolverService,
+    RoleCanActivateService,
+    UserCanActivateAdminService,
+    UserCanEditCalendarService
   ]
 })
 export class AdminRoutingModule { }

@@ -13,8 +13,8 @@ buildscript {
 }
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.2.70'
-    id 'org.jetbrains.kotlin.kapt' version '1.2.70'
+    id 'org.jetbrains.kotlin.jvm' version '1.2.71'
+    id 'org.jetbrains.kotlin.kapt' version '1.2.71'
     id "org.flywaydb.flyway" version "5.1.4"
     id 'nu.studer.jooq' version '3.0.1'
     id 'pl.codelabs.flywayJooq' version '1.3.1'
@@ -38,9 +38,9 @@ if (localProps.exists()) {
     project.ext.local = new Properties()
 }
 flyway {
-    url = project.ext.local.flywayUrl
-    user = project.ext.local.flywayUsername
-    password = project.ext.local.flywayPassword
+    url = project.ext.local.flywayUrl ?: 'jdbc:postgresql:seasonal-calendars'
+    user = project.ext.local.flywayUsername ?: 'postgres'
+    password = project.ext.local.flywayPassword ?: 'password'
     baselineOnMigrate = project.ext.local.flywayBaselineOnMigrate?.toBoolean() ?: false
     outOfOrder = project.ext.local.flywayOutOfOrder?.toBoolean() ?: false
 }
@@ -119,6 +119,8 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+//    compile 'org.funktionale:funktionale-all:1.2'
+    compile "io.arrow-kt:arrow-syntax:0.7.3"
 
     compile "io.dropwizard:dropwizard-core:$dropWizardVersion"
     compile "io.dropwizard:dropwizard-auth:$dropWizardVersion"
@@ -128,21 +130,32 @@ dependencies {
     compile 'com.zaxxer:HikariCP:3.1.0'
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6"
 
+    compile 'au.org.ala:userdetails-service-client:1.5.0-SNAPSHOT'
     compile 'au.org.ala:profile-service-client:1.0-SNAPSHOT'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-java8:2.4.0'
     compile 'com.squareup.moshi:moshi:1.6.0'
-    compile 'com.squareup.okhttp3:okhttp:3.11.0'
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.6.0'
+    compile 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
     compile 'org.jooq:jooq'
-    compile 'org.jooq:jooq-meta-extensions'
-    compile 'org.jooq:jooq-codegen'
+//    compile 'org.jooq:jooq-meta-extensions'
+//    compile 'org.jooq:jooq-codegen'
     compile 'au.org.ala:jooq-postgres-bindings:1.0-SNAPSHOT'
     jooqRuntime "org.postgresql:postgresql:$postgresVersion"
     compile "org.postgresql:postgresql:$postgresVersion"
 
     compile 'org.imgscalr:imgscalr-lib:4.2'
-    compile 'org.apache.tika:tika-java7:1.18'
+    compile('org.apache.tika:tika-java7:1.18')
+    compile('org.apache.tika:tika-parsers:1.18') {
+        exclude group: 'org.apache.cxf' // don't really need another jax-rs implementation
+        exclude group: 'org.apache.poi' // nor odf, "oo"xml, ms office
+        exclude group: 'org.apache.pdfbox' // nor pdf
+        exclude group: 'org.apache.commons', module: 'commons-exec' // nor  this
+    }
     compile 'com.google.guava:guava:26.0-jre'
+    compile group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.6.2'
 }
 
 compileKotlin {

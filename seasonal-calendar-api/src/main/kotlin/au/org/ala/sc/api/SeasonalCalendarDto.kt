@@ -38,7 +38,15 @@ data class SeasonalCalendarDto(
     val ourHistory: String,
     val logos: List<String>,
     val mediaLinks: List<String>,
-    val externalLinks: List<String>
+    val externalLinks: List<String>,
+    val users: List<CalendarUser>? = null,
+    val admin: Boolean? = null
+)
+
+data class CalendarUser(
+    val username: String,
+    val admin: Boolean,
+    val editor: Boolean
 )
 
 data class CalendarSavedDto(

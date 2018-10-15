@@ -2,33 +2,26 @@ package au.org.ala.sc.services
 
 import au.org.ala.profiles.service.*
 import au.org.ala.sc.api.FeatureDto
+import au.org.ala.sc.auth.User
+import au.org.ala.sc.util.HTTP_NOT_FOUND
 import au.org.ala.sc.util.logger
 import java.util.*
 
-class FeatureService(
-    private val profileServiceClient: ProfileServiceClient
-) {
+typealias FeatureServiceFactory = (user: User) -> FeatureService
 
-    companion object {
-        val log = logger()
-        const val userId = "8373"
-    }
+class DefaultFeatureServiceFactory(private val profileServiceClient: ProfileServiceClient): FeatureServiceFactory {
+    override fun invoke(user: User) = build(user)
 
+    fun build(user: User) = DefaultFeatureService(profileServiceClient, user)
+}
+
+interface FeatureService {
     /**
      * Get a Feature DTO for a give calendar uuid and the feature / profile uuid
      * @param collectionUuid The uuid of the seasonal calendar / opus
      * @param profileUuid The uuid of the associated profile
      */
-    fun getFeature(collectionUuid: UUID, profileUuid: UUID) : FeatureDto {
-        val getProfileResponse = profileServiceClient.getProfile(collectionUuid.toString(), profileUuid.toString(), userId).execute()
-        if (getProfileResponse.isSuccessful) {
-            val profile = getProfileResponse.body()!!
-            return convertProfileToFeatureDto(profile)
-        } else {
-            log.error("Couldn't retrieve getProfileResponse collection uuid {}, profile uuid {} with code {}", collectionUuid, profileUuid, getProfileResponse.code())
-            throw FeatureException("Couldn't retrieve getProfileResponse collection uuid $collectionUuid, profile uuid $profileUuid with code ${getProfileResponse.code()}")
-        }
-    }
+    fun getFeature(collectionUuid: UUID, profileUuid: UUID) : FeatureDto
 
     /**
      * Create a new feature for the given collection uuid
@@ -36,26 +29,7 @@ class FeatureService(
      * @param feature The feature to create
      * @return The id of the new feature
      */
-    fun createFeature(collectionUuid: UUID, feature: FeatureDto): UUID {
-        val opusId = collectionUuid.toString()
-        val profile = convertFeatureDtoToNewProfile(feature).apply { opusUuid = opusId }
-        val response = profileServiceClient.createProfile(opusId, userId, profile).execute()
-        return if (response.isSuccessful) {
-            val newProfile = response.body()!!
-            for ((name, value) in listOf("commonName" to feature.commonName, "description" to feature.description)) {
-                val attr = createNewAttribute(name, value)
-                val response = profileServiceClient.createAttribute(opusId, newProfile.uuid, userId, attr).execute()
-                if (!response.isSuccessful) {
-                    log.error("Couldn't create attribute $name, $value for ${newProfile.uuid}: ${newProfile.scientificName} because ${response.code()} ${response.errorBody()?.string()}")
-                    throw FeatureException("Couldn't create attribute $name, $value for ${newProfile.scientificName}")
-                }
-            }
-            UUID.fromString(newProfile.uuid)
-        } else {
-            log.error("Couldn't create profile for collection uuid {}. HTTP code: {}, body: {}", collectionUuid, response.code(), response.errorBody()?.string())
-            throw FeatureException("Couldn't create profile $collectionUuid: ${feature.name}")
-        }
-    }
+    fun createFeature(collectionUuid: UUID, feature: FeatureDto): UUID
 
     /**
      * Update an existing feature for a given calendar uuid.
@@ -63,11 +37,48 @@ class FeatureService(
      * @param feature The feature dto, including the existing uuid.
      * @return The newly constructed feature DTO
      */
-    fun updateFeature(collectionUuid: UUID, feature: FeatureDto) {
-        val profileUuid = feature.profileUuid.toString()
-        val profile = getProfile(collectionUuid, profileUuid)
+    fun updateFeature(collectionUuid: UUID, feature: FeatureDto)
+}
 
-        if (feature.name != profile.scientificName) {
+class DefaultFeatureService(
+    private val profileServiceClient: ProfileServiceClient,
+    private val user: User = User.Anonymous
+) : FeatureService {
+
+    companion object {
+        val log = logger()
+    }
+
+    override fun getFeature(collectionUuid: UUID, profileUuid: UUID) : FeatureDto {
+        return convertProfileToFeatureDto(getProfile(collectionUuid, profileUuid))
+    }
+
+    override fun createFeature(collectionUuid: UUID, feature: FeatureDto): UUID {
+        val opusId = collectionUuid.toString()
+        val profile = convertFeatureDtoToNewProfile(feature).apply { opusUuid = opusId }
+        val profileResponse = profileServiceClient.createProfile(opusId, user.name, profile).execute()
+        return if (profileResponse.isSuccessful) {
+            val newProfile = profileResponse.body()!!
+            for ((name, value) in listOf("commonName" to feature.commonName, "description" to feature.description)) {
+                val attr = createNewAttribute(name, value)
+                val attrResponse = profileServiceClient.createAttribute(opusId, newProfile.uuid, user.name, attr).execute()
+                if (!attrResponse.isSuccessful) {
+                    log.error("Couldn't create attribute $name, $value for ${newProfile.uuid}: ${newProfile.scientificName} because ${attrResponse.code()} ${attrResponse.errorBody()?.string()}")
+                    throw FeatureException("Couldn't create attribute $name, $value for ${newProfile.scientificName}")
+                }
+            }
+            UUID.fromString(newProfile.uuid)
+        } else {
+            log.error("Couldn't create profile for collection uuid {}. HTTP code: {}, body: {}", collectionUuid, profileResponse.code(), profileResponse.errorBody()?.string())
+            throw FeatureException("Couldn't create profile $collectionUuid: ${feature.name}")
+        }
+    }
+
+    override fun updateFeature(collectionUuid: UUID, feature: FeatureDto) {
+        val profileUuid = feature.profileUuid.toString()
+        val profile = getProfile(collectionUuid, feature.profileUuid!!)
+
+        if (feature.name != profile.scientificName || feature.scientificNameGuid != profile.matchedName?.guid) {
             renameProfile(collectionUuid, profile, feature)
         }
 
@@ -75,7 +86,7 @@ class FeatureService(
 
         val updatedProfile = profile.applyFeatureToProfileUpdate(feature)
         // TODO check if an update is needed
-        val response = profileServiceClient.updateProfile(collectionUuid.toString(), profileUuid, userId, updatedProfile).execute()
+        val response = profileServiceClient.updateProfile(collectionUuid.toString(), profileUuid, user.name, updatedProfile).execute()
         if (!response.isSuccessful) {
             log.error("Couldn't update profile for collection uuid {}, profile uuid {}. HTTP code: {}, body: {}", response.code(), response.errorBody()?.string())
             throw FeatureException("Couldn't update profile collection uuid $collectionUuid, profile uuid $profileUuid with code ${response.code()}")
@@ -89,14 +100,14 @@ class FeatureService(
             val attr = attrsByName[name]
             if (attr != null && attr.text != value) {
                 val update = AttributeUpdate().apply { text = value }
-                val response = profileServiceClient.updateAttribute(collectionUuidString, profile.uuid, attr.uuid, userId, update).execute()
+                val response = profileServiceClient.updateAttribute(collectionUuidString, profile.uuid, attr.uuid, user.name, update).execute()
                 if (!response.isSuccessful) {
                     log.error("Couldn't update attribute ${attr.title}")
                     throw FeatureException("Couldn't update attribute $name for $collectionUuid ${profile.uuid}")
                 }
             } else if (attr == null) {
                 val newAttr = createNewAttribute(name, value)
-                profileServiceClient.createAttribute(collectionUuidString, profile.uuid, userId, newAttr)
+                profileServiceClient.createAttribute(collectionUuidString, profile.uuid, user.name, newAttr)
 
             }
         }
@@ -106,21 +117,27 @@ class FeatureService(
         val renameRequest = RenameProfileRequest().apply {
             newName = feature.name
             manuallyMatchedGuid = feature.scientificNameGuid ?: ""
+            clearMatch = feature.scientificNameGuid.isNullOrBlank()
         }
-        val response = profileServiceClient.renameProfile(collectionUuid.toString(), profile.uuid, userId, renameRequest).execute()
+        val response = profileServiceClient.renameProfile(collectionUuid.toString(), profile.uuid, user.name, renameRequest).execute()
         if (!response.isSuccessful) {
             log.error("Couldn't rename profile from ${profile.scientificName} to ${feature.name} because ${response.code()}: ${response.errorBody()?.string()}")
             throw FeatureException("Couldn't rename profile from ${profile.scientificName} to ${feature.name}")
         }
     }
 
-    private fun getProfile(collectionUuid: UUID, profileUuid: String): Profile {
-        val getProfileResponse = profileServiceClient.getProfile(collectionUuid.toString(), profileUuid, userId).execute()
-        if (getProfileResponse.isSuccessful) {
-            return getProfileResponse.body()!!
+    private fun getProfile(collectionUuid: UUID, profileUuid: UUID): Profile {
+        val response = profileServiceClient.getProfile(collectionUuid.toString(), profileUuid.toString(), user.name).execute()
+        if (response.isSuccessful) {
+            return response.body()!!
         } else {
-            log.error("Couldn't retrieve getProfileResponse collection uuid {}, profile uuid {} with code {}", collectionUuid, profileUuid, getProfileResponse.code())
-            throw FeatureException("Couldn't retrieve getProfileResponse collection uuid $collectionUuid, profile uuid $profileUuid with code ${getProfileResponse.code()}")
+            val code = response.code()
+            if (code == HTTP_NOT_FOUND) {
+                throw FeatureNotFoundException(collectionUuid, profileUuid)
+            } else {
+                log.error("Couldn't retrieve getProfileResponse collection uuid {}, profile uuid {} with code {}", collectionUuid, profileUuid, response.code())
+                throw FeatureException("Couldn't retrieve getProfileResponse collection uuid $collectionUuid, profile uuid $profileUuid with code ${response.code()}")
+            }
         }
     }
 
@@ -178,4 +195,5 @@ class FeatureService(
 
 }
 
-class FeatureException(message: String) : RuntimeException(message)
+class FeatureNotFoundException(val collectionUuid: UUID, val profileUuid: UUID) : CalendarException("Couldn't find feature $profileUuid in calendar $collectionUuid")
+class FeatureException(message: String) : CalendarException(message)

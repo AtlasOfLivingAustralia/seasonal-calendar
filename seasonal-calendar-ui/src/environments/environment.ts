@@ -4,8 +4,10 @@
 
 export const environment = {
   production: false,
-  api: 'http://devt.ala.org.au:8080/',
-  profiles: 'https://profiles-dev.ala.org.au/'
+  api: 'https://devt.ala.org.au/seasonal-calendar/api/',
+  profiles: 'https://devt.ala.org.au/profile-hub/',
+  stsServer: 'https://auth-test.ala.org.au/cas/oidc',
+  clientId: 'sc-dev-client-id'
 };
 
 /*

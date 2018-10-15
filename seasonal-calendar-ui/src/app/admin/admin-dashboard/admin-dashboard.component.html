@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col">
+    <a *ngIf="userinfo$ | hasRole:['ROLE_ADMIN', 'ROLE_SC_ADMIN'] | async" class="btn btn-primary float-right" routerLink="/admin/create-calendar">New Calendar</a>
+    <h2>Admin</h2>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Calendar name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let calendar of calendars">
+          <td>{{ calendar.name }}</td>
+          <td>
+            <a class="btn btn-primary" routerLink="/admin/calendar/{{calendar.collectionUuid}}">Edit</a>&ngsp;
+            <button *ngIf="!calendar.published" class="btn btn-secondary" [disabled]="!calendar.admin" (click)="confirmPublish(calendar, true)">Publish</button>&ngsp;
+            <button *ngIf="calendar.published" class="btn btn-secondary" [disabled]="!calendar.admin" (click)="confirmPublish(calendar, false)">Unpublish</button>&ngsp;
+            <button class="btn btn-secondary" [disabled]="!calendar.admin" (click)="calendarUsersModal(calendar)">Permissions</button>&ngsp;
+            <button class="btn btn-danger" [disabled]="!calendar.admin" (click)="confirmDelete(calendar)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

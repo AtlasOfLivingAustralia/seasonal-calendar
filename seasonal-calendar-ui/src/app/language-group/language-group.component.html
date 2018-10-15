@@ -1,91 +1,88 @@
-<div class="container">
-
-  <div class="card-deck p-2">
-    <div class="card" *ngFor="let logo of calendar.logos">
-      <div class="card-body p-0">
-        <img class="card-img img-fluid" [src]="logo" />
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-body">
-        Welcome to {{ calendar.languageGroup }} country
-      </div>
+<div class="card-deck p-2">
+  <div class="card" *ngFor="let logo of calendar.logos">
+    <div class="card-body p-0">
+      <img class="card-img img-fluid" [src]="logo" />
     </div>
   </div>
-
-  <div class="card-columns p-2">
-
-    <div class="card" *ngIf="calendar.welcomeCountry">
-      <div class="card-body">
-        {{ calendar.welcomeCountry }}
-      </div>
-    </div>
-
-    <div class="card" *ngIf="calendar.welcomeCountryMedia">
-      <div class="card-body p-0">
-        <div class="card-img">
-          <iframe frameborder="0" [src]="welcomeMedia" webkitallowfullscreen mozallowfullscreen
-                  allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-body p-0">
-        <div class="card-img">
-          <sc-calendar-map [latitude]="calendar.latitude" [longitude]="calendar.longitude" [zoom]="calendar.zoom"></sc-calendar-map>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" *ngIf="calendar.whoWeAreDescription">
-      <div class="card-body">
-        <p class="card-text">
-          {{calendar.whoWeAreDescription}}
-        </p>
-      </div>
-    </div>
-
-    <div class="card" *ngIf="calendar.ourCountry">
-      <div class="card-body">
-        <p class="card-text">
-          {{calendar.ourCountry}}
-        </p>
-      </div>
-    </div>
-
-    <div class="card" *ngIf="calendar.ourHistory">
-      <div class="card-body">
-        <p class="card-text">
-          {{calendar.ourHistory}}
-        </p>
-      </div>
+  <div class="card">
+    <div class="card-body">
+      Welcome to {{ calendar.languageGroup }} country
     </div>
   </div>
-
-  <div class="card-deck p-0" *ngIf="calendar.mediaLinks">
-    <div class="card" *ngFor="let media of mediaLinks">
-      <div class="card-body">
-        <div class="card-img">
-            <iframe frameborder="0" [src]="media" webkitallowfullscreen mozallowfullscreen
-                  allowfullscreen width="150px" height="150px"></iframe>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card-columns">
-    <div class="card">
-      <a class="card-link" routerLink="calendar">Launch Seasonal Calendar</a>
-      <br>
-      <a class="card-link" [href]="profileLink">Launch Profiles</a>
-    </div>
-    <div class="card" *ngFor="let link of calendar.externalLinks">
-      <div class="card-body p-0">
-        <a class="card-link" href="link" >{{link}}</a>
-      </div>
-    </div>
-  </div>
-
 </div>
+
+<div class="language-group card-columns p-2">
+
+  <div class="card" *ngIf="calendar.welcomeCountry">
+    <div class="card-body">
+      {{ calendar.welcomeCountry }}
+    </div>
+  </div>
+
+  <div class="card" *ngIf="calendar.welcomeCountryMedia">
+    <div class="card-body p-0">
+      <div class="card-img">
+        <iframe frameborder="0" [src]="welcomeMedia" webkitallowfullscreen mozallowfullscreen
+                allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="card-img">
+        <sc-calendar-map [latitude]="calendar.latitude" [longitude]="calendar.longitude" [zoom]="calendar.zoom"></sc-calendar-map>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="calendar.whoWeAreDescription">
+    <div class="card-body">
+      <p class="card-text">
+        {{calendar.whoWeAreDescription}}
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="calendar.ourCountry">
+    <div class="card-body">
+      <p class="card-text">
+        {{calendar.ourCountry}}
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="calendar.ourHistory">
+    <div class="card-body">
+      <p class="card-text">
+        {{calendar.ourHistory}}
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="card-deck p-0" *ngIf="calendar.mediaLinks">
+  <div class="card" *ngFor="let media of mediaLinks">
+    <div class="card-body">
+      <div class="card-img">
+          <iframe frameborder="0" [src]="media" webkitallowfullscreen mozallowfullscreen
+                allowfullscreen width="150px" height="150px"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ext-links card-columns">
+  <div class="card">
+    <a class="card-link" routerLink="calendar">Launch Seasonal Calendar</a>
+    <br>
+    <a class="card-link" [href]="profileLink">Launch Profiles</a>
+  </div>
+  <div class="card" *ngFor="let link of calendar.externalLinks">
+    <div class="card-body p-0">
+      <a class="card-link" href="link" >{{link}}</a>
+    </div>
+  </div>
+</div>
+
 

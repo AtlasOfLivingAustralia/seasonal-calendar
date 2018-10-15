@@ -2,20 +2,39 @@ package au.org.ala.sc.services
 
 import au.org.ala.jooq.postgres.Range
 import au.org.ala.sc.api.SeasonDto
+import au.org.ala.sc.auth.User
 import au.org.ala.sc.domain.jooq.tables.Season.SEASON
 import au.org.ala.sc.domain.jooq.tables.daos.SeasonDao
 import au.org.ala.sc.domain.jooq.tables.pojos.Season
 import org.jooq.Configuration
-import org.jooq.DSLContext
 import java.util.*
 
-class SeasonService(
-    private val seasonDao: SeasonDao,
-    private val ctx: DSLContext,
-    private val featureService: FeatureService
-) {
+typealias SeasonServiceFactory = (user: User, configuration: Configuration?) -> DefaultSeasonService
 
-    fun getSeasonsForCalendarId(collectionUuid: UUID): List<SeasonDto> {
+class DefaultSeasonServiceFactory(private val defaultConfiguration: Configuration, private val featureServiceFactory: FeatureServiceFactory) : SeasonServiceFactory {
+    override fun invoke(user: User, configuration: Configuration?): DefaultSeasonService = build(user, configuration)
+
+    fun build(user: User, configuration: Configuration?) = DefaultSeasonService(configuration ?: defaultConfiguration, featureServiceFactory(user), user)
+}
+
+interface SeasonService {
+    fun getSeasonsForCalendarId(collectionUuid: UUID): List<SeasonDto>
+    fun getSeason(collectionUuid: UUID, name: String): Season?
+    fun getSeasonWithFeatures(collectionUuid: UUID, name: String)
+    fun saveSeason(collectionUuid: UUID, dto: SeasonDto)
+}
+
+interface TransactionableSeasonService: SeasonService, Transactionable<TransactionableSeasonService>
+
+data class DefaultSeasonService(
+    override val configuration: Configuration,
+    private val featureService: FeatureService,
+    private val user: User
+) : TransactionableSeasonService {
+
+    private val seasonDao by lazy(LazyThreadSafetyMode.NONE) { SeasonDao(configuration) }
+
+    override fun getSeasonsForCalendarId(collectionUuid: UUID): List<SeasonDto> {
         val seasons = seasonDao.fetchByCollectionUuid(collectionUuid)
         return seasons.map { season ->
             val dto = convertSeasonToDto(season)
@@ -24,24 +43,20 @@ class SeasonService(
         }
     }
 
-    fun getSeason(collectionUuid: UUID, name: String) =
-        ctx.selectFrom(SEASON).where(SEASON.COLLECTION_UUID.eq(collectionUuid)).and(SEASON.LOCAL_NAME.eq(name)).fetchOne().into(Season::class.java)
+    override fun getSeason(collectionUuid: UUID, name: String) =
+        configuration.dsl()
+            .selectFrom(SEASON)
+            .where(SEASON.COLLECTION_UUID.eq(collectionUuid)).and(SEASON.LOCAL_NAME.eq(name))
+            .fetchOne().into(Season::class.java)
 
-    fun getSeasonWithFeatures(collectionUuid: UUID, name: String) {
+    override fun getSeasonWithFeatures(collectionUuid: UUID, name: String) {
         val season = getSeason(collectionUuid, name)
         val features = season.profileUuids.map{ featureService.getFeature(collectionUuid, it) }
         convertSeasonToDto(season).copy(features = features)
     }
 
-    fun saveSeason(collectionUuid: UUID, dto: SeasonDto, txConfig: Configuration? = null) {
-
-        if (txConfig != null) {
-            internalSaveSeason(collectionUuid, dto, txConfig)
-        } else {
-            ctx.transaction { config ->
-                internalSaveSeason(collectionUuid, dto, config)
-            }
-        }
+    override fun saveSeason(collectionUuid: UUID, dto: SeasonDto) {
+        internalSaveSeason(collectionUuid, dto)
     }
 
     private fun convertSeasonToDto(season: Season) =
@@ -68,9 +83,8 @@ class SeasonService(
                 featureIds.toTypedArray()
             )
 
-    private fun internalSaveSeason(collectionUuid: UUID, dto: SeasonDto, txConfig: Configuration) {
+    private fun internalSaveSeason(collectionUuid: UUID, dto: SeasonDto) {
         val features = dto.features.map { feature ->
-            // would need to pass txConfig here if feature service required it
             return@map if (feature.profileUuid == null) {
                 featureService.createFeature(collectionUuid, feature)
             } else {
@@ -79,16 +93,16 @@ class SeasonService(
             }
         }
 
-        val txSeasonDao = SeasonDao(txConfig)
-
-        if (dto.id != null && txSeasonDao.existsById(dto.id)) {
-            val season = convertDtoToSeason(collectionUuid, dto, features)
-            txSeasonDao.update(season)
+        val season = convertDtoToSeason(collectionUuid, dto, features)
+        if (dto.id != null && seasonDao.existsById(dto.id)) {
+            seasonDao.update(season)
         } else {
-            val season = convertDtoToSeason(collectionUuid, dto, features)
-            txSeasonDao.insert(season)
+            seasonDao.insert(season)
         }
     }
 
+    override fun withTransaction(configuration: Configuration) =
+            this.copy(configuration = configuration)
+//        DefaultSeasonService(configuration, featureService, user)
 
 }

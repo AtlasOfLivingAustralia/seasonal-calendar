@@ -1,7 +1,10 @@
 import {Component, ElementRef, Input, NgZone, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {Observable} from "rxjs";
-import {ICalendar} from "../model/calendar";
-import {CalendarService} from "../calendar.service";
+import {ICalendar} from "../shared/model/calendar";
+import {CalendarService, UserInfoService} from "../shared/services/calendar.service";
+import {OidcSecurityService} from "angular-auth-oidc-client";
+import {canEditAnyCalendar} from "../shared/roles";
+import {map} from "rxjs/operators";
 // import {animate, state, style, transition, trigger} from "@angular/animations";
 
 // WIP Navbar collapse using angular animations
@@ -23,8 +26,7 @@ import {CalendarService} from "../calendar.service";
 
 @Component({
   selector: 'sc-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  templateUrl: './navbar.component.html'
   // ,animations: [Collapse]
 })
 export class NavbarComponent implements OnInit {
@@ -39,14 +41,37 @@ export class NavbarComponent implements OnInit {
 
   calendars$: Observable<ICalendar[]>;
 
+  isLoggedIn$: Observable<Boolean>;
+  canAccessAdmin$: Observable<Boolean>;
+
   constructor(
     private ngZone: NgZone,
     private calendarService: CalendarService,
-    private renderer2: Renderer2) { }
+    private renderer2: Renderer2,
+    private oidcSecurityService: OidcSecurityService,
+    private userInfoService: UserInfoService) {
+    this.isLoggedIn$ = this.oidcSecurityService.getIsAuthorized();
+    this.canAccessAdmin$ = userInfoService.userinfo$.pipe(
+      map(info => canEditAnyCalendar(info))
+    );
+    // this.oidcSecurityService.onAuthorizationResult.subscribe(next => console.log(next));
+  }
 
 
   ngOnInit(): void {
     this.calendars$ = this.calendarService.getCalendars(true);
+  }
+
+  login() {
+    // this.oidcSecurityService.authorize();
+    this.oidcSecurityService.authorize((authUrl) => {
+      // handle the authorrization URL
+      window.open(authUrl, 'sc_login', 'toolbar=0,location=0,menubar=0');
+    });
+  }
+
+  logout() {
+    this.oidcSecurityService.logoff();
   }
 
   // This is a hack to add the bootstrap collapse animation to the navbar as it's not
@@ -56,7 +81,8 @@ export class NavbarComponent implements OnInit {
       this.navbarClosed = true;
       this.navbarOpen = this.navbarOpening = this.navbarClosing = false;
     } else if (this.navbarOpening) {
-      this.navCollapse.nativeElement.style.height = '';
+      this.renderer2.setStyle(this.navCollapse.nativeElement, 'height', '');
+      // this.navCollapse.nativeElement.style.height = '';
       this.navbarOpen = true;
       this.navbarClosed = this.navbarOpening = this.navbarClosing = false;
     }

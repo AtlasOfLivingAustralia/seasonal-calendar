@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ICalendar} from '../model/calendar';
+import {ICalendar} from '../shared/model/calendar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {environment} from "../../environments/environment";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";

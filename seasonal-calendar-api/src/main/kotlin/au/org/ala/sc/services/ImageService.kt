@@ -4,12 +4,20 @@ import org.imgscalr.Scalr
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
+import javax.inject.Inject
+import javax.inject.Named
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class ImageService(private val baseDir: File) {
+interface ImageService {
+    fun getImageFile(original: File, width: Int?, height: Int?): File
+}
 
-    fun getImageFile(original: File, width: Int?, height: Int?): File {
+class DefaultImageService @Inject constructor(
+    @Named("imagesBaseDir") private val baseDir: File
+) : ImageService {
+
+    override fun getImageFile(original: File, width: Int?, height: Int?): File {
         val baseName = original.nameWithoutExtension
         val ext = original.extension
 
@@ -71,7 +79,7 @@ class ImageService(private val baseDir: File) {
         val srcW: Int
         val srcH: Int
 
-        if (aspectH > aspectW) {
+        if (aspectH < h) {
             srcX = 0
             srcY = ((h - aspectH) / 2.0).roundToInt()
             srcW = w

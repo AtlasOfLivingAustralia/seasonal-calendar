@@ -1,6 +1,4 @@
 database:
-#  driverClass: org.postgresql.Driver
-#  url: jdbc:postgresql:seasonal-calendars
   dataSourceClass: org.postgresql.ds.PGSimpleDataSource
   properties:
 #    serverName: localhost
@@ -10,17 +8,36 @@ database:
     databaseName: seasonal-calendars
 flyway:
   outOfOrder: false
-profileServiceBaseUrl: http://devt.ala.org.au:8099
+profileServiceBaseUrl: https://devt.ala.org.au/profile-service/
+userDetailsBaseUrl: https://auth-test.ala.org.au/userdetails/
+oidcBaseUrl: https://auth-test.ala.org.au/cas/oidc/
+oidcClientId: sc-dev-client-id
+oidcClientSecret: ????
 dataResourceUid: dr382
+warnOnUnknownJsonProperties: true
+server:
+  applicationConnectors:
+    - type: http
+      port: 9090
 httpClients:
+  logging:
+    enabled: true
+    level: BASIC
+  headers:
+    User-Agent: Seasonal-Calendars-API/1.0
   named:
     profile-service:
       readTimeout: PT30s
       headers:
-        apiKey: 1234567890
+        Accept: application/json
+#        apiKey: 1234567890
+    oidc:
+      logging:
+        enabled: true
+        level: BODY
+      headers:
+        Accept: application/json
 logging:
-  level: DEBUG
-#server:
-#  applicationConnectors:
-#    - type: http
-#      port: 8082
+  level: INFO
+#  loggers:
+#    "org.jooq.tools.LoggerListener": DEBUG

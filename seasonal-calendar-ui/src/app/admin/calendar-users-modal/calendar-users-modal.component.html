@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{calendar.name}} users</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col">
+      <ul>
+        <li *ngFor="let user of calendarUsers; let i = index;">
+          {{user.username}}&ngsp;
+          <!--<div class="btn-group-toggle" data-toggle="buttons">-->
+            <!--<label class="btn btn-secondary active">-->
+              <!--<input type="checkbox" checked autocomplete="off"> Checked-->
+            <!--</label>-->
+          <!--</div>-->
+          <span class="btn-group-toggle">
+            <label class="btn btn-primary btn-sm" ngbButtonLabel>
+              <input type="checkbox" ngbButton [(ngModel)]="user.admin">{{user.admin ? 'Admin' : 'Editor'}}
+            </label>
+          </span>&ngsp;
+          <button class="btn btn-sm btn-danger" [attr.aria-label]="'Remove ' + user.username" (click)="remove(i)">&times;</button>
+        </li>
+      </ul>
+      <div class="form-group">
+        <label>User search <fa-icon icon="question-circle" ngbTooltip="Select a species name from this typeahead to select it for this feature"></fa-icon></label>
+        <input class="form-control" name="feature-species" placeholder="Type here to search" [(ngModel)]="selectedResponse" [class.is-invalid]="searchFailed"
+               [ngbTypeahead]="search" [editable]="false" [inputFormatter]="searchInputFormatter" [resultFormatter]="searchInputFormatter"
+               [showHint]="true" [focusFirst]="true">
+        <span *ngIf="searching">searching...</span>
+        <div class="invalid-feedback" *ngIf="searchFailed">Sorry, matches could not be loaded.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" [disabled]="saving" (click)="cancel()">Cancel</button>
+  <button type="button" class="btn btn-outline-primary position-relative" [disabled]="saving" (click)="save()">
+    <span [class.invisible]="saving">Save</span>
+    <div *ngIf="saving" class="position-absolute" style="width: 100%; height: 100%; top: 0; left: 0; bottom: 0; right: 0; z-index: 2;">
+      <img style="height: 100%" src="assets/loading.svg" aria-label="Saving">
+    </div>
+    <!--<ng-container [ngSwitch]="saving">-->
+      <!--<span *ngSwitchCase="false">Save</span>-->
+      <!--<img *ngSwitchCase="true" class="image-fluid" src="assets/loading.svg" aria-label="Saving">-->
+    <!--</ng-container>-->
+  </button>
+</div>

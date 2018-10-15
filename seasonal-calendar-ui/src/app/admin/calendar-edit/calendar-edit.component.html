@@ -1,0 +1,414 @@
+<div class="row">
+  <div class="col">
+    <h2>Calendar: {{originalCalendar?.name || 'New'}}</h2>
+
+    <form #calendarForm="ngForm" class="needs-validation" [class.was-validated]="calendarForm.invalid && (calendarForm.dirty || calendarForm.touched  )">
+      <ngb-tabset justify="justified" #tabs>
+        <ngb-tab title="Calendar" id="calendar-tab">
+          <ng-template ngbTabContent>
+
+            <div class="card bg-light my-3">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="calendarName" class="required">Name</label>
+                      <input class="form-control" id="calendarName" name="calendarName" required [(ngModel)]="calendar.name">
+                      <div class="invalid-feedback">
+                        A calendar name is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="shortName" class="required">Short Name <fa-icon icon="question-circle" ngbTooltip="A short version of the name to use in the calendar URL, should be lower case"></fa-icon></label>
+                      <input class="form-control" id="shortName" name="shortName" required [(ngModel)]="calendar.shortName">
+                      <div class="invalid-feedback">
+                        A short name is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="description">Description <fa-icon icon="question-circle" ngbTooltip="A few words or a sentence describing the calendar"></fa-icon></label>
+                      <textarea class="form-control" id="description" name="description" [(ngModel)]="calendar.description"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="website">Calendar Website <fa-icon icon="question-circle" ngbTooltip="Provide the URL address for the calendar project especially if there is additional associated information about the calendar and its development"></fa-icon></label>
+                      <input type="url" class="form-control" id="website" name="website" [(ngModel)]="calendar.websiteUrl">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="calendar-image">Calendar image <fa-icon icon="question-circle" ngbTooltip="An image to be used as the thumbnail image for the calendar"></fa-icon></label>
+                      <sc-image-upload id="calendar-image" label="Select image" accept="image/*" [(imageUrl)]="calendar.imageUrl"></sc-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-center text-primary"> a. <strong>WHO</strong> - background on the organisations and individuals responsible for developing the calendar</p>
+
+            <div class="card bg-light mb-3">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="organisationName">Organisation Name</label>
+                      <input class="form-control" id="organisationName" name="organisationName" [(ngModel)]="calendar.organisationName">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="contributors">Contributors <fa-icon icon="question-circle" ngbTooltip="List the individuals who contributed to the development of the calendar"></fa-icon></label>
+                      <sc-list-input intput-id="contributors" name="contributors" placeholder="Add contributor" [(inputs)]="calendar.contributors"></sc-list-input>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="contactName">Contact Name <fa-icon icon="question-circle" ngbTooltip="Contact name for person who can be contacted in relation to the calendar"></fa-icon></label>
+                      <input class="form-control" id="contactName" name="contactName" [(ngModel)]="calendar.contactName">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="contactEmail">Contact Email</label>
+                      <input class="form-control" id="contactEmail" name="contactEmail" [(ngModel)]="calendar.contactEmail">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="keywords">Keywords <fa-icon icon="question-circle" ngbTooltip="Include any additional keywords which may assist in searching for this calendar, including names, geographic locations, language group, IPA etc"></fa-icon></label>
+                      <sc-list-input intput-id="keywords" name="keywords" placeholder="Add keyword" [(inputs)]="calendar.keywords"></sc-list-input>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="about">About <fa-icon icon="question-circle" ngbTooltip="Provide a short introduction to the project or general description of who developed the calendar"></fa-icon></label>
+                      <textarea class="form-control" id="about" name="about" [(ngModel)]="calendar.about"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="organisationUrl">Organisation URL</label>
+                      <input type="url" class="form-control" id="organisationUrl" name="organisationUrl" [(ngModel)]="calendar.organisationUrl">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="organisationLogo">Organisation Logo</label>
+                      <sc-image-upload id="organisationLogo" label="Select organisation logo" accept="image/*" [(imageUrl)]="calendar.organisationLogoUrl"></sc-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-center text-primary">b. <strong>HOW</strong> - how the calendar was developed or created:</p>
+
+            <div class="card bg-light mb-3">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <label for="development">How the calendar was developed <fa-icon icon="question-circle" ngbTooltip="Provide a short general description on how the calendar was developed e.g. workshops, interviews, protocols, research project etc"></fa-icon></label>
+                    <textarea class="form-control" id="development" name="development" [(ngModel)]="calendar.development"></textarea>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="references">References <fa-icon icon="question-circle" ngbTooltip="List any papers, publications or references relevant to the calendar"></fa-icon></label>
+                      <sc-list-input intput-id="references" name="references" placeholder="Add reference" [(inputs)]="calendar.references"></sc-list-input>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="referenceLinks">Reference Links <fa-icon icon="question-circle" ngbTooltip="Provide the URL address for references (if available)"></fa-icon></label>
+                      <sc-list-input intput-id="referenceLinks" name="referenceLinks" placeholder="Add reference link" [(inputs)]="calendar.referenceLinks"></sc-list-input>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-center text-primary">c. <strong>WHY</strong> - for what purpose and for whom the calendar was created</p>
+
+            <div class="card bg-light mb-3">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <label for="developmentReason">Why the calendar was developed <fa-icon icon="question-circle" ngbTooltip="Provide a short general description as to why the calendar was created, for what purpose, the intended audience e.g. education, awareness raising, application to a management practice"></fa-icon></label>
+                    <textarea class="form-control" id="developmentReason" name="developmentReason" [(ngModel)]="calendar.developmentReason"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-center text-primary">d. <strong>USE</strong> - any qualifications or limitations on how the calendar can be used</p>
+
+            <div class="card bg-light mb-3">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="limitations">Limitations <fa-icon icon="question-circle" ngbTooltip="Any qualifications or limitations regarding how the calendar was created, any intellectual property references/licenses (e.g. covered by copyright and how can be used - see creative commons as one option - https://creativecommons.org/choose/ ), any attributions required, any traditional knowledge/image notices, or acknowlegement of country."></fa-icon></label>
+                      <textarea class="form-control" id="limitations" name="limitations" [(ngModel)]="calendar.limitations"></textarea>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="licenceTerms">Licence terms</label>
+                      <select class="custom-select" id="licenceTerms" name="licenceTerms" [(ngModel)]="calendar.licenceTerms">
+                        <option value="">Please select</option>
+                        <option value="creative-commons">Creative Commons Attribution-NonCommercial-NoDerivatives (CC-BY-NC-ND)</option>
+                        <option value="copyright-all">Copyright-All rights reserved</option>
+                        <option value="cc-by">Creative Commons Attribution (CC-BY)</option>
+                        <option value="cc-by-nc">Creative Commons Attribution-NonCommercial (CC-BY-NC)</option>
+                        <option value="cc-by-sa">Creative Commons Attribution-ShareAlike (CC-BY-SA)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Language Group" id="language-group-tab">
+          <ng-template ngbTabContent>
+
+            <div class="card bg-light my-3">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="title">Title</label>
+                      <input class="form-control" id="title" name="title" [(ngModel)]="calendar.languageGroup">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="welcomeCountry">Welcome Country <fa-icon icon="question-circle" ngbTooltip="Any qualifications or limitations regarding how the calendar was created, any intellectual property references/licenses (e.g. covered by copyright and how can be used - see creative commons as one option - https://creativecommons.org/choose/ ), any attributions required, any traditional knowledge/image notices, or acknowlegement of country."></fa-icon></label>
+                      <textarea class="form-control" id="welcomeCountry" name="welcomeCountry" [(ngModel)]="calendar.welcomeCountry"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="whoWeAre">Who We Are</label>
+                      <textarea class="form-control" id="whoWeAre" name="whoWeAre" [(ngModel)]="calendar.whoWeAreDescription" rows="3"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="ourCountry">Our Country</label>
+                      <textarea class="form-control" id="ourCountry" name="ourCountry" [(ngModel)]="calendar.ourCountry" rows="3"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="ourHistory">Our History</label>
+                      <textarea class="form-control" id="ourHistory" name="ourHistory" [(ngModel)]="calendar.ourHistory" rows="3"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="logos">Logos <fa-icon icon="question-circle" ngbTooltip="Provide the URL address for logos (if available)"></fa-icon></label>
+                      <sc-list-input intput-id="logos" name="logos" placeholder="Add logo url link" [(inputs)]="calendar.logos"></sc-list-input>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="welcomeMedia">Welcome Country Video</label>
+                      <input class="form-control" id="welcomeMedia" name="welcomeMedia" [(ngModel)]="calendar.welcomeCountryMedia">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="mediaLinks">Media Links <fa-icon icon="question-circle" ngbTooltip="Provide the URL address for medias (if available)"></fa-icon></label>
+                      <sc-list-input intput-id="mediaLinks" name="mediaLinks" placeholder="Add Media url link" [(inputs)]="calendar.mediaLinks"></sc-list-input>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="externalLinks">External Links <fa-icon icon="question-circle" ngbTooltip="Provide the URL address for external websites (if available)"></fa-icon></label>
+                      <sc-list-input intput-id="externalLinks" name="externalLinks" placeholder="Add External url link" [(inputs)]="calendar.externalLinks"></sc-list-input>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-img">
+                  <sc-calendar-draw-map [(latitude)]="calendar.latitude" [(longitude)]="calendar.longitude" [(zoom)]="calendar.zoom" [mapReadonly]="false"></sc-calendar-draw-map>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Seasons" id="seasons-tab">
+          <ng-template ngbTabContent>
+
+            <div class="card bg-light mb-3" *ngFor="let season of calendar.seasons; trackBy: trackByKey; index as seasonIndex">
+
+              <div class="card-header">
+                  <button class="btn btn-danger btn-sm float-right" (click)="deleteSeason(seasonIndex)" aria-label="Delete season">&times;</button>
+                  Season: {{ season.localName || 'New Season' }}
+              </div>
+
+              <div class="card-body">
+
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label class="required">Language or local name <fa-icon icon="question-circle" ngbTooltip="This title will form the main “tab” or “section” of the calendar – Indigenous language name used where possible"></fa-icon></label>
+                      <input class="form-control" name="season-localName-{{seasonIndex}}" required [(ngModel)]="season.localName">
+                      <div class="invalid-feedback">
+                        The season language name is required
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col">
+                    <div class="form-group">
+                      <label class="required">Alternate name <fa-icon icon="question-circle" ngbTooltip="This title provides a short description of the season – max 4-5 words"></fa-icon></label>
+                      <input class="form-control" name="season-alternateName-{{seasonIndex}}" required [(ngModel)]="season.alternateName">
+                    </div>
+                    <div class="invalid-feedback">
+                      The alternate name is required
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label class="required">English Months Start <fa-icon icon="question-circle" ngbTooltip="Provide the English calendar month(s) that correspond to the relevant season"></fa-icon></label>
+                      <!--<input class="form-control" type="number" name="season-months-start-{{seasonIndex}}" [(ngModel)]="season.startMonth">-->
+                      <select name="season-months-start-{{seasonIndex}}" required [(ngModel)]="season.startMonth" class="custom-select">
+                        <option value="">Please select</option>
+                        <option [value]="1">January</option>
+                        <option [value]="2">February</option>
+                        <option [value]="3">March</option>
+                        <option [value]="4">April</option>
+                        <option [value]="5">May</option>
+                        <option [value]="6">June</option>
+                        <option [value]="7">July</option>
+                        <option [value]="8">August</option>
+                        <option [value]="9">September</option>
+                        <option [value]="10">October</option>
+                        <option [value]="11">November</option>
+                        <option [value]="12">December</option>
+                      </select>
+                      <div class="invalid-feedback">
+                        The first English month is required
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label class="required">English Months End <fa-icon icon="question-circle" ngbTooltip="Provide the English calendar month(s) that correspond to the relevant season"></fa-icon></label>
+                      <!--<input class="form-control" type="number" name="season-months-end-{{seasonIndex}}" [(ngModel)]="season.endMonth">-->
+                      <select name="season-months-end-{{seasonIndex}}" required [(ngModel)]="season.endMonth" class="custom-select">
+                        <option value="">Please select</option>
+                        <option [value]="1">January</option>
+                        <option [value]="2">February</option>
+                        <option [value]="3">March</option>
+                        <option [value]="4">April</option>
+                        <option [value]="5">May</option>
+                        <option [value]="6">June</option>
+                        <option [value]="7">July</option>
+                        <option [value]="8">August</option>
+                        <option [value]="9">September</option>
+                        <option [value]="10">October</option>
+                        <option [value]="11">November</option>
+                        <option [value]="12">December</option>
+                      </select>
+                      <div class="invalid-feedback">
+                        The final English month is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-group">
+                      <label>Weather icons</label>
+                      <select name="season-weather-icons-{{seasonIndex}}" [(ngModel)]="season.weatherIcons" class="custom-select">
+                        <option value="">Please select</option>
+                        <option value="sunny">Sunny</option>
+                        <option value="cloudy">Cloudy</option>
+                        <option value="rainy">Rainy</option>
+                        <option value="snowy">Snowy</option>
+                        <option value="rainbow">Rainbow</option>
+                        <option value="starry">Starry</option>
+                        <option value="stormy">Stormy</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col">
+                    <div class="form-group">
+                      <label class="required">Season description <fa-icon icon="question-circle" ngbTooltip="This is a short paragraph providing additional information about the season. Note more detail about a feature of the season can be created by adding separate Feature (see + new Feature)."></fa-icon></label>
+                      <textarea class="form-control" name="season-description-{{seasonIndex}}" required [(ngModel)]="season.description"></textarea>
+                      <div class="invalid-feedback">
+                        The season description is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="card-columns features">
+                  <sc-feature-edit *ngFor="let feature of season.features; trackBy: trackByKey; index as featureIndex" [feature]="feature" (delete)="deleteFeature(season, featureIndex)"></sc-feature-edit>
+
+                </div>
+
+              </div>
+
+              <div class="card-footer">
+                <button class="btn btn-default" (click)="addFeature(season)">Add Feature</button>&ngsp;
+                <button class="btn btn-danger float-right" (click)="deleteSeason(seasonIndex)">Delete {{ season.localName || 'season'}}</button>
+              </div>
+
+            </div>
+
+
+            <div class="my-3">
+              <button class="btn btn-primary" (click)="addSeason()">Add Season</button>
+            </div>
+
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+
+      <div class="my-3">
+        <button class="btn btn-primary" [disabled]="calendarForm.invalid || saving" (click)="save()">Save Calendar</button>&ngsp;
+        <button class="btn btn-outline-secondary" (click)="next()">Next</button>&ngsp;
+        <!--<button class="btn btn-success" [disabled]="calendarForm.invalid" (click)="publish()">Publish Calendar</button>&ngsp;-->
+      </div>
+    </form>
+  </div>
+</div>
+
+

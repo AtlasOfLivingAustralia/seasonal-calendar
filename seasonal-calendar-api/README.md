@@ -21,11 +21,11 @@ The SC API requires a `profile-service` instance and a PostgreSQL database, conf
 
 ## Adding a new DB migration
 
-Run `./new-migration.groovy` then edit.
+Run `./new-migration.groovy` then edit the resulting file.
 
 ## Tips for authoring a migration
 
-Since backing out a migration can be a pain, try authoring / testing the migration in a transaction first, eg open `psql` or the IntelliJ DB tools and:
+Since backing out a migration can be a pain, try authoring / testing the migration in a transaction first, eg open your favourite SQL tool such as pgadmin, `psql` or the IntelliJ DB tools and:
 
 ```
 BEGIN;
@@ -44,7 +44,11 @@ Then to restore: `pg_restore -c db.dump`
 
 ## Editting a migration
 
-1. If you have data to keep, back out the migration manually (not necessary if it failed) then delete the corresponding row from the `flyway_schema_history` table.  Then ensure the JOOQ generated code is deleted `./gradlew clean`
-2. If you want to start from scratch: `./gradlew flywayClean clean`
-3. Edit the migration
-4. Rerun the migration and jooq codegen: `./gradlew generateSeasonalCalendarJooqSchemaSource`
+*NOTE:* **Never** edit a migration if it has been applied to a production database.  Probably don't edit a migration if it's been applied to a co-worker's database either.  In these cases just write a follow up migration.
+
+1. Return to the pre-migration state:
+    1. If the migration failed, then the migration transaction will have been aborted automatically.
+    2. If you have data to keep, undo the migration manually then delete the corresponding row from the `flyway_schema_history` table.  Finally ensure the JOOQ generated code is deleted: `./gradlew clean`
+    3. If you just want to start the db from scratch: `./gradlew flywayClean clean`
+2. Edit the migration
+3. Rerun the migration and jooq codegen: `./gradlew generateSeasonalCalendarJooqSchemaSource`
