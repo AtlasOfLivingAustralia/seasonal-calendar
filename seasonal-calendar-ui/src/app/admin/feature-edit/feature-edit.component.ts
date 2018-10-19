@@ -29,9 +29,15 @@ export class FeatureEditComponent {
   };
   set selectedResponse(selectedResponse: BieSearchResult) {
     this._selectedResponse = selectedResponse;
-    this.feature.scientificName = selectedResponse.name;
-    this.feature.scientificNameGuid = selectedResponse.guid;
-    if (!this.feature.commonName && selectedResponse.commonName) this.feature.commonName = selectedResponse.commonName;
+    if (this.selectedResponse) {
+      this.feature.scientificName = selectedResponse.name;
+      this.feature.scientificNameGuid = selectedResponse.guid;
+      this.feature.commonName = selectedResponse.commonName;
+    } else {
+      this.feature.scientificName = '';
+      this.feature.scientificNameGuid = '';
+      this.feature.commonName = '';
+    }
   }
 
   constructor(private calendarService: CalendarService,
