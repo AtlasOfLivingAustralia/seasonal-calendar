@@ -85,7 +85,8 @@ export class AppModule {
 
       openIDImplicitFlowConfiguration.stsServer = environment.stsServer;
       // openIDImplicitFlowConfiguration.redirect_url = document.baseURI;
-      openIDImplicitFlowConfiguration.redirect_url = document.baseURI + 'assets/silent_login.html';
+      openIDImplicitFlowConfiguration.redirect_url = document.baseURI;
+      // openIDImplicitFlowConfiguration.redirect_url = document.baseURI + 'assets/silent_login.html';
       // The Client MUST validate that the aud (audience) Claim contains its client_id value registered at the Issuer
       // identified by the iss (issuer) Claim as an audience.
       // The ID Token MUST be rejected if the ID Token does not list the Client as a valid audience,
@@ -112,8 +113,8 @@ export class AppModule {
       openIDImplicitFlowConfiguration.max_id_token_iat_offset_allowed_in_seconds = 3600; // 3
       openIDImplicitFlowConfiguration.auto_userinfo = true;
       openIDImplicitFlowConfiguration.auto_clean_state_after_authentication = true;
-      openIDImplicitFlowConfiguration.trigger_authorization_result_event = true;
-      // openIDImplicitFlowConfiguration.post_login_route = '/';
+      // openIDImplicitFlowConfiguration.trigger_authorization_result_event = true;
+      openIDImplicitFlowConfiguration.post_login_route = '/';
       // openIDImplicitFlowConfiguration.resource = '';
       // openIDImplicitFlowConfiguration.silent_renew = true;
       // openIDImplicitFlowConfiguration.trigger_authorization_result_event = false;

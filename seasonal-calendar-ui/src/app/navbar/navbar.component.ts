@@ -63,11 +63,11 @@ export class NavbarComponent implements OnInit {
   }
 
   login() {
-    // this.oidcSecurityService.authorize();
-    this.oidcSecurityService.authorize((authUrl) => {
-      // handle the authorrization URL
-      window.open(authUrl, 'sc_login', 'toolbar=0,location=0,menubar=0');
-    });
+    this.oidcSecurityService.authorize();
+    // this.oidcSecurityService.authorize((authUrl) => {
+    //   // handle the authorization URL
+    //   window.open(authUrl, 'sc_login', 'toolbar=0,location=0,menubar=0');
+    // });
   }
 
   logout() {
