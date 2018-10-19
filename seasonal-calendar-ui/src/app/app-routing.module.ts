@@ -5,10 +5,11 @@ import { PageNotFoundComponentComponent } from './page-not-found-component/page-
 import {CalendarResolverService} from "./resolvers/calendar-resolver.service";
 import { CalendarsResolverService } from "./resolvers/calendars-resolver.service";
 import { LanguageGroupComponent } from './language-group/language-group.component';
+import {UserCanActivateAdminService} from "./admin/route-guards/role-can-activate.service";
 
 const routes: Routes = [
   { path: '', component: CalendarsGalleryComponent, data: {publishedCalendarsOnly: true }, resolve: { calendars: CalendarsResolverService } },
-  { path: 'admin', loadChildren: './admin/admin.module#AdminModule' },
+  { path: 'admin', loadChildren: './admin/admin.module#AdminModule', canActivate: [ UserCanActivateAdminService ]},
   { path: '401', component: PageNotFoundComponentComponent },
   { path: '403', component: PageNotFoundComponentComponent },
   { path: '404', component: PageNotFoundComponentComponent },
@@ -25,7 +26,8 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [
     CalendarResolverService,
-    CalendarsResolverService
+    CalendarsResolverService,
+    UserCanActivateAdminService
   ]
 })
 export class AppRoutingModule { }

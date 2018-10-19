@@ -23,7 +23,7 @@ export function canEditCalendar(userinfo: any, calendarId: string) {
   return false;
 }
 
-export function canEditAnyCalendar(userinfo: any) {
+export function canEditAnyCalendar(userinfo: any): boolean {
   if (!userinfo) return false;
   if (hasRole(userinfo, ADMIN_ROLES)) return true;
   if (userinfo.calendarRoles) {
