@@ -1,5 +1,6 @@
 package au.org.ala.sc.auth
 
+import arrow.core.Either
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import okhttp3.HttpUrl
@@ -56,7 +57,7 @@ interface OidcClient {
 @JsonClass(generateAdapter = true)
 data class IntrospectResponse(
     val active: Boolean,
-    @Json(name = "client_id") val clientId: String,
+    @Json(name = "client_id") val clientId: String?,
     val username: String?,
     val scope: String?,
     val sub: String?,
@@ -134,9 +135,11 @@ data class Address(
     val country: String?
 )
 
-typealias ExceptionFactory = (Response<*>?, IOException?) -> RuntimeException
-private val defaultExceptionFactory: ExceptionFactory = { r, e -> if (r != null) RuntimeException("${r.code()}: ${r.errorBody()?.string()}") else RuntimeException(e) }
-
+typealias ExceptionFactory = (Either<IOException, Response<*>>) -> RuntimeException
+private val defaultExceptionFactory: ExceptionFactory = { responseOrException ->
+    responseOrException
+        .fold({ e -> RuntimeException(e) }) { r -> RuntimeException("HTTP ${r.code()}: ${r.errorBody()?.string()}") }
+}
 class SimpleCallAdapterFactory(
     val exceptionFactory: ExceptionFactory = defaultExceptionFactory
 ): CallAdapter.Factory() {
@@ -154,10 +157,10 @@ class SimpleCallAdapterFactory(
                 try {
                     val response = call.execute()
                     return if (response.isSuccessful) response.body()!!
-                    else throw exceptionFactory(response, null)
+                    else throw exceptionFactory(Either.right(response))
                     //RuntimeException("${response.code()}: ${response.errorBody()?.string()}")
                 } catch (e: IOException) {
-                    throw exceptionFactory(null, e)
+                    throw exceptionFactory(Either.left(e))
                     //RuntimeException(e)
                 }
             }
@@ -169,7 +172,7 @@ class SimpleCallAdapterFactory(
 val SIMPLE_CALL_ADAPTER_FACTORY = SimpleCallAdapterFactory()
 
 fun String.httpUrl() = HttpUrl.get(this)!!
-fun String.baseUrl() = HttpUrl.get(if (this.endsWith("/")) this else this + "/")!!
+fun String.baseUrl() = HttpUrl.get(if (this.endsWith("/")) this else "$this/")!!
 
 fun String.bearerToken() = "Bearer $this"
 

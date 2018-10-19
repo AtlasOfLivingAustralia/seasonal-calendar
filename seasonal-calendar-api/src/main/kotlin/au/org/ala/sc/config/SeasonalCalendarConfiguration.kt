@@ -54,6 +54,9 @@ class SeasonalCalendarConfiguration : Configuration() {
     @JsonProperty("oidcClientSecret")
     var oidcClientSecret: String = "secret"
 
+    @JsonProperty("allowedTimestampDrift")
+    var allowedTimestampDrift: Int = 3
+
     @JsonProperty("warnOnUnknownJsonProperties")
     var warnOnUnknownJsonProperties: Boolean = false
     @JsonProperty("httpClients")

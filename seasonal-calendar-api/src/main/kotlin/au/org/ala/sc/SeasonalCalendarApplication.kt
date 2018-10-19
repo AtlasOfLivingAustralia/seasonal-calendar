@@ -131,7 +131,7 @@ class SeasonalCalendarApplication : Application<SeasonalCalendarConfiguration>()
             configuration.calendarTag
         )
 
-        val tokenAuthenticator = TokenAuthenticator(userDetailsClient, oidcClient, wk.get(), configuration.oidcClientId, configuration.oidcClientSecret)
+        val tokenAuthenticator = TokenAuthenticator(userDetailsClient, oidcClient, wk.get(), configuration.oidcClientId, configuration.oidcClientSecret, configuration.allowedTimestampDrift)
         val userAuthorizer = UserAuthorizer(userService)
 
         val oauthFilter = OAuthCredentialAuthFilter.Builder<User>()

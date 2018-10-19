@@ -19,7 +19,8 @@ class TokenAuthenticator(
     private val oidcClient: OidcClient,
     private val wk: WellKnownResponse,
     private val clientId: String,
-    private val clientSecret: String
+    private val clientSecret: String,
+    private val allowedTimestampDriftSeconds: Int
 ): Authenticator<String, User> {
 
     companion object {
@@ -53,7 +54,7 @@ class TokenAuthenticator(
             }
             if (introspectResponse.exp != null) {
                 val expiry = Instant.ofEpochSecond(introspectResponse.exp)
-                if (now.plusSeconds(3).isBefore(expiry)) {
+                if (now.plusSeconds(allowedTimestampDriftSeconds.toLong()).isBefore(expiry)) {
                     log.error("Token {} is expired.  Expired at {}", credentials, expiry)
                     throw AuthenticationException("Token expired")
                 }
