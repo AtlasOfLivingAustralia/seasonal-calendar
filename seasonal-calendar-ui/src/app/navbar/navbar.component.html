@@ -21,7 +21,7 @@
          (transitionend)="onTransitionEnd()">
       <ul class="navbar-nav mr-auto ml-auto">
         <li class="nav-item" *ngFor="let calendar of calendars$ | async as calendars" routerLinkActive="active">
-          <a class="nav-link" routerLink="/{{calendar.name}}">{{calendar.name}}</a>
+          <a class="nav-link" routerLink="/{{calendar.shortName}}">{{calendar.name}}</a>
         </li>
         <li *ngIf="!(isLoggedIn$ | async)" class="nav-item">
           <button class="btn btn-link nav-link" (click)="login()">Login</button>
