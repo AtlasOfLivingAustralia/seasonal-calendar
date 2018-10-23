@@ -9,7 +9,7 @@ import {ICalendar} from "../shared/model/calendar";
 })
 export class CalendarLandingComponent implements OnInit {
 
-  private calendar: ICalendar;
+  public calendar: ICalendar;
 
   constructor(
     private route: ActivatedRoute
