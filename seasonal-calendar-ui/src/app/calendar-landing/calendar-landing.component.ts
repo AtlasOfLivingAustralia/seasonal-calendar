@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
+import {ICalendar} from "../shared/model/calendar";
 
 @Component({
   selector: 'sc-calendar-landing',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CalendarLandingComponent implements OnInit {
 
-  constructor() { }
+  private calendar: ICalendar;
+
+  constructor(
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
+    this.route.data.subscribe((data: { calendar: ICalendar }) => {
+      this.calendar = data.calendar;
+    });
   }
 
 }

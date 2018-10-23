@@ -2,12 +2,17 @@
   <div class="col">
     <h2>Seasonal Calendars Gallery</h2>
 
-    <div class="card-columns">
+    <div class="card-columns" *ngIf="calendars">
       <div class="card" *ngFor="let calendar of calendars">
         <div class="card-body">
-          <h5 class="card-title"><a routerLink="/{{calendar.name}}">{{ calendar.name }}</a></h5>
+          <h5 class="card-title"><a routerLink="/{{calendar.shortName}}">{{ calendar.name }}</a></h5>
           <p class="card-text">{{ calendar.description }}</p>
         </div>
+      </div>
+    </div>
+    <div class="card border-info mb-3" *ngIf="!calendars">
+      <div class="card-body">
+        There are no calendars available at this time.  Please try again later.
       </div>
     </div>
 

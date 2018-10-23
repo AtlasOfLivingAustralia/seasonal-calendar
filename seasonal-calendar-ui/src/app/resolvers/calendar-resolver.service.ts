@@ -29,8 +29,9 @@ export class CalendarResolverService implements Resolve<Calendar> {
     }
     return calendar$.pipe(
       catchError(e => {
+        let name = id ? id : language;
         this.logger.log("Caught error", e);
-        this.messageService.add({text: `${id} not found`, action: { text: 'Dismiss' } });
+        this.messageService.add({text: `${name} not found`, action: { text: 'Dismiss' } });
         return observableOf(null);
       }),
       take(1),
